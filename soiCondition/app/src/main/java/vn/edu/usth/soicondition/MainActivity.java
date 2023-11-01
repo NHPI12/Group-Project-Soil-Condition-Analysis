@@ -27,8 +27,7 @@ public class MainActivity extends AppCompatActivity {
     
     private ViewPager2 viewPager2;
     private FragmentAdapter adapter;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
+
 
 
     @Override
@@ -39,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager2 = findViewById(R.id.viewPager2);
         tabLayout.addTab(tabLayout.newTab().setText("Humidity"));
         tabLayout.addTab(tabLayout.newTab().setText("Temperature"));
+        tabLayout.addTab(tabLayout.newTab().setText("Soil Moisture"));
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         adapter = new FragmentAdapter(fragmentManager, getLifecycle());

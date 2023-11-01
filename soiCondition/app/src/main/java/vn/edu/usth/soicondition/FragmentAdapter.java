@@ -16,12 +16,14 @@ public class FragmentAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         if(position == 1){
             return new temperatureFragment();
+        }else if(position == 2){
+            return new soilMoistureFragment();
         }
         return new humidityFragment();
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
 }

@@ -13,7 +13,6 @@
     <TextView
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:text="20\ng/m³"
         android:gravity="center"
         android:textColor="@color/white"
         android:background="@drawable/circular_background"

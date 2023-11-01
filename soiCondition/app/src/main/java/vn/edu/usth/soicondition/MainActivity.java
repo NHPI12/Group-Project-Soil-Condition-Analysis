@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.Fragment;
+import android.content.Context;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,8 +20,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
+    
     private ViewPager2 viewPager2;
     private FragmentAdapter adapter;
     FirebaseDatabase firebaseDatabase;
@@ -30,14 +35,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        tabLayout =findViewById(R.id.tabLayout);
-        viewPager2 =findViewById(R.id.viewPager2);
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager2 = findViewById(R.id.viewPager2);
         tabLayout.addTab(tabLayout.newTab().setText("Humidity"));
         tabLayout.addTab(tabLayout.newTab().setText("Temperature"));
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        adapter = new FragmentAdapter(fragmentManager , getLifecycle());
+        adapter = new FragmentAdapter(fragmentManager, getLifecycle());
         viewPager2.setAdapter(adapter);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -62,26 +66,6 @@ public class MainActivity extends AppCompatActivity {
                 super.onPageScrollStateChanged(state);
             }
         });
-        temperatureFragment fragment = (temperatureFragment) getSupportFragmentManager().findFragmentById(R.id.temperature_view_fragment);
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("sensor_data");
-        TextView temperatureView = fragment.getView().findViewById(R.id.temperature_view);
-
-                databaseReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            Integer value = snapshot.child("sensor_data/temperature").getValue(Integer.class);
-                            String Stringvalue = value.toString();
-                            temperatureView.setText(Stringvalue);
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(MainActivity.this, "Failed mf", Toast.LENGTH_SHORT).show();
-                    }
-                });
 
     }
-
 }

@@ -10,4 +10,5 @@
     <color name="dark_red">#CA0000</color>
     <color name="red">#F02E00</color>
     <color name="orange">#FF8C00</color>
+    <color name="gray">#808080</color>
 </resources>

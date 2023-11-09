@@ -20,9 +20,8 @@
             app:tabGravity="fill"
             app:tabIndicatorGravity="stretch"
             app:tabSelectedTextColor="@color/white"
-            app:tabIndicatorAnimationMode="elastic"
-            app:tabIndicator="@drawable/tab_indicator"
-        />
+            app:tabIndicatorAnimationMode="elastic"/>
+
 
         <androidx.viewpager2.widget.ViewPager2
             android:layout_width="match_parent"

@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,18 +45,18 @@ public class MainActivity extends AppCompatActivity {
         viewPager2 = findViewById(R.id.viewPager2);
 
 
-        tabLayout.addTab(tabLayout.newTab().setText("Humidity"));
+        /**tabLayout.addTab(tabLayout.newTab().setText("Humidity"));
         tabLayout.addTab(tabLayout.newTab().setText("Temperature"));
         tabLayout.addTab(tabLayout.newTab().setText("Soil Moisture"));
-
+        */
 
         //Adapter
         FragmentManager fragmentManager = getSupportFragmentManager();
         adapter = new FragmentAdapter(fragmentManager, getLifecycle());
         viewPager2.setAdapter(adapter);
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
+        /**tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+           @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager2.setCurrentItem(tab.getPosition());
             }
@@ -65,7 +66,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
             }
-        });
+        });*/
+        new TabLayoutMediator(tabLayout,viewPager2,(tab, position) -> {
+                switch (position){
+                    case 0:
+                        tab.setText("Humidity");
+                        break;
+                    case 1:
+                        tab.setText("Temperature");
+                        break;
+                    case 2:
+                        tab.setText("Soil Moisture");
+                        break;
+                }
+        }).attach();
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrollStateChanged(int state) {

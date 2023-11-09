@@ -4,7 +4,7 @@
 
         <item
             android:id="@+id/item_1"
-            android:title="Your plant"
+            android:title="Your plants"
             android:icon="@drawable/ic_your_plant_img" />
         <item
             android:id="@+id/item_2"
@@ -12,7 +12,6 @@
             android:icon="@drawable/ic_soil_library_foreground"
             />
         <item
-
             android:id="@+id/item_3"
             android:title="Settings"
             android:icon="@drawable/ic_settings_foreground"/>

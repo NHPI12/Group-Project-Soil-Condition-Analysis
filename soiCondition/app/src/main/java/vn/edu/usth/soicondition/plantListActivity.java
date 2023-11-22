@@ -4,13 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +28,7 @@ public class plantListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<PlantListItem> plantList;
     private Plant_List_Recycle_Adapter plantListRecycleAdapter;
+    private NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,9 +38,26 @@ public class plantListActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.plant_list_nav_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.nav_open, R.string.nav_close);
 
+        navigationView = findViewById(R.id.plant_list_nav);
+
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                Intent intent;
+                if(id == R.id.item_1){
+                    intent = new Intent(plantListActivity.this,MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(intent);
+                }
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+
 
         // RecycleView
         recyclerView = findViewById(R.id.plant_list_recycle_View);
@@ -47,12 +70,14 @@ public class plantListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(plantListRecycleAdapter);
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -71,5 +96,6 @@ public class plantListActivity extends AppCompatActivity {
             }
         });
         return  super.onCreateOptionsMenu(menu);
+        }
     }
-}
+

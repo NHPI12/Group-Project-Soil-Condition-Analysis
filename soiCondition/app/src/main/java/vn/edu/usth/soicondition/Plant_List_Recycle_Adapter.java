@@ -3,6 +3,7 @@ package vn.edu.usth.soicondition;
 
 import android.content.Context;
 import android.media.Image;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,51 +13,62 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
-import vn.edu.usth.soicondition.model.PlantListItem;
+import vn.edu.usth.soicondition.network.model.PlantData;
+import vn.edu.usth.soicondition.network.model.default_Image;
 
 public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_Recycle_Adapter.MyViewHolder> {
-    private List<PlantListItem> plantListData;
+    private List<PlantData> PlantData;
+    private Context context;
 
 
-    public Plant_List_Recycle_Adapter(List<PlantListItem> plantListData) {
-        this.plantListData = plantListData;
+    public Plant_List_Recycle_Adapter(Context context, List<PlantData> plantData) {
+        this.context = context;
+        this.PlantData = plantData;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.plant_list_item,parent,false);
-
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.plant_list_item,parent,false);
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        PlantListItem plantListItem = plantListData.get(position);
-        if(plantListItem == null){
+        PlantData plantData = PlantData.get(position);
+
+        if(plantData == null){
             return;
         }
-        holder.common_name.setText(plantListItem.getCommon_name());
-        holder.thumbnail.setImageResource(plantListItem.getThumbnail());
-        holder.watering.setImageResource(plantListItem.getWatering());
-        holder.sunlight.setImageResource(plantListItem.getSunlight());
-        holder.cycle.setImageResource(plantListItem.getCycle());
+        holder.common_name.setText((plantData.getCommon_name()));
+        default_Image defaultImage = plantData.getDefaultImage();
+        if (defaultImage != null) {
+            String thumbnailUrl = defaultImage.getThumbnail(); // Assuming getThumbnail returns the URL
+            if (!TextUtils.isEmpty(thumbnailUrl)) {
+                Picasso.get().load(thumbnailUrl).into(holder.thumbnail);
+            }
+        }
+        holder.watering.setText((plantData.getWatering()));
+        List<String> sunlight = plantData.getSunlight();
+        String sunlighttext = TextUtils.join("// ",sunlight);
+        holder.sunlight.setText(sunlighttext);
+        holder.cycle.setText(plantData.getCycle());
 
     }
 
     @Override
     public int getItemCount() {
-        if(plantListData != null){
-            return plantListData.size();
-        }
-        return 0;
+        return PlantData.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-        private TextView common_name;
-        ImageView thumbnail, watering, sunlight,cycle;
+        private TextView common_name,watering, sunlight,cycle;
+        ImageView thumbnail;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             common_name =itemView.findViewById(R.id.common_name);

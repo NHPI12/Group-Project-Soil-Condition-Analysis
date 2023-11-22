@@ -41,18 +41,18 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="5dp"
                 android:layout_gravity="center">
-                <ImageView
-                    android:layout_width="30dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:id = "@+id/watering"
                     android:layout_marginRight="50dp"/>
-                <ImageView
-                    android:layout_width="30dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:id = "@+id/sunlight"
                     android:layout_marginRight="50dp"/>
-                <ImageView
-                    android:layout_width="30dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:id = "@+id/cycle"
                     android:layout_marginRight="50dp"/>

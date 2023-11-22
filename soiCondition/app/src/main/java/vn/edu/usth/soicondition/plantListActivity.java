@@ -11,22 +11,35 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import vn.edu.usth.soicondition.model.PlantListItem;
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import vn.edu.usth.soicondition.network.JSONPlaceHolder;
+import vn.edu.usth.soicondition.network.model.PlantData;
+import vn.edu.usth.soicondition.network.model.PlantResponse;
+import vn.edu.usth.soicondition.network.model.default_Image;
 
 public class plantListActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private RecyclerView recyclerView;
-    private List<PlantListItem> plantList;
+    private List<PlantData> plantList;
+    private default_Image defaultImage;
     private Plant_List_Recycle_Adapter plantListRecycleAdapter;
     private NavigationView navigationView;
     @Override
@@ -36,13 +49,14 @@ public class plantListActivity extends AppCompatActivity {
 
         //Navigation menu
         drawerLayout = findViewById(R.id.plant_list_nav_layout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.nav_open, R.string.nav_close);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
 
         navigationView = findViewById(R.id.plant_list_nav);
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -58,18 +72,52 @@ public class plantListActivity extends AppCompatActivity {
             }
         });
 
-
         // RecycleView
         recyclerView = findViewById(R.id.plant_list_recycle_View);
         plantList = new ArrayList<>();
-        plantList.add(new PlantListItem("Plant 1",R.drawable.ic_thumbnail,R.drawable.watering_minimum,R.drawable.sunlight_part_shade,R.drawable.cycle_biennial));
-        plantList.add(new PlantListItem("Plant 2",R.drawable.ic_thumbnail,R.drawable.watering_none,R.drawable.sunlight_full_sun,R.drawable.cycle_annual));
-        plantList.add(new PlantListItem("Plant 3",R.drawable.ic_thumbnail,R.drawable.watering_frequently,R.drawable.sunlight_sun_part_shade,R.drawable.cycle_biennial));
-        plantListRecycleAdapter = new Plant_List_Recycle_Adapter(plantList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        plantListRecycleAdapter = new Plant_List_Recycle_Adapter(this, plantList);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(plantListRecycleAdapter);
+        fetchData();
     }
+        private void fetchData() {
+            OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("https://perenual.com/api/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(builder.build())
+                    .build();
+
+            JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
+            String apiKey = "sk-tizW655dda2fd073d2885";
+            fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
+        }
+        private void fetchDatafromMultiplePages(JSONPlaceHolder jsonPlaceHolder, String apiKey, int pageNumber){
+            Call<PlantResponse> call = jsonPlaceHolder.getData(apiKey, pageNumber);
+            call.enqueue(new Callback<PlantResponse>() {
+                @Override
+                public void onResponse(Call<PlantResponse> call, Response<PlantResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        PlantResponse plantResponse = response.body();
+                        List<PlantData> postList = plantResponse.getPlantDataList();
+                        plantList.addAll(postList);
+                        plantListRecycleAdapter.notifyDataSetChanged();
+                        if (pageNumber <= 30) {
+                            fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, pageNumber + 1);
+                        } else {
+                            Log.d("PlantList", "DONE");
+                        }
+                    } else {
+                        Log.e("PlantList", "Error" + response.code());
+                    }
+                }
+                @Override
+                public void onFailure(Call<PlantResponse> call, Throwable t) {
+                    Log.d("error", t.getMessage());
+                }
+            });
+        }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

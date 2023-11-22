@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:layout_marginHorizontal="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="10dp"
+    app:cardCornerRadius="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:id="@+id/thumbnail"/>
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:padding="15dp"
+                android:gravity="center"
+                android:id="@+id/common_name"
+                android:layout_gravity="center"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:id = "@+id/watering"
+                    android:layout_marginRight="50dp"/>
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:id = "@+id/sunlight"
+                    android:layout_marginRight="50dp"/>
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:id = "@+id/cycle"
+                    android:layout_marginRight="50dp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

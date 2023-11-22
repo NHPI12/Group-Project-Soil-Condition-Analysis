@@ -5,33 +5,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/drawer_layout"
-    tools:context=".MainActivity">
-    <LinearLayout
+    tools:context=".plantListActivity"
+    android:id="@+id/plant_list_nav_layout">
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <com.google.android.material.tabs.TabLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/tabLayout"
-            app:tabMode="fixed"
-            app:tabGravity="fill"
-            app:tabIndicatorGravity="stretch"
-            app:tabSelectedTextColor="@color/white"
-            app:tabIndicatorAnimationMode="elastic"/>
-
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/viewPager2"/>
-    </LinearLayout>
+        android:id="@+id/plant_list_recycle_View"
+        android:layout_margin="10dp"/>
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:id="@+id/nav_view"
+        android:id = "@+id/plant_list_nav"
         app:itemTextAppearance="@style/NavigationViewItemStyle"
         app:menu="@menu/navigation_menu"
         app:itemIconSize="40dp"
@@ -44,9 +29,9 @@
             android:padding="15dp"
             android:layout_marginBottom="0dp">
             <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -71,4 +56,6 @@
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
+
+
 </androidx.drawerlayout.widget.DrawerLayout>

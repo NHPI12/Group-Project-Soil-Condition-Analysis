@@ -22,8 +22,8 @@ import vn.edu.usth.soicondition.network.model.PlantData;
 import vn.edu.usth.soicondition.network.model.default_Image;
 
 public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_Recycle_Adapter.MyViewHolder> {
-    private final List<PlantData> PlantData;
-    private final Context context;
+    private List<PlantData> PlantData;
+    private Context context;
 
 
     public Plant_List_Recycle_Adapter(Context context, List<PlantData> plantData) {
@@ -73,11 +73,16 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
+
         private final TextView common_name;
         private final TextView sunlight;
         private final TextView cycle;
         private final ImageView wateringIcon;
         private final ImageView thumbnail;
+
+        private TextView common_name,watering, sunlight,cycle;
+        ImageView thumbnail;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             common_name =itemView.findViewById(R.id.common_name);

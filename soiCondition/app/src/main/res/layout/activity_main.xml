@@ -23,7 +23,8 @@
         <androidx.viewpager2.widget.ViewPager2
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/viewPager2"/>
+            android:id="@+id/viewPager2"
+            android:clickable="true"/>
     </LinearLayout>
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"

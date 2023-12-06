@@ -79,8 +79,13 @@ public class plantListActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(plantListRecycleAdapter);
+
         // fetchData();
+
+
+
     }
+        // API
         private void fetchData() {
             OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
             Retrofit retrofit = new Retrofit.Builder()
@@ -90,7 +95,11 @@ public class plantListActivity extends AppCompatActivity {
                     .build();
 
             JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
-            String apiKey = "sk-gAIS6560794454fbf2885";
+
+            //String apiKey = "sk-gAIS6560794454fbf2885"; Quy's API key
+          
+            String apiKey = "sk-O0QK655e2575b0b303082";
+
             fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
         }
         private void fetchDatafromMultiplePages(JSONPlaceHolder jsonPlaceHolder, String apiKey, int pageNumber){

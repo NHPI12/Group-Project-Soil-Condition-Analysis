@@ -1,5 +1,6 @@
 package vn.edu.usth.soicondition;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -44,6 +45,15 @@ public class soilMoistureFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+        view.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void  onClick(View v){
+                Intent intent = new Intent(getActivity(),ChartActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_up,R.anim.slide_down);
             }
         });
         return view;

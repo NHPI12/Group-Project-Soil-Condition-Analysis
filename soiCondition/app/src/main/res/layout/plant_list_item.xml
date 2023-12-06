@@ -41,11 +41,11 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="5dp"
                 android:layout_gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:id = "@+id/watering"
-                    android:layout_marginRight="50dp"/>
+                <ImageView
+                    android:layout_width="75px"
+                    android:layout_height="75px"
+                    android:id = "@+id/wateringIcon"
+                    android:src="@drawable/frequent"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"

@@ -2,9 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
         <item
-            android:id="@+id/item_1"
+            android:id="@+id/stats_plant"
             android:title="Statistics"
             android:icon="@drawable/ic_statistics"
+            />
+        <item
+            android:id="@+id/list_plants"
+            android:title="Plants List"
+            android:icon="@drawable/ic_soil_library_foreground"
             />
         <item
             android:id="@+id/item_2"
@@ -23,5 +28,4 @@
             android:id="@+id/item_5"
             android:title="Settings"
             android:icon="@drawable/ic_settings_foreground"/>
-
 </menu>

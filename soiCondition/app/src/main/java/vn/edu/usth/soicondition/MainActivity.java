@@ -15,7 +15,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -42,9 +44,6 @@ public class MainActivity extends AppCompatActivity {
         //Tab Layout
         tabLayout = findViewById(R.id.tabLayout);
         viewPager2 = findViewById(R.id.viewPager2);
-
-
-
 
         //Adapter
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -76,28 +75,44 @@ public class MainActivity extends AppCompatActivity {
         //Navigation Menu
         drawerLayout = findViewById(R.id.drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.nav_open, R.string.nav_close);
-
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         navigationView = findViewById(R.id.nav_view);
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
+
+                if (id == R.id.stats_plant) {
+                    // Open PlantListActivity
+                    Log.d("MainActivity", "Plant List Clicked");
+                    openStatsActivity();
+                    return true;
+                }
+                if (id == R.id.list_plants) {
+                    // Open PlantListActivity
+                    Log.d("MainActivity", "Plant List Clicked");
+                    openPlantListActivity();
+                    return true;
+
                 Intent intent;
                 if(id == R.id.item_3){
                     intent = new Intent(MainActivity.this,plantListActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intent);
+
                 }
-                drawerLayout.closeDrawer(GravityCompat.START);
-                return true;
+                return false;
             }
         });
-
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.navigation_menu, menu);
+        return true;
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -105,5 +120,16 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    // Method to open PlantListActivity
+    private void openStatsActivity() {
+        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    private void openPlantListActivity() {
+        Intent intent = new Intent(MainActivity.this, plantListActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

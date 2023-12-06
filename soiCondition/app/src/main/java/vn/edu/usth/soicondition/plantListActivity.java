@@ -79,7 +79,7 @@ public class plantListActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(plantListRecycleAdapter);
-        fetchData();
+        // fetchData();
     }
         private void fetchData() {
             OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
@@ -106,10 +106,10 @@ public class plantListActivity extends AppCompatActivity {
                         if (pageNumber <= 30) {
                             fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, pageNumber + 1);
                         } else {
-                            Log.d("PlantList", "DONE");
+                            Log.d("PlantList", "DONE ditmemay");
                         }
                     } else {
-                        Log.e("PlantList", "Error" + response.code());
+                        Log.e("PlantList", "Error ditmemay" + response.code());
                     }
                 }
                 @Override

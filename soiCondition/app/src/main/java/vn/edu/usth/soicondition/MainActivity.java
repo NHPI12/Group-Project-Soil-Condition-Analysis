@@ -117,9 +117,11 @@ public class MainActivity extends AppCompatActivity {
     private void openStatsActivity() {
         Intent intent = new Intent(MainActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
     private void openPlantListActivity() {
         Intent intent = new Intent(MainActivity.this, plantListActivity.class);
         startActivity(intent);
+        finish();
     }
 }

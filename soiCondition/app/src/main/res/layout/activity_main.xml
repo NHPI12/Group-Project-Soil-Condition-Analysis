@@ -20,8 +20,6 @@
             app:tabIndicatorGravity="stretch"
             app:tabSelectedTextColor="@color/white"
             app:tabIndicatorAnimationMode="elastic"/>
-
-
         <androidx.viewpager2.widget.ViewPager2
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -55,6 +53,7 @@
                     android:textSize="20dp"
                     android:text="Add"
                     android:textStyle="bold"
+                    android:id="@+id/add_text"
                     android:textColor="@color/gray"/>
                 <View
                     android:layout_width="1dp"
@@ -65,6 +64,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="20dp"
                     android:text="Remove"
+                    android:id="@+id/remove_text"
                     android:textStyle="bold"
                     android:paddingLeft="40dp"
                     android:textColor="@color/gray"/>

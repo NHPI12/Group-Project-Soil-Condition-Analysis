@@ -62,7 +62,7 @@ public class plantListActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 Intent intent;
-                if(id == R.id.item_1){
+                if(id == R.id.stats_plant){
                     intent = new Intent(plantListActivity.this,MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intent);
@@ -90,7 +90,7 @@ public class plantListActivity extends AppCompatActivity {
                     .build();
 
             JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
-            String apiKey = "sk-tizW655dda2fd073d2885";
+            String apiKey = "sk-gAIS6560794454fbf2885";
             fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
         }
         private void fetchDatafromMultiplePages(JSONPlaceHolder jsonPlaceHolder, String apiKey, int pageNumber){

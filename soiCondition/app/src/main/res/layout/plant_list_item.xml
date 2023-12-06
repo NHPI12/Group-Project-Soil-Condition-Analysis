@@ -44,13 +44,12 @@
                 <ImageView
                     android:layout_width="75px"
                     android:layout_height="75px"
-                    android:id = "@+id/wateringIcon"
-                    android:src="@drawable/frequent"/>
-                <TextView
+                    android:id = "@+id/wateringIcon"/>
+                <LinearLayout
+                    android:id="@+id/sunlightIconsContainer"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:id = "@+id/sunlight"
-                    android:layout_marginRight="50dp"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"

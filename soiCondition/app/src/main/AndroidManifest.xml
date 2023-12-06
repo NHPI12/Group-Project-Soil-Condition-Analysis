@@ -15,12 +15,22 @@
         android:theme="@style/Theme.SoiCondition"
         tools:targetApi="34">
         <activity
-            android:name=".plantListActivity"
+            android:name=".ChartActivity"
             android:exported="true">
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".plantListActivity"
+            android:exported="true"></activity>
     </application>
 
 </manifest>

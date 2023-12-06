@@ -96,13 +96,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("MainActivity", "Plant List Clicked");
                     openPlantListActivity();
                     return true;
-
-                Intent intent;
-                if(id == R.id.item_3){
-                    intent = new Intent(MainActivity.this,plantListActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    startActivity(intent);
-
                 }
                 return false;
             }

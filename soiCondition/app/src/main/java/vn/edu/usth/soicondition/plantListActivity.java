@@ -80,7 +80,7 @@ public class plantListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(plantListRecycleAdapter);
 
-        fetchData();
+        //fetchData();
 
 
 
@@ -96,11 +96,10 @@ public class plantListActivity extends AppCompatActivity {
 
             JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
 
-            //String apiKey = "sk-gAIS6560794454fbf2885"; Quy's API key
-          
-            //String apiKey = "sk-O0QK655e2575b0b303082"; Nguyen Main
-            //String apiKey = "sk-JAdj65704f90038483358"; Nguyen 2nd
-            String apiKey = "sk-PEwA657057073ee313360"; //Quy 2nd
+            //String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
+            //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+            //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+            String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
 
 
 

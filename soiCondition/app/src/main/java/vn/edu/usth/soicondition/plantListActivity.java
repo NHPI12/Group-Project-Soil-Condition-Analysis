@@ -80,7 +80,7 @@ public class plantListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(plantListRecycleAdapter);
 
-        // fetchData();
+        //fetchData();
 
 
 

@@ -44,8 +44,7 @@
                 <ImageView
                     android:layout_width="75px"
                     android:layout_height="75px"
-                    android:id = "@+id/wateringIcon"
-                    android:src="@drawable/frequent"/>
+                    android:id = "@+id/wateringIcon"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"

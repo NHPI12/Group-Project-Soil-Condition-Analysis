@@ -58,7 +58,7 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
         if (holder.wateringIcon != null) {
             int wateringIcon = getWateringIcon(plantData.getWatering());
             // Set the icon to the ImageView
-            holder.wateringIcon.setBackgroundResource(wateringIcon);
+            holder.wateringIcon.setBackgroundResource(getWateringIcon((plantData.getWatering())));
         }
         List<String> sunlight = plantData.getSunlight();
         String sunlighttext = TextUtils.join("// ",sunlight);
@@ -72,7 +72,7 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
         return PlantData.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
+       class MyViewHolder extends RecyclerView.ViewHolder{
 
         private final TextView common_name;
         private final TextView sunlight;
@@ -80,8 +80,7 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
         private final ImageView wateringIcon;
         private final ImageView thumbnail;
 
-        private TextView common_name,watering, sunlight,cycle;
-        ImageView thumbnail;
+
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

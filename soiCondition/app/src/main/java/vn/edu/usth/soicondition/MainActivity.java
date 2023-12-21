@@ -85,24 +85,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
 
-                if (id == R.id.stats_plant) {
-                    // Open PlantListActivity
-                    Log.d("MainActivity", "Plant List Clicked");
-                    openStatsActivity();
-                    return true;
-                }
                 if (id == R.id.list_plants) {
                     // Open PlantListActivity
                     Log.d("MainActivity", "Plant List Clicked");
                     openPlantListActivity();
                     return true;
-
-                Intent intent;
-                if(id == R.id.item_3){
-                    intent = new Intent(MainActivity.this,plantListActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    startActivity(intent);
-
                 }
                 return false;
             }

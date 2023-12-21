@@ -53,7 +53,7 @@ public class soilMoistureFragment extends Fragment {
                 Intent intent = new Intent(getActivity(),ChartActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_up,R.anim.slide_down);
+                getActivity().overridePendingTransition(R.anim.slide_down,R.anim.slide_up);
             }
         });
         return view;

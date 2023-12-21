@@ -25,7 +25,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
-    @SuppressLint("MissingInflatedId")
+   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

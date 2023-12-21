@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -60,9 +61,7 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
             // Set the icon to the ImageView
             holder.wateringIcon.setBackgroundResource(getWateringIcon((plantData.getWatering())));
         }
-        List<String> sunlight = plantData.getSunlight();
-        String sunlighttext = TextUtils.join("// ",sunlight);
-        holder.sunlight.setText(sunlighttext);
+        setSunlightIcons(plantData.getSunlight(), holder.sunlightIconsContainer);
         holder.cycle.setText(plantData.getCycle());
 
     }
@@ -72,28 +71,26 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
         return PlantData.size();
     }
 
-       class MyViewHolder extends RecyclerView.ViewHolder{
+    class MyViewHolder extends RecyclerView.ViewHolder{
+        LinearLayout sunlightIconsContainer;
 
         private final TextView common_name;
-        private final TextView sunlight;
         private final TextView cycle;
         private final ImageView wateringIcon;
         private final ImageView thumbnail;
-
 
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             common_name =itemView.findViewById(R.id.common_name);
             thumbnail = itemView.findViewById(R.id.thumbnail);
-            sunlight = itemView.findViewById(R.id.sunlight);
             cycle = itemView.findViewById(R.id.cycle);
             wateringIcon = itemView.findViewById(R.id.wateringIcon);
-
+            sunlightIconsContainer = itemView.findViewById(R.id.sunlightIconsContainer);
         }
     }
     private int getWateringIcon(String wateringText) {
-        switch (wateringText) {
+        switch (wateringText.toLowerCase()) {
             case "frequent":
                 return R.drawable.frequent;
             case "average":
@@ -105,5 +102,45 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
             default:
                 return R.drawable.ic_thumbnail;
         }
+    }
+    private int getSunlightIcon(String sunlightText) {
+        switch (sunlightText.toLowerCase()) {
+            case "full shade":
+                return R.drawable.full_shade;
+            case "part shade":
+                return R.drawable.part_shade;
+            case "filtered shade":
+                return R.drawable.sunpart_shade;
+            case "full sun":
+                return R.drawable.full_sun;
+            default:
+                return R.drawable.ic_thumbnail;
+        }
+    }
+    private void setSunlightIcons(List<String> sunlightConditions, ViewGroup sunlightContainer) {
+        // Clear previous icons
+        sunlightContainer.removeAllViews();
+
+        if (sunlightConditions.isEmpty()) {
+            // Set default icon if the list is empty
+            ImageView defaultIcon = createSunlightIcon(R.drawable.ic_thumbnail);
+            sunlightContainer.addView(defaultIcon);
+            return;
+        }
+
+        // Create and add icons for each sunlight condition
+        for (String sunlightCondition : sunlightConditions) {
+            int iconResourceId = getSunlightIcon(sunlightCondition);
+            ImageView icon = createSunlightIcon(iconResourceId);
+            sunlightContainer.addView(icon);
+        }
+    }
+
+    private ImageView createSunlightIcon(int iconResourceId) {
+        ImageView icon = new ImageView(context);
+        icon.setLayoutParams(new ViewGroup.LayoutParams(75,75));
+        icon.setImageResource(iconResourceId);
+        icon.setPadding(0, 0, 8, 0); // Add padding between icons if needed
+        return icon;
     }
 }

@@ -8,7 +8,6 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.bumptech.glide.Glide;
 import java.util.List;
 
 public class Plant_Details_Image_Recycle_Adapter extends RecyclerView.Adapter<Plant_Details_Image_Recycle_Adapter.ImageViewHolder> {

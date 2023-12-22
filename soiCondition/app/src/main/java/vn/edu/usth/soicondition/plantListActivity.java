@@ -1,11 +1,13 @@
 package vn.edu.usth.soicondition;
 
 import androidx.annotation.NonNull;
+import vn.edu.usth.soicondition.PlantDetailsActivity;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -74,13 +77,21 @@ public class plantListActivity extends AppCompatActivity {
 
         // RecycleView
         recyclerView = findViewById(R.id.plant_list_recycle_View);
+
         plantList = new ArrayList<>();
         plantListRecycleAdapter = new Plant_List_Recycle_Adapter(this, plantList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        plantListRecycleAdapter.setOnItemClickListener(new Plant_List_Recycle_Adapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                // Handle item click here, e.g., start PlantDetailsActivity
+                Intent intent = new Intent(plantListActivity.this, PlantDetailsActivity.class);
+                startActivity(intent);
+            }
+        });
         recyclerView.setAdapter(plantListRecycleAdapter);
-
-        //fetchData();
+        fetchData();
     }
         // API
         private void fetchData() {
@@ -90,16 +101,12 @@ public class plantListActivity extends AppCompatActivity {
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(builder.build())
                     .build();
-
             JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
 
             //String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
             //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-            //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
-            String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
-
-
-
+            String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+            //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
 
             fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
         }
@@ -116,10 +123,10 @@ public class plantListActivity extends AppCompatActivity {
                         if (pageNumber <= 30) {
                             fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, pageNumber + 1);
                         } else {
-                            Log.d("PlantList", "DONE ditmemay");
+                            Log.d("PlantList", "DONE");
                         }
                     } else {
-                        Log.e("PlantList", "Error ditmemay" + response.code());
+                        Log.e("PlantList", "Error" + response.code());
                     }
                 }
                 @Override
@@ -128,14 +135,12 @@ public class plantListActivity extends AppCompatActivity {
                 }
             });
         }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){

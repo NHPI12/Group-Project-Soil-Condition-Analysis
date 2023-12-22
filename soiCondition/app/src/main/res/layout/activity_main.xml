@@ -47,13 +47,12 @@
                     android:textSize="32sp"
                     android:id="@+id/humidData"/>
             </LinearLayout>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/humidDetails"
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChartHumid"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
                     android:visibility="gone"
-                    android:text="asndasjdkdjasdkjansjkdasjkdnajkndakjndkjsnjknasdjkandjkansdjkansdkjansasjndakjsndakjsndasjkdasjkn"
-                    android:textSize="18sp"/>
+                    android:layout_marginTop="16dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
@@ -90,13 +89,12 @@
                     android:textSize="32sp"
                     android:id="@+id/tempData"/>
             </LinearLayout>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tempDetails"
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChartTemp"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
                     android:visibility="gone"
-                    android:text="asndasjdkdjasdkjansjkdasjkdnajkndakjndkjsnjknasdjkandjkansdjkansdkjansasjndakjsndakjsndasjkdasjkn"
-                    android:textSize="18sp"/>
+                    android:layout_marginTop="16dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
@@ -133,13 +131,11 @@
                     android:textSize="32sp"
                     android:id="@+id/soilData"/>
                 </LinearLayout>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/soilDetails"
-                    android:visibility="gone"
-                    android:text="asndasjdkdjasdkjansjkdasjkdnajkndakjndkjsnjknasdjkandjkansdjkansdkjansasjndakjsndakjsndasjkdasjkn"
-                    android:textSize="18sp"/>
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChartSoil"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="16dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>

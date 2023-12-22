@@ -55,7 +55,6 @@ public class ChartActivity extends AppCompatActivity {
             lineDataSet1.setCircleColor(Color.RED);
         }
 
-
         lineDataSet1.setLineWidth(2f);
         lineDataSet1.setCircleRadius(4f);
         lineDataSet1.setValueTextSize(10f);

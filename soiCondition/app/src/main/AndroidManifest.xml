@@ -19,7 +19,6 @@
         <activity
             android:name=".PlantDetailsActivity"
             android:exported="true">
-
         </activity>
         <activity
             android:name=".MainActivity"
@@ -33,5 +32,4 @@
             android:name=".plantListActivity"
             android:exported="true" />
     </application>
-
 </manifest>

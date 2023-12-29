@@ -1,21 +1,27 @@
 package vn.edu.usth.soicondition;
 
 import androidx.annotation.NonNull;
+import vn.edu.usth.soicondition.PlantDetailsActivity;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -38,10 +44,10 @@ public class plantListActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private RecyclerView recyclerView;
-    private List<PlantData> plantList;
-    private default_Image defaultImage;
     private Plant_List_Recycle_Adapter plantListRecycleAdapter;
     private NavigationView navigationView;
+    private List<PlantData> plantList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,22 +56,22 @@ public class plantListActivity extends AppCompatActivity {
         //Navigation menu
         drawerLayout = findViewById(R.id.plant_list_nav_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-
         navigationView = findViewById(R.id.plant_list_nav);
-
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        NavigationView navigationView = findViewById(R.id.plant_list_nav);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                Intent intent;
-                if(id == R.id.stats_plant){
-                    intent = new Intent(plantListActivity.this,MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    startActivity(intent);
+                if (id == R.id.stats_plant) {
+                    Intent intent = new Intent(plantListActivity.this, MainActivity.class);
+                    Log.d("Troi oi cuoc doi List", "" + plantList);
+                    openActivity(MainActivity.class);
+                    overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
                 }
                 else if (id == R.id.item_5) {
                     openSettings();
@@ -76,72 +82,61 @@ public class plantListActivity extends AppCompatActivity {
             }
         });
 
-
-
+        TextView addTextView = findViewById(R.id.add_text);
+        TextView removeTextView = findViewById(R.id.remove_text);
+        addTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addIntent = new Intent(plantListActivity.this, AddPlantsActivity.class);
+                addIntent.putExtra("plantList", new ArrayList<>(plantList));
+                openActivity(AddPlantsActivity.class);
+                overridePendingTransition(R.anim.slide_up, R.anim.slide_up_out);
+            }
+        });
+        removeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity(RemovePlantsActivity.class);
+                overridePendingTransition(R.anim.slide_up, R.anim.slide_up_out);
+            }
+        });
         // RecycleView
-        recyclerView = findViewById(R.id.plant_list_recycle_View);
-        plantList = new ArrayList<>();
-        plantListRecycleAdapter = new Plant_List_Recycle_Adapter(this, plantList);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(plantListRecycleAdapter);
-
-        fetchData();
-    }
-        // API
-        private void fetchData() {
-            OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://perenual.com/api/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(builder.build())
-                    .build();
-
-            JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
-
-            //String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
-            //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-            //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
-            String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
-
-
-
-
-            fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
-        }
-        private void fetchDatafromMultiplePages(JSONPlaceHolder jsonPlaceHolder, String apiKey, int pageNumber){
-            Call<PlantResponse> call = jsonPlaceHolder.getData(apiKey, pageNumber);
-            call.enqueue(new Callback<PlantResponse>() {
+        Intent intent = getIntent();
+        if (intent.hasExtra("plantList")) {
+            List<PlantData> plantList = intent.getParcelableArrayListExtra("plantList");
+            Log.d("New Data", "" + plantList);
+            recyclerView = findViewById(R.id.plant_list_recycle_View);
+            plantListRecycleAdapter = new Plant_List_Recycle_Adapter(this, plantList);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            plantListRecycleAdapter.setOnItemClickListener(new Plant_List_Recycle_Adapter.OnItemClickListener() {
                 @Override
-                public void onResponse(Call<PlantResponse> call, Response<PlantResponse> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        PlantResponse plantResponse = response.body();
-                        List<PlantData> postList = plantResponse.getPlantDataList();
-                        plantList.addAll(postList);
-                        plantListRecycleAdapter.notifyDataSetChanged();
-                        if (pageNumber <= 1) {
-                            fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, pageNumber + 1);
-                        } else {
-                            Log.d("PlantList", "DONE ditmemay");
-                        }
-                    } else {
-                        Log.e("PlantList", "Error ditmemay" + response.code());
-                    }
-                }
-                @Override
-                public void onFailure(Call<PlantResponse> call, Throwable t) {
-                    Log.d("error", t.getMessage());
+                public void onItemClick(int position) {
+                    PlantData clickedPlant = plantList.get(position);
+                    default_Image clickedPlantImage = clickedPlant.getDefaultImage();
+                    Intent intent = new Intent(plantListActivity.this, PlantDetailsActivity.class);
+                    // Pass data to PlantDetailsActivity
+                    intent.putExtra("original_url", clickedPlantImage.getOriginalUrl());
+                    Log.d("PlantListActivity", "Original URL: " + clickedPlantImage.getOriginalUrl());
+                    intent.putExtra("scientific_name", new ArrayList<>(clickedPlant.getScientific_name()));
+                    intent.putExtra("common_name", clickedPlant.getCommon_name());
+                    intent.putExtra("cycle", clickedPlant.getCycle());
+                    intent.putExtra("watering", clickedPlant.getWatering());
+                    intent.putExtra("id", clickedPlant.getId());
+                    startActivity(intent);
+
                 }
             });
         }
+            recyclerView.setAdapter(plantListRecycleAdapter);
 
+        }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
-
     }
 
     private void openSettings() {
@@ -168,6 +163,12 @@ public class plantListActivity extends AppCompatActivity {
         });
         return  super.onCreateOptionsMenu(menu);
         }
+    private void openActivity(Class<?> destinationClass) {
+        Intent intent = new Intent(plantListActivity.this, destinationClass);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+    }
+
     }
 
 

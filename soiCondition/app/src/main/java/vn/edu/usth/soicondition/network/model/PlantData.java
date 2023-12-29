@@ -1,12 +1,17 @@
 package vn.edu.usth.soicondition.network.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class PlantData implements Serializable {
+public class PlantData implements Parcelable {
     @SerializedName("id")
     private int id;
     @SerializedName("common_name")
@@ -26,6 +31,29 @@ public class PlantData implements Serializable {
     private List<String> sunlight;
     @SerializedName("default_image")
     private default_Image defaultImage;
+
+    protected PlantData(Parcel in) {
+        id = in.readInt();
+        common_name = in.readString();
+        scientific_name = in.createStringArrayList();
+        other_name = in.createStringArrayList();
+        cycle = in.readString();
+        watering = in.readString();
+        sunlight = in.createStringArrayList();
+        defaultImage = in.readParcelable(default_Image.class.getClassLoader());
+    }
+
+    public static final Creator<PlantData> CREATOR = new Creator<PlantData>() {
+        @Override
+        public PlantData createFromParcel(Parcel in) {
+            return new PlantData(in);
+        }
+
+        @Override
+        public PlantData[] newArray(int size) {
+            return new PlantData[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -82,10 +110,29 @@ public class PlantData implements Serializable {
     public void setWatering(String watering) {
         this.watering = watering;
     }
+
     public default_Image getDefaultImage() {
         return defaultImage;
     }
+
     public void setDefaultImage(default_Image defaultImage) {
         this.defaultImage = defaultImage;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(common_name);
+        dest.writeStringList(scientific_name);
+        dest.writeStringList(other_name);
+        dest.writeString(cycle);
+        dest.writeString(watering);
+        dest.writeStringList(sunlight);
+        dest.writeParcelable(defaultImage, flags);
     }
 }

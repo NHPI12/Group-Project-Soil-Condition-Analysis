@@ -6,12 +6,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.LayoutTransition;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,11 +21,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
@@ -34,10 +30,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,8 +39,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Connection;
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,23 +46,31 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import vn.edu.usth.soicondition.network.ApiServiceDatabase;
 import vn.edu.usth.soicondition.network.DatabaseLocal.Measurements;
 import vn.edu.usth.soicondition.network.DatabaseLocal.RetrofitDatabase;
+import vn.edu.usth.soicondition.network.JSONPlaceHolder;
 import vn.edu.usth.soicondition.network.TimeAxisValueFormatter;
+import vn.edu.usth.soicondition.network.model.PlantData;
+import vn.edu.usth.soicondition.network.model.PlantResponse;
 
 
 public class MainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-    private NavigationView navigationView;
     private LineChart lineChartTemp, lineChartSoil, lineChartHumid;
     LinearLayout humidLayout, tempLayout, soilLayout;
     private HandlerThread handlerThread;
     private Handler handler;
+    private List<PlantData> plantList;
+    private Plant_List_Recycle_Adapter plantListRecycleAdapter;
+    private boolean isDataFetched = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         humidLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
         tempLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
         soilLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+        plantList = new ArrayList<>();
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://smart-pot-1d7b5-default-rtdb.firebaseio.com/");
         DatabaseReference databaseReference1 = firebaseDatabase.getReference("sensor_data");
@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         // Fetch data from local SQL database
         // Start fetching data periodically
         startFetchingData();
+
         databaseReferenceSoil.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -199,23 +200,47 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        plantListRecycleAdapter = new Plant_List_Recycle_Adapter(MainActivity.this, plantList);
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                if (id == R.id.list_plants){
-                    // Open PlantListActivity
-                    Log.d("MainActivity", "Plant List Clicked");
-                    openPlantListActivity();
-                } else if (id == R.id.item_5) {
+                if (id == R.id.list_plants) {
+                    fetchData();
+
+                }else if (id == R.id.item_5) {
                     openSettings();
-                }
 
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
+        TextView addTextView = findViewById(R.id.add_text);
+        TextView removeTextView = findViewById(R.id.remove_text);
+        addTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addIntent = new Intent(MainActivity.this, AddPlantsActivity.class);
+                Log.d("Troi oi cuoc doi Main", "" + plantList);
+                startActivity(addIntent);
+                openActivity(AddPlantsActivity.class);
+            }
+        });
+        removeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity(RemovePlantsActivity.class);
+            }
+        });
+    }
+
+    private void openActivity(Class<?> destinationClass) {
+        Intent intent = new Intent(MainActivity.this, destinationClass);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_up, R.anim.slide_up_out);
     }
 
     @Override
@@ -235,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     private void openSettings() {
         Intent intent = new Intent(MainActivity.this, setting.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -249,8 +275,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void expandHumid(View view) {
         expand(lineChartHumid, humidLayout, lineChartTemp, lineChartSoil);
@@ -265,7 +289,6 @@ public class MainActivity extends AppCompatActivity {
     public void expandSoil(View view) {
         expand(lineChartSoil, soilLayout, lineChartHumid, lineChartTemp);
     }
-
     private void expand(LineChart clickedText, LinearLayout clickedLayout, LineChart... otherTexts) {
         if (clickedText.getVisibility() == View.VISIBLE) {
             clickedText.setVisibility(View.GONE);
@@ -278,15 +301,12 @@ public class MainActivity extends AppCompatActivity {
         }
         TransitionManager.beginDelayedTransition(clickedLayout, new AutoTransition());
     }
-
     private void startFetchingData() {
         // Define a Runnable that fetches data and updates UI
         Runnable fetchDataRunnable = new Runnable() {
             @Override
             public void run() {
-                // Fetch data (you might want to modify this based on your implementation)
                 List<Measurements> newData = fetchDataFromLocalDatabase();
-                // Update UI with the fetched data (modify this based on your UI update logic)
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -298,11 +318,9 @@ public class MainActivity extends AppCompatActivity {
                 handler.postDelayed(this, 2000);
             }
         };
-
         // Schedule the initial data fetch with a delay of 0 seconds
         handler.postDelayed(fetchDataRunnable, 0);
     }
-
     private void updateUI(List<Measurements> newData) {
         ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
         Call<List<Measurements>> call = apiService.fetchData();
@@ -343,14 +361,14 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("SoilActivity", "Data loading failed. Error code: " + response.code());
                 }
             }
+
             @Override
-            public void onFailure (Call < List < Measurements >> call, Throwable t){
+            public void onFailure(Call<List<Measurements>> call, Throwable t) {
                 Log.e("NguActivity", "Data loading failed. Exception: " + t.getMessage());
             }
         });
     }
-
-        private List<Measurements> fetchDataFromLocalDatabase() {
+    private List<Measurements> fetchDataFromLocalDatabase() {
         ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
         Call<List<Measurements>> call = apiService.fetchData();
         call.enqueue(new Callback<List<Measurements>>() {
@@ -358,7 +376,6 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<Measurements>> call, Response<List<Measurements>> response) {
                 if (response.isSuccessful()) {
                     List<Measurements> data = response.body();
-                    // Process the data or update UI here
                     Log.d("SoilActivity", "Data loading successfully");
                 } else {
                     // Handle the case when the response is not successful
@@ -374,7 +391,7 @@ public class MainActivity extends AppCompatActivity {
         });
         return null;
     }
-    private void updateLineChart(LineChart lineChart, List<Entry> entries, String label,List<String> timestamps) {
+    private void updateLineChart(LineChart lineChart, List<Entry> entries, String label, List<String> timestamps) {
         int maxDataPoints = 100;
         int dataSize = entries.size();
         if (dataSize > maxDataPoints) {
@@ -448,6 +465,79 @@ public class MainActivity extends AppCompatActivity {
         handler.removeCallbacksAndMessages(null);
         // Quit the background thread
         handlerThread.quit();
+    }
+    private void statusbarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.black, this.getTheme()));
+        } else {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.black));
+        }
+    }
+
+    private void fetchData() {
+        OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://perenual.com/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(builder.build())
+                .build();
+        JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
+
+        String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
+        //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
+
+            if (!isDataFetched) {
+                // Fetch data only if it hasn't been fetched yet
+                fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
+            } else {
+                // Start PlantListActivity directly with the existing data
+                startPlantListActivity();
+            }
+    }
+
+    private void fetchDatafromMultiplePages(JSONPlaceHolder jsonPlaceHolder, String apiKey, int pageNumber) {
+        Call<PlantResponse> call = jsonPlaceHolder.getData(apiKey, pageNumber);
+        call.enqueue(new Callback<PlantResponse>() {
+            @Override
+            public void onResponse(Call<PlantResponse> call, Response<PlantResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    PlantResponse plantResponse = response.body();
+                    List<PlantData> plantList = plantResponse.getPlantDataList();
+                    // Pass data to PlantListActivity
+                    Intent intent = new Intent(MainActivity.this, plantListActivity.class);
+                    intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
+                    if (pageNumber <= 1) {
+                        fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, pageNumber + 1);
+                    } else {
+                        Log.d("PlantList", "DONE" + plantList);
+                        isDataFetched = true;
+                        // Pass data to PlantListActivity
+                        startPlantListActivity(plantList);
+                    }
+                } else {
+                    Log.e("PlantList", "Error" + response.code());
+                }
+            }
+            @Override
+            public void onFailure(Call<PlantResponse> call, Throwable t) {
+                Log.d("error", t.getMessage());
+            }
+        });
+    }
+    private void startPlantListActivity(List<PlantData> plantList) {
+        Intent intent = new Intent(MainActivity.this, plantListActivity.class);
+        intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
+        startActivity(intent);
+        overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
+    }
+    private void startPlantListActivity() {
+        // Start PlantListActivity without passing data
+        Intent intent = new Intent(MainActivity.this, plantListActivity.class);
+        intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
+        startActivity(intent);
+        overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
     }
 }
 

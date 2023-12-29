@@ -1,9 +1,11 @@
 package vn.edu.usth.soicondition;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.Image;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +22,16 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import vn.edu.usth.soicondition.network.model.PlantData;
+import vn.edu.usth.soicondition.network.model.PlantResponse;
 import vn.edu.usth.soicondition.network.model.default_Image;
 
 public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_Recycle_Adapter.MyViewHolder> {
     private List<PlantData> PlantData;
     private Context context;
-
-
     public Plant_List_Recycle_Adapter(Context context, List<PlantData> plantData) {
         this.context = context;
         this.PlantData = plantData;
     }
-
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -43,7 +43,6 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         PlantData plantData = PlantData.get(position);
-
         if(plantData == null){
             return;
         }
@@ -51,11 +50,13 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
         default_Image defaultImage = plantData.getDefaultImage();
         if (defaultImage != null) {
             String thumbnailUrl = defaultImage.getThumbnail(); // Assuming getThumbnail returns the URL
+            Log.d("Thumbnail", "Thumbnail URL: " + thumbnailUrl);
             if (!TextUtils.isEmpty(thumbnailUrl)) {
                 Picasso.get().load(thumbnailUrl).into(holder.thumbnail);
             }
+        } else{
+            Log.d("Thumbnail", "Not found");
         }
-
         if (holder.wateringIcon != null) {
             int wateringIcon = getWateringIcon(plantData.getWatering());
             // Set the icon to the ImageView
@@ -63,9 +64,23 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
         }
         setSunlightIcons(plantData.getSunlight(), holder.sunlightIconsContainer);
         holder.cycle.setText(plantData.getCycle());
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int adapterPosition = holder.getAdapterPosition();
+                if (adapterPosition != RecyclerView.NO_POSITION && onItemClickListener != null) {
+                    onItemClickListener.onItemClick(adapterPosition);
+                }
+            }
+        });
     }
-
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+    public OnItemClickListener onItemClickListener;
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
     @Override
     public int getItemCount() {
         return PlantData.size();
@@ -73,7 +88,6 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         LinearLayout sunlightIconsContainer;
-
         private final TextView common_name;
         private final TextView cycle;
         private final ImageView wateringIcon;
@@ -135,7 +149,6 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
             sunlightContainer.addView(icon);
         }
     }
-
     private ImageView createSunlightIcon(int iconResourceId) {
         ImageView icon = new ImageView(context);
         icon.setLayoutParams(new ViewGroup.LayoutParams(75,75));

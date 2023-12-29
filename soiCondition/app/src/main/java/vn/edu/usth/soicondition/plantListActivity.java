@@ -67,10 +67,16 @@ public class plantListActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intent);
                 }
+                else if (id == R.id.item_5) {
+                    openSettings();
+                }
+
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
+
+
 
         // RecycleView
         recyclerView = findViewById(R.id.plant_list_recycle_View);
@@ -80,7 +86,7 @@ public class plantListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(plantListRecycleAdapter);
 
-        //fetchData();
+        fetchData();
     }
         // API
         private void fetchData() {
@@ -113,7 +119,7 @@ public class plantListActivity extends AppCompatActivity {
                         List<PlantData> postList = plantResponse.getPlantDataList();
                         plantList.addAll(postList);
                         plantListRecycleAdapter.notifyDataSetChanged();
-                        if (pageNumber <= 30) {
+                        if (pageNumber <= 1) {
                             fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, pageNumber + 1);
                         } else {
                             Log.d("PlantList", "DONE ditmemay");
@@ -137,6 +143,13 @@ public class plantListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
 
     }
+
+    private void openSettings() {
+        Intent intent = new Intent(plantListActivity.this, setting.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+        //finish();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.search_bar_menu,menu);
@@ -156,4 +169,6 @@ public class plantListActivity extends AppCompatActivity {
         return  super.onCreateOptionsMenu(menu);
         }
     }
+
+
 

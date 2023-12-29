@@ -24,7 +24,7 @@
             android:exported="false" />
         <activity
             android:name=".PlantDetailsActivity"
-            android:exported="true" />
+            android:exported="true" />         
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -38,5 +38,4 @@
             android:name=".plantListActivity"
             android:exported="true" />
     </application>
-
 </manifest>

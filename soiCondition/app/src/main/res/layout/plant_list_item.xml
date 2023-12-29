@@ -45,7 +45,6 @@
                     android:layout_width="75px"
                     android:layout_height="75px"
                     android:id = "@+id/wateringIcon"/>
-
                 <LinearLayout
                     android:id="@+id/sunlightIconsContainer"
                     android:layout_width="wrap_content"

@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.Image;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,9 +50,12 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
         default_Image defaultImage = plantData.getDefaultImage();
         if (defaultImage != null) {
             String thumbnailUrl = defaultImage.getThumbnail(); // Assuming getThumbnail returns the URL
+            Log.d("Thumbnail", "Thumbnail URL: " + thumbnailUrl);
             if (!TextUtils.isEmpty(thumbnailUrl)) {
                 Picasso.get().load(thumbnailUrl).into(holder.thumbnail);
             }
+        } else{
+            Log.d("Thumbnail", "Not found");
         }
         if (holder.wateringIcon != null) {
             int wateringIcon = getWateringIcon(plantData.getWatering());
@@ -73,7 +77,7 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
-    private OnItemClickListener onItemClickListener;
+    public OnItemClickListener onItemClickListener;
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.onItemClickListener = listener;
     }
@@ -145,7 +149,6 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
             sunlightContainer.addView(icon);
         }
     }
-
     private ImageView createSunlightIcon(int iconResourceId) {
         ImageView icon = new ImageView(context);
         icon.setLayoutParams(new ViewGroup.LayoutParams(75,75));

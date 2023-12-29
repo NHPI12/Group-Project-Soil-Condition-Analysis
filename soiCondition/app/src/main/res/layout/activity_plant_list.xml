@@ -39,6 +39,7 @@
                     android:paddingLeft="35dp"
                     android:textSize="20dp"
                     android:text="Add"
+                    android:id="@+id/add_text"
                     android:textStyle="bold"
                     android:textColor="@color/gray"/>
                 <View
@@ -50,6 +51,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="20dp"
                     android:text="Remove"
+                    android:id="@+id/remove_text"
                     android:textStyle="bold"
                     android:paddingLeft="40dp"
                     android:textColor="@color/gray"/>

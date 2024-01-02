@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.LayoutTransition;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -71,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
     private List<PlantData> plantList;
     private Plant_List_Recycle_Adapter plantListRecycleAdapter;
     private boolean isDataFetched = false;
+    plantListActivity plantListActivity = new plantListActivity();
+    AddPlantsActivity addPlantsActivity = new AddPlantsActivity();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 if (id == R.id.list_plants) {
-                    fetchData();
+                    fetchData(plantListActivity);
                 }
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
@@ -219,10 +222,7 @@ public class MainActivity extends AppCompatActivity {
         addTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent addIntent = new Intent(MainActivity.this, AddPlantsActivity.class);
-                Log.d("Troi oi cuoc doi Main", "" + plantList);
-                startActivity(addIntent);
-                openActivity(AddPlantsActivity.class);
+                fetchData(addPlantsActivity);
             }
         });
         removeTextView.setOnClickListener(new View.OnClickListener() {
@@ -453,7 +453,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void fetchData() {
+    private void fetchData(Activity activity) {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://perenual.com/api/")
@@ -462,21 +462,27 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
 
-        String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
+        //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
-
+        String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
+        //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
             if (!isDataFetched) {
                 // Fetch data only if it hasn't been fetched yet
-                fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
+                fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1,activity);
             } else {
-                // Start PlantListActivity directly with the existing data
-                startPlantListActivity();
+                // Start Activity directly with the existing data
+                if (activity instanceof plantListActivity){
+                    startPlantListActivity();
+                }else if(activity instanceof AddPlantsActivity){
+                    startAddPlantsActivity();
+                }
+
             }
     }
 
-    private void fetchDatafromMultiplePages(JSONPlaceHolder jsonPlaceHolder, String apiKey, int pageNumber) {
+    private void fetchDatafromMultiplePages(JSONPlaceHolder jsonPlaceHolder, String apiKey, int pageNumber, Activity activity) {
         Call<PlantResponse> call = jsonPlaceHolder.getData(apiKey, pageNumber);
         call.enqueue(new Callback<PlantResponse>() {
             @Override
@@ -484,16 +490,18 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     PlantResponse plantResponse = response.body();
                     List<PlantData> plantList = plantResponse.getPlantDataList();
-                    // Pass data to PlantListActivity
-                    Intent intent = new Intent(MainActivity.this, plantListActivity.class);
-                    intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
+                    // Pass data to Activity
                     if (pageNumber <= 1) {
-                        fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, pageNumber + 1);
+                        fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, pageNumber + 1,activity);
                     } else {
                         Log.d("PlantList", "DONE" + plantList);
                         isDataFetched = true;
-                        // Pass data to PlantListActivity
-                        startPlantListActivity(plantList);
+                        // Pass data to Activity
+                        if (activity instanceof plantListActivity){
+                            startPlantListActivity(plantList);
+                        }else if(activity instanceof AddPlantsActivity){
+                            startAddPlantsActivity(plantList);
+                        }
                     }
                 } else {
                     Log.e("PlantList", "Error" + response.code());
@@ -517,6 +525,18 @@ public class MainActivity extends AppCompatActivity {
         intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
         startActivity(intent);
         overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
+    }
+    private void startAddPlantsActivity(List<PlantData> plantList){
+        // Start AddPlantsActivity with passing data
+        Intent intent = new Intent(MainActivity.this,AddPlantsActivity.class);
+        intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
+        startActivity(intent);
+    }
+    private void startAddPlantsActivity(){
+        Intent intent = new Intent(MainActivity.this,AddPlantsActivity.class);
+        intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
     }
 }
 

@@ -149,12 +149,11 @@ public class plantListActivity extends AppCompatActivity {
             }
         });
         return  super.onCreateOptionsMenu(menu);
-        }
+    }
     private void openActivity(Class<?> destinationClass) {
         Intent intent = new Intent(plantListActivity.this, destinationClass);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
-
-    }
+}
 

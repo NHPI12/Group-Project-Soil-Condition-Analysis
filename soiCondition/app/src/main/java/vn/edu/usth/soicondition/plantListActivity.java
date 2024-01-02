@@ -73,10 +73,15 @@ public class plantListActivity extends AppCompatActivity {
                     openActivity(MainActivity.class);
                     overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
                 }
+                else if (id == R.id.item_5) {
+                    openSettings();
+                }
+
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
+
         TextView addTextView = findViewById(R.id.add_text);
         TextView removeTextView = findViewById(R.id.remove_text);
         addTextView.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +124,7 @@ public class plantListActivity extends AppCompatActivity {
                     intent.putExtra("watering", clickedPlant.getWatering());
                     intent.putExtra("id", clickedPlant.getId());
                     startActivity(intent);
+
                 }
             });
         }
@@ -131,6 +137,13 @@ public class plantListActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openSettings() {
+        Intent intent = new Intent(plantListActivity.this, setting.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+        //finish();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -156,4 +169,6 @@ public class plantListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
+
+
 

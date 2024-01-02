@@ -215,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
                 } else if (id == R.id.item_5) {
                     openSettings();
                 }
-
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
             }

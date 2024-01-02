@@ -5,10 +5,8 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class PlantData implements Parcelable {
@@ -31,6 +29,7 @@ public class PlantData implements Parcelable {
     private List<String> sunlight;
     @SerializedName("default_image")
     private default_Image defaultImage;
+    private boolean isChecked;
 
     protected PlantData(Parcel in) {
         id = in.readInt();
@@ -41,6 +40,7 @@ public class PlantData implements Parcelable {
         watering = in.readString();
         sunlight = in.createStringArrayList();
         defaultImage = in.readParcelable(default_Image.class.getClassLoader());
+        this.isChecked = false;
     }
 
     public static final Creator<PlantData> CREATOR = new Creator<PlantData>() {
@@ -134,5 +134,11 @@ public class PlantData implements Parcelable {
         dest.writeString(watering);
         dest.writeStringList(sunlight);
         dest.writeParcelable(defaultImage, flags);
+    }
+    public boolean isChecked() {
+        return isChecked;
+    }
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }

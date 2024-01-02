@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,7 +19,10 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import vn.edu.usth.soicondition.network.model.PlantData;
 import vn.edu.usth.soicondition.network.model.default_Image;
@@ -27,6 +31,8 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
     private List<PlantData> PlantData;
     private Context context;
     private boolean isAllChecked = false;
+    private List<PlantData> selectedPlants = new ArrayList<>();
+
     public  Plant_Add_Recycle_Adapter(Context context, List<PlantData> plantData){
         this.context = context;
         this.PlantData = plantData;
@@ -46,6 +52,7 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
             return;
         }
         holder.Add_common_name.setText((plantData.getCommon_name()));
+        holder.checkBox.setChecked(plantData.isChecked());
         default_Image defaultImage = plantData.getDefaultImage();
         if(defaultImage != null){
             String thumbnailUrl = defaultImage.getThumbnail();
@@ -95,7 +102,29 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
             wateringIcon = itemView.findViewById(R.id.AddwateringIcon);
             sunlightIconContainer = itemView.findViewById(R.id.AddsunlightIconsContainer);
             checkBox = itemView.findViewById(R.id.checkbox_plant);
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        PlantData plantData = PlantData.get(position);
+                        if (plantData != null) {
+                            plantData.setChecked(isChecked);
 
+                            // Update the selectedPlants list based on checkbox state
+                            if (isChecked) {
+                                selectedPlants.add(plantData);
+                            } else {
+                                selectedPlants.remove(plantData);
+                            }
+
+                            if (onCheckedChangeListener != null) {
+                                onCheckedChangeListener.onCheckedChanged(isAtLeastOneChecked());
+                            }
+                        }
+                    }
+                }
+            });
         }
     }
     private int getWateringIcon(String wateringText) {
@@ -144,11 +173,33 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
             sunlightContainer.addView(icon);
         }
     }
+    public Set<Integer> getSelectedPlantIds() {
+        Set<Integer> selectedPlantIds = new HashSet<>();
+        for (PlantData selectedPlant : selectedPlants) {
+            selectedPlantIds.add(Integer.valueOf(selectedPlant.getId())); // Assuming the PlantData has a method getId()
+        }
+        return selectedPlantIds;
+    }
     private ImageView createSunlightIcon(int iconResourceId) {
         ImageView icon = new ImageView(context);
         icon.setLayoutParams(new ViewGroup.LayoutParams(75,75));
         icon.setImageResource(iconResourceId);
         icon.setPadding(0, 0, 8, 0); // Add padding between icons if needed
         return icon;
+    }
+    public interface OnCheckedChangeListener {
+        void onCheckedChanged(boolean isAtLeastOneChecked);
+    }
+    private OnCheckedChangeListener onCheckedChangeListener;
+    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
+        this.onCheckedChangeListener = listener;
+    }
+    public boolean isAtLeastOneChecked() {
+        for (PlantData plantData : PlantData) {
+            if (plantData.isChecked()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

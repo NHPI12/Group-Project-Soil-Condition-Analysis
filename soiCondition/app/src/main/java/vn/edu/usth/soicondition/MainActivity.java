@@ -212,11 +212,12 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 if (id == R.id.list_plants) {
                     fetchData(plantListActivity);
-                }else if(id==R.id.item_5){
+                } else if (id == R.id.item_5) {
                     openSettings();
                 }
-                drawerLayout.closeDrawer(GravityCompat.START);
-                return true;
+
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    return true;
             }
         });
         TextView addTextView = findViewById(R.id.add_text);
@@ -241,6 +242,25 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         overridePendingTransition(R.anim.slide_up, R.anim.slide_up_out);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.navigation_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
     private void openSettings() {
         Intent intent = new Intent(MainActivity.this, setting.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -248,20 +268,13 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        return true;
+    // Method to open PlantListActivity
+    private void openPlantListActivity(){
+        Intent intent = new Intent(MainActivity.this, plantListActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+        finish();
     }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void expandHumid(View view) {
         expand(lineChartHumid, humidLayout, lineChartTemp, lineChartSoil);
@@ -546,5 +559,6 @@ public class MainActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
+
 }
 

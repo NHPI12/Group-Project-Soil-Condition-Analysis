@@ -14,6 +14,39 @@
         android:gravity="top"
         android:layout_marginTop="120dp">
         <androidx.cardview.widget.CardView
+            android:id="@+id/selectedPlantsCardView"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/selectedPlantsImageView">
+                </ImageView>
+                <TextView
+                    android:id="@+id/selectedPlantsTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textSize="18sp"/>
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/selectedPlantsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
             android:onClick="expandHumid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

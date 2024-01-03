@@ -20,6 +20,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -51,6 +52,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
         String cycle = intent.getStringExtra("cycle");
         String watering = intent.getStringExtra("watering");
         String originalUrl = intent.getStringExtra("original_url");
+        ArrayList<String> sunlight = intent.getStringArrayListExtra("sunlight");
         Log.d("Common",""+ commonName);
         int ID = intent.getIntExtra("id", 0);
         Log.d("Okabcde","Original URL: " + originalUrl);
@@ -62,13 +64,15 @@ public class PlantDetailsActivity extends AppCompatActivity {
         TextView cycleTextView = findViewById(R.id.cycle_details);
         TextView wateringTextView = findViewById(R.id.humidity_details);
         ImageView BigImageDetails = findViewById(R.id.ImageBigDetails);
-        TextView temperatureTextView = findViewById(R.id.temperatureDetails);
 
         // Set text in TextView elements
         scientificNameTextView.setText(joinStrings(scientificNames));
         commonNameTextView.setText(commonName);
         cycleTextView.setText(cycle);
+        customizeSunlightText(sunlight);
         wateringTextView.setText(watering);
+        customizeHumidityText(watering);
+
         if (originalUrl != null && !originalUrl.isEmpty()) {
             Picasso.get().load(originalUrl).into(BigImageDetails);
         } else {
@@ -79,20 +83,17 @@ public class PlantDetailsActivity extends AppCompatActivity {
                 R.drawable.ic_thumbnail,
                 R.drawable.ic_thumbnail,
                 R.drawable.ic_thumbnail,
-                R.drawable.ic_thumbnail,
-                R.drawable.ic_thumbnail,
-                R.drawable.ic_thumbnail,
-                R.drawable.ic_thumbnail,
                 R.drawable.ic_thumbnail
         );
 
         Plant_Details_Image_Recycle_Adapter adapter = new Plant_Details_Image_Recycle_Adapter(this, imageList);
         recyclerView.setAdapter(adapter);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
+        //String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
-        //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
+        String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
+        //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
         fetchPlantDetails(ID,apiKey);
     }
     @Override
@@ -136,10 +137,13 @@ public class PlantDetailsActivity extends AppCompatActivity {
                     String description = plantDetails.getDescription();
                     TextView flowering_season = findViewById(R.id.SeasonsDetails);
                     TextView description_details = findViewById(R.id.descriptionDetails);
+                    ImageView flowering_Image = findViewById(R.id.Flowering_Season_Icon);
                     if (plantDetails.getFlowering_season() != null) {
+                        setSeasonIcon(plantDetails.getFlowering_season(), flowering_Image);
                         flowering_season.setText(plantDetails.getFlowering_season());
                     } else {
                         flowering_season.setText("Not specified");
+                        flowering_Image.setImageResource(R.drawable.season_cycle_icon);
                     }
                     description_details.setText(description);
                 } else {
@@ -151,5 +155,89 @@ public class PlantDetailsActivity extends AppCompatActivity {
                 Log.e("PlantDetails", "Error: " + t.getMessage());
             }
         });
+    }
+    private void setSeasonIcon(String season, ImageView seasonIconImageView) {
+        int iconResource;
+
+        switch (season.toLowerCase()) {
+            case "spring":
+                iconResource = R.drawable.spring_icon;
+                break;
+            case "summer":
+                iconResource = R.drawable.summer_icon;
+                break;
+            case "autumn":
+                iconResource = R.drawable.autumn_icon;
+                break;
+            case "winter":
+                iconResource = R.drawable.winter_icon;
+                break;
+            default:
+                iconResource = R.drawable.season_cycle_icon;
+                break;
+        }
+        seasonIconImageView.setImageResource(iconResource);
+    }
+    private void customizeHumidityText(String watering) {
+        TextView humidityTextView = findViewById(R.id.humidity_details);
+        String humidityText;
+        switch (watering.toLowerCase()) {
+            case "frequent":
+                humidityText = "High";
+                break;
+            case "average":
+                humidityText = "Medium";
+                break;
+            case "minimum":
+                humidityText = "Low";
+                break;
+            case "none":
+                humidityText = "None";
+                break;
+            default:
+                humidityText = "Not specified";
+                break;
+        }
+        humidityTextView.setText(humidityText);
+    }
+    private void customizeSunlightText(List<String> sunlight) {
+        TextView temperatureTextView = findViewById(R.id.temperatureDetails);
+        // Create lists to store minimum and maximum temperatures
+        List<Integer> minTemps = new ArrayList<>();
+        List<Integer> maxTemps = new ArrayList<>();
+
+        // Loop through each sunlight value and populate the temperature lists
+        for (String value : sunlight) {
+            switch (value.toLowerCase()) {
+                case "full shade":
+                    minTemps.add(15);
+                    maxTemps.add(24);
+                    break;
+                case "part shade":
+                case "part sun/part shade":
+                    minTemps.add(18);
+                    maxTemps.add(27);
+                    break;
+                case "filtered shade":
+                    minTemps.add(16);
+                    maxTemps.add(25);
+                    break;
+                case "full sun":
+                    minTemps.add(21);
+                    maxTemps.add(32);
+                    break;
+                default:
+                    // Handle other cases if needed
+                    break;
+            }
+        }
+
+        // Find the overall minimum and maximum temperatures
+        int overallMinTemp = Collections.min(minTemps);
+        int overallMaxTemp = Collections.max(maxTemps);
+
+        // Display the customized temperature text
+        String temperatureValue = overallMinTemp + "°C - " + overallMaxTemp + "°C";
+        temperatureTextView.setText(temperatureValue);
     }
 }

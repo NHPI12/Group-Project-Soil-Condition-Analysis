@@ -98,7 +98,7 @@
                                         android:layout_height="50dp"
                                         android:layout_marginLeft="20dp"
                                         android:layout_marginTop="15dp"
-                                        android:id="@+id/Flowering_Season_Icon" />
+                                        android:src="@drawable/ic_thumbnail" />
 
                                     <LinearLayout
                                         android:layout_width="122dp"
@@ -116,20 +116,19 @@
                                             android:textStyle="bold" />
 
                                         <TextView
-                                            android:layout_width="100dp"
-                                            android:layout_height="30dp"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
                                             android:layout_marginLeft="10dp"
-                                            android:layout_marginTop="2dp"
                                             android:id="@+id/SeasonsDetails"
                                             android:text="Spring"
                                             android:textColor="@color/black"
                                             android:textStyle="bold"
                                             android:autoSizeTextType="uniform"
                                             android:maxLines="1"
-                                            android:textSize="10sp"
-                                            app:autoSizeMinTextSize="5sp"
-                                            app:autoSizeMaxTextSize="10sp"
-                                            app:autoSizeStepGranularity="1sp"/>
+                                            android:textSize="25sp"
+                                            app:autoSizeMinTextSize="10sp"
+                                            app:autoSizeMaxTextSize="25sp"
+                                            app:autoSizeStepGranularity="5dp"/>
                                     </LinearLayout>
 
                                 </LinearLayout>
@@ -145,7 +144,7 @@
                                         android:layout_height="50dp"
                                         android:layout_marginLeft="10dp"
                                         android:layout_marginTop="15dp"
-                                        android:src="@drawable/cycle_icon" />
+                                        android:src="@drawable/ic_thumbnail" />
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
@@ -195,7 +194,7 @@
                                         android:layout_height="50dp"
                                         android:layout_marginLeft="20dp"
                                         android:layout_marginTop="15dp"
-                                        android:src="@drawable/temperature_icon" />
+                                        android:src="@drawable/ic_thumbnail" />
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
@@ -213,20 +212,14 @@
                                             android:textStyle="bold" />
 
                                         <TextView
-                                            android:layout_width="100dp"
-                                            android:layout_height="50dp"
-                                            android:layout_marginTop="2dp"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="80dp"
                                             android:layout_marginLeft="10dp"
                                             android:id="@+id/temperatureDetails"
                                             android:text="44°F - 64°F"
                                             android:textColor="@color/black"
-                                            android:textStyle="bold"
-                                            android:autoSizeTextType="uniform"
-                                            android:maxLines="1"
-                                            android:textSize="10sp"
-                                            app:autoSizeMinTextSize="5sp"
-                                            app:autoSizeMaxTextSize="10sp"
-                                            app:autoSizeStepGranularity="1sp" />
+                                            android:textSize="25dp"
+                                            android:textStyle="bold" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -240,7 +233,7 @@
                                         android:layout_height="50dp"
                                         android:layout_marginLeft="10dp"
                                         android:layout_marginTop="10dp"
-                                        android:src="@drawable/humidity" />
+                                        android:src="@drawable/ic_thumbnail" />
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"

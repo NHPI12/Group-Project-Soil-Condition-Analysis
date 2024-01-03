@@ -3,7 +3,6 @@ package vn.edu.usth.soicondition;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.Image;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,10 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import vn.edu.usth.soicondition.network.model.PlantData;
 import vn.edu.usth.soicondition.network.model.PlantResponse;
@@ -131,8 +127,6 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
                 return R.drawable.sunpart_shade;
             case "full sun":
                 return R.drawable.full_sun;
-            case "part sun/part shade":
-                return R.drawable.partsun_partshade;
             default:
                 return R.drawable.ic_thumbnail;
         }

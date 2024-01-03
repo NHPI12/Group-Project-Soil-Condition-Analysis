@@ -1,5 +1,6 @@
 package vn.edu.usth.soicondition;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +21,7 @@ import vn.edu.usth.soicondition.network.model.default_Image;
 
 public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAdapter.ViewHolder> {
 
-    private List<PlantData> selectedPlants;
+    private final List<PlantData> selectedPlants;
     private OnItemClickListener listener;
     private boolean expanded;
 
@@ -36,9 +37,8 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.selected_plants_item, parent, false);
         return new ViewHolder(view);
     }
-
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         PlantData plant = selectedPlants.get(position);
         default_Image defaultImage = plant.getDefaultImage();
         if (defaultImage != null) {
@@ -114,5 +114,18 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
     }
     public interface OnItemClickListener {
         void onItemClick(int position);
+    }
+    public PlantData getPlantDataAtPosition(int position) {
+        if (position >= 0 && position < selectedPlants.size()) {
+            return selectedPlants.get(position);
+        }
+        return null;
+    }
+    public PlantData getTopItem() {
+        if (selectedPlants.size() > 0) {
+            return selectedPlants.get(0);
+        } else {
+            return null;
+        }
     }
 }

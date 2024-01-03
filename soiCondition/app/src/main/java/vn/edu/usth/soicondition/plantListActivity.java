@@ -152,7 +152,6 @@ public class plantListActivity extends AppCompatActivity {
         Intent intent = new Intent(plantListActivity.this, setting.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
-        //finish();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){

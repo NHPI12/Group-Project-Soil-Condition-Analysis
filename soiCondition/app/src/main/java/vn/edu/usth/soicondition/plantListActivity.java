@@ -69,8 +69,7 @@ public class plantListActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 if (id == R.id.stats_plant) {
                     Intent intent = new Intent(plantListActivity.this, MainActivity.class);
-                    Log.d("Troi oi cuoc doi List", "" + plantList);
-                    openActivity(MainActivity.class);
+                    startActivity(intent);
                     overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
                 }
                 else if (id == R.id.item_5) {
@@ -119,6 +118,7 @@ public class plantListActivity extends AppCompatActivity {
                     intent.putExtra("original_url", clickedPlantImage.getOriginalUrl());
                     Log.d("PlantListActivity", "Original URL: " + clickedPlantImage.getOriginalUrl());
                     intent.putExtra("scientific_name", new ArrayList<>(clickedPlant.getScientific_name()));
+                    intent.putExtra("sunlight", new ArrayList<>(clickedPlant.getSunlight()));
                     intent.putExtra("common_name", clickedPlant.getCommon_name());
                     intent.putExtra("cycle", clickedPlant.getCycle());
                     intent.putExtra("watering", clickedPlant.getWatering());
@@ -162,7 +162,7 @@ public class plantListActivity extends AppCompatActivity {
             }
         });
         return  super.onCreateOptionsMenu(menu);
-    }
+        }
     private void openActivity(Class<?> destinationClass) {
         Intent intent = new Intent(plantListActivity.this, destinationClass);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

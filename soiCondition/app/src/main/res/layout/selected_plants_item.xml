@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="10dp">
@@ -17,5 +18,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text=""
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:maxLines="1"
+        app:autoSizeMinTextSize="5sp"
+        app:autoSizeMaxTextSize="10sp"
+        app:autoSizeStepGranularity="1sp"
+        android:layout_marginStart="10dp"/>
 </LinearLayout>

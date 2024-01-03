@@ -21,10 +21,13 @@
             android:exported="false" />
         <activity
             android:name=".RemovePlantsActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:theme="@style/AppThemeForAddAndRemove."
+            />
         <activity
             android:name=".AddPlantsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/AppThemeForAddAndRemove."/>
         <activity
             android:name=".PlantDetailsActivity"
             android:exported="true" />

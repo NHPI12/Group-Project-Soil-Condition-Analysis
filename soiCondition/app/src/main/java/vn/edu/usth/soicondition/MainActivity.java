@@ -581,7 +581,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateSelectedPlantsCard() {
         SharedPreferences sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
         Set<String> selectedPlantIdsStringSet = sharedPreferences.getStringSet("selected_plants", new HashSet<>());
-        selectedPlantsAdapter = new SelectedPlantsAdapter();
+        selectedPlantsAdapter = new SelectedPlantsAdapter(plantList);
         selectedPlantsRecyclerView.setAdapter(selectedPlantsAdapter);
         selectedPlantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         selectedPlantsCardView.setOnClickListener(new View.OnClickListener() {

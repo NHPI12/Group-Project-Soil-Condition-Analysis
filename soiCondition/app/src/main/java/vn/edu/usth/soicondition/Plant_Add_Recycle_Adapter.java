@@ -117,7 +117,6 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
                             } else {
                                 selectedPlants.remove(plantData);
                             }
-
                             if (onCheckedChangeListener != null) {
                                 onCheckedChangeListener.onCheckedChanged(isAtLeastOneChecked());
                             }

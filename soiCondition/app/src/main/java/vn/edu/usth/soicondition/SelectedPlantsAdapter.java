@@ -46,11 +46,12 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
             if (!TextUtils.isEmpty(thumbnailUrl)) {
                 Picasso.get().load(thumbnailUrl).into(holder.thumbnailImageView);
             }
-        } else{
+        } else {
             Log.d("Selected Plant Details", "DefaultImage Not found");
         }
         holder.nameTextView.setText(plant.getCommon_name());
     }
+
     @Override
     public int getItemCount() {
         if (expanded) {
@@ -59,10 +60,12 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
             return 1;
         }
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView thumbnailImageView, arrowImageView;
         private TextView nameTextView;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             thumbnailImageView = itemView.findViewById(R.id.imageViewThumbnail);
@@ -71,6 +74,7 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
         }
 
     }
+
     public void toggleRecyclerViewVisibility(ImageView arrowImageView, RecyclerView selectedPlantsRecyclerView) {
         if (selectedPlantsRecyclerView != null) {
             expanded = !expanded;
@@ -79,6 +83,7 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
             // Rotate the arrow icon
             float newRotation = expanded ? 180f : 0f;
             arrowImageView.animate().rotation(newRotation).start();
+            adjustRecyclerViewHeight(selectedPlantsRecyclerView);
         } else {
             Log.d("Selected Plant Details", "Recycle View null");
         }
@@ -91,4 +96,17 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
         notifyDataSetChanged();
     }
 
+    private void adjustRecyclerViewHeight(RecyclerView recyclerView) {
+        if (recyclerView != null && expanded) {
+            int maxRecyclerViewHeight = 200; // Set your maximum height in pixels
+            int recyclerViewHeight = recyclerView.getMeasuredHeight();
+
+            if (recyclerViewHeight > maxRecyclerViewHeight) {
+                ViewGroup.LayoutParams layoutParams = recyclerView.getLayoutParams();
+                layoutParams.height = maxRecyclerViewHeight;
+                recyclerView.setLayoutParams(layoutParams);
+            }
+        }
+
+    }
 }

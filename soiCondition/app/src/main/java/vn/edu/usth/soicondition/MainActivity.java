@@ -23,6 +23,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -243,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
                 startActivity(intent);
                 overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+                finish();
             }
         });
         removeTextView.setOnClickListener(new View.OnClickListener() {
@@ -492,8 +495,8 @@ public class MainActivity extends AppCompatActivity {
         JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
 
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
-        //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-        String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
         //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
@@ -547,6 +550,21 @@ public class MainActivity extends AppCompatActivity {
                 SelectedPlantsAdapter selectedPlantsAdapter = new SelectedPlantsAdapter(allSelectedPlants);
                 selectedPlantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
                 selectedPlantsRecyclerView.setAdapter(selectedPlantsAdapter);
+                ViewTreeObserver vto = selectedPlantsRecyclerView.getViewTreeObserver();
+                vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    public boolean onPreDraw() {
+                        int maxRecyclerViewHeight = 200; // Set your maximum height in pixels
+                        int recyclerViewHeight = selectedPlantsRecyclerView.getMeasuredHeight();
+
+                        if (recyclerViewHeight > maxRecyclerViewHeight) {
+                            ViewGroup.LayoutParams layoutParams = selectedPlantsRecyclerView.getLayoutParams();
+                            layoutParams.height = maxRecyclerViewHeight;
+                            selectedPlantsRecyclerView.setLayoutParams(layoutParams);
+                        }
+                        selectedPlantsRecyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        return true;
+                    }
+                });
                 arrowImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

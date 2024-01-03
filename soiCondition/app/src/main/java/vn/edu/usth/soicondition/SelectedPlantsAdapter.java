@@ -21,12 +21,13 @@ import vn.edu.usth.soicondition.network.model.default_Image;
 public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAdapter.ViewHolder> {
 
     private List<PlantData> selectedPlants;
-    private int initiallyVisibleItems;
+    private OnItemClickListener listener;
     private boolean expanded;
 
-    public SelectedPlantsAdapter(List<PlantData> selectedPlantsList) {
+    public SelectedPlantsAdapter(List<PlantData> selectedPlantsList, OnItemClickListener listener) {
         this.selectedPlants = selectedPlantsList;
         this.expanded = false;
+        this.listener = listener;
     }
 
     @NonNull
@@ -50,6 +51,14 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
             Log.d("Selected Plant Details", "DefaultImage Not found");
         }
         holder.nameTextView.setText(plant.getCommon_name());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onItemClick(position);
+                }
+            }
+        });
     }
 
     @Override
@@ -71,6 +80,15 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
             thumbnailImageView = itemView.findViewById(R.id.imageViewThumbnail);
             nameTextView = itemView.findViewById(R.id.textViewCommonName);
             arrowImageView = itemView.findViewById(R.id.ArrowSelectedPlant);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && listener != null) {
+                        listener.onItemClick(position);
+                    }
+                }
+            });
         }
 
     }
@@ -83,7 +101,6 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
             // Rotate the arrow icon
             float newRotation = expanded ? 180f : 0f;
             arrowImageView.animate().rotation(newRotation).start();
-            adjustRecyclerViewHeight(selectedPlantsRecyclerView);
         } else {
             Log.d("Selected Plant Details", "Recycle View null");
         }
@@ -95,18 +112,7 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
         expanded = false;
         notifyDataSetChanged();
     }
-
-    private void adjustRecyclerViewHeight(RecyclerView recyclerView) {
-        if (recyclerView != null && expanded) {
-            int maxRecyclerViewHeight = 200; // Set your maximum height in pixels
-            int recyclerViewHeight = recyclerView.getMeasuredHeight();
-
-            if (recyclerViewHeight > maxRecyclerViewHeight) {
-                ViewGroup.LayoutParams layoutParams = recyclerView.getLayoutParams();
-                layoutParams.height = maxRecyclerViewHeight;
-                recyclerView.setLayoutParams(layoutParams);
-            }
-        }
-
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
 }

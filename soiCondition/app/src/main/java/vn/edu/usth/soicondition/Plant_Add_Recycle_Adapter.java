@@ -150,6 +150,8 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
                 return R.drawable.sunpart_shade;
             case "full sun":
                 return R.drawable.full_sun;
+            case "part sun/part shade":
+                return R.drawable.partsun_partshade;
             default:
                 return R.drawable.ic_thumbnail;
         }
@@ -181,9 +183,9 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
     }
     private ImageView createSunlightIcon(int iconResourceId) {
         ImageView icon = new ImageView(context);
-        icon.setLayoutParams(new ViewGroup.LayoutParams(75,75));
+        icon.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         icon.setImageResource(iconResourceId);
-        icon.setPadding(0, 0, 8, 0); // Add padding between icons if needed
+        icon.setPadding(0, 0, 20, 0); // Add padding between icons if needed
         return icon;
     }
     public interface OnCheckedChangeListener {

@@ -157,9 +157,9 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
     }
     private ImageView createSunlightIcon(int iconResourceId) {
         ImageView icon = new ImageView(context);
-        icon.setLayoutParams(new ViewGroup.LayoutParams(75,75));
+        icon.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         icon.setImageResource(iconResourceId);
-        icon.setPadding(0, 0, 8, 0); // Add padding between icons if needed
+        icon.setPadding(0, 0, 20, 0); // Add padding between icons if needed
         return icon;
     }
 }

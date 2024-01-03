@@ -12,68 +12,78 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <ImageView
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
+        <androidx.cardview.widget.CardView
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:id="@+id/Addthumbnail"/>
+            android:layout_margin="5dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            android:layout_gravity="center">
+            <ImageView
+                android:id="@+id/Addthumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="218dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:orientation="vertical">
-
+            android:layout_gravity="center"
+            android:layout_marginEnd="5dp"
+            android:orientation="vertical"
+            android:layout_weight="1">
             <TextView
                 android:id="@+id/Addcommon_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:padding="15dp"
                 android:text="Title"
                 android:textColor="@color/black"
-                android:textSize="20dp" />
-
+                android:textSize="20sp"
+                android:autoSizeTextType="uniform"
+                android:maxLines="1"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeStepGranularity="1sp"/>
             <LinearLayout
-                android:layout_width="194dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal">
-
+                android:layout_width="match_parent"
+                android:layout_height="80px"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center">
                 <ImageView
                     android:id="@+id/AddwateringIcon"
-                    android:layout_width="75px"
-                    android:layout_height="75px" />
-
+                    android:layout_width="80px"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"/>
                 <LinearLayout
                     android:id="@+id/AddsunlightIconsContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
                     android:orientation="horizontal" />
 
                 <TextView
                     android:id="@+id/Addcycle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="50dp" />
-
+                    android:layout_width="75dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end" />
             </LinearLayout>
         </LinearLayout>
         <RelativeLayout
             android:layout_width="43dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_gravity="end">
             <CheckBox
+                android:id="@+id/checkbox_plant"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:checked="false"
-                android:id="@+id/checkbox_plant"/>
+                android:checked="false" />
         </RelativeLayout>
-
-
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -12,53 +12,64 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <ImageView
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
+        <androidx.cardview.widget.CardView
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:id="@+id/thumbnail"/>
+            android:layout_marginStart="10dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            android:layout_gravity="center">
+            <ImageView
+                android:id="@+id/thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+        </androidx.cardview.widget.CardView>
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="10dp">
+            android:layout_margin="5dp"
+            android:orientation="vertical">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Title"
                 android:textColor="@color/black"
-                android:textSize="20dp"
-                android:padding="15dp"
-                android:gravity="center"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:id="@+id/common_name"
-                android:layout_gravity="center"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="5dp"
-                android:layout_gravity="center">
-                <ImageView
-                    android:layout_width="75px"
-                    android:layout_height="75px"
-                    android:id = "@+id/wateringIcon"/>
+                android:textSize="20sp"
+                android:autoSizeTextType="uniform"
+                android:maxLines="1"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeStepGranularity="1sp"/>
                 <LinearLayout
-                    android:id="@+id/sunlightIconsContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:id = "@+id/cycle"
-                    android:layout_marginRight="50dp"/>
-
-            </LinearLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="80px"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
+                    <ImageView
+                        android:layout_width="80px"
+                        android:layout_marginStart="10dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/wateringIcon"/>
+                    <LinearLayout
+                        android:id="@+id/sunlightIconsContainer"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"/>
+                    <TextView
+                        android:layout_width="85dp"
+                        android:layout_height="match_parent"
+                        android:id = "@+id/cycle"
+                        android:layout_gravity="end"/>
+                </LinearLayout>
         </LinearLayout>
-
-
     </LinearLayout>
 </androidx.cardview.widget.CardView>

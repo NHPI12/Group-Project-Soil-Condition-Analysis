@@ -31,18 +31,17 @@
                 android:id="@+id/selectedPlantsRecyclerView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxHeight="200dp"
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"/>
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="top|end"
-                    android:layout_marginTop="20dp"
-                    android:src="@drawable/humidity"
+                    android:layout_marginTop="30dp"
+                    android:src="@drawable/arrow_up"
                     android:id="@+id/ArrowSelectedPlant"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_marginRight="15dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView

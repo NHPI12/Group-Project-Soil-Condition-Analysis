@@ -69,7 +69,7 @@ import vn.edu.usth.soicondition.network.model.PlantData;
 import vn.edu.usth.soicondition.network.model.PlantResponse;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SelectedPlantsAdapter.OnItemClickListener {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private LineChart lineChartTemp, lineChartSoil, lineChartHumid;
@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
     private List<PlantData> plantList;
     private Plant_List_Recycle_Adapter plantListRecycleAdapter;
+    private List<PlantData> allSelectedPlants;
     private boolean isDataFetched = false;
     private CardView selectedPlantsCardView;
     private RecyclerView selectedPlantsRecyclerView;
@@ -495,10 +496,10 @@ public class MainActivity extends AppCompatActivity {
         JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
 
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
-        String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+        //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
-        //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
+        String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
         //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
             if (!isDataFetched) {
                 // Fetch data only if it hasn't been fetched yet
@@ -546,25 +547,10 @@ public class MainActivity extends AppCompatActivity {
             PlantData lastSelectedPlant = getPlantDataById(lastSelectedPlantId, plantList);
 
             if (lastSelectedPlant != null) {
-                List<PlantData> allSelectedPlants = getAllSelectedPlants(sharedPreferences);
-                SelectedPlantsAdapter selectedPlantsAdapter = new SelectedPlantsAdapter(allSelectedPlants);
+                allSelectedPlants = getAllSelectedPlants(sharedPreferences);
+                selectedPlantsAdapter = new SelectedPlantsAdapter(allSelectedPlants, this);
                 selectedPlantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
                 selectedPlantsRecyclerView.setAdapter(selectedPlantsAdapter);
-                ViewTreeObserver vto = selectedPlantsRecyclerView.getViewTreeObserver();
-                vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                    public boolean onPreDraw() {
-                        int maxRecyclerViewHeight = 200; // Set your maximum height in pixels
-                        int recyclerViewHeight = selectedPlantsRecyclerView.getMeasuredHeight();
-
-                        if (recyclerViewHeight > maxRecyclerViewHeight) {
-                            ViewGroup.LayoutParams layoutParams = selectedPlantsRecyclerView.getLayoutParams();
-                            layoutParams.height = maxRecyclerViewHeight;
-                            selectedPlantsRecyclerView.setLayoutParams(layoutParams);
-                        }
-                        selectedPlantsRecyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
-                        return true;
-                    }
-                });
                 arrowImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -608,5 +594,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return selectedPlants;
+    }
+    @Override
+    public void onItemClick(int position) {
+        if (allSelectedPlants != null && selectedPlantsAdapter != null && position < allSelectedPlants.size()) {
+            Collections.swap(allSelectedPlants, position, 0);
+            selectedPlantsAdapter.notifyItemMoved(position, 0);
+        } else if (allSelectedPlants == null){
+            Log.d("Selected Plant Details", "All selected plant is null");
+        } else if (selectedPlantsAdapter == null){
+            Log.d("Selected Plant Details", "Selected Plant Adapter is null");
+        }
     }
 }

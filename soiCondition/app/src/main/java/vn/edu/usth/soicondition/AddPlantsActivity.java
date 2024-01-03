@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -95,11 +96,24 @@ public class AddPlantsActivity extends AppCompatActivity {
     }
 
     private void saveSelectedPlants() {
-        Set<Integer> selectedPlantIds = plantAddRecycleAdapter.getSelectedPlantIds();
+        // Retrieve existing set from SharedPreferences
+        Set<String> existingPlantIdsStringSet = sharedPreferences.getStringSet(PREF_SELECTED_PLANTS, new HashSet<>());
+        // Convert the existing set to a Set<Integer>
+        Set<Integer> existingPlantIds = new HashSet<>();
+        for (String id : existingPlantIdsStringSet) {
+            existingPlantIds.add(Integer.valueOf(id));
+        }
+        // Add new plant IDs to the existing set
+        existingPlantIds.addAll(plantAddRecycleAdapter.getSelectedPlantIds());
+        // Save the updated set back to SharedPreferences
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putStringSet(PREF_SELECTED_PLANTS, convertSetToStringSet(selectedPlantIds));
+        editor.putStringSet(PREF_SELECTED_PLANTS, convertSetToStringSet(existingPlantIds));
         editor.apply();
-        Log.d("Selected Plant IDs", selectedPlantIds.toString());
+        Log.d("Selected Plant IDs", existingPlantIds.toString());
+        Intent intent = new Intent(AddPlantsActivity.this, MainActivity.class);
+        intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
+        startActivity(intent);
+        overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
         finish();
     }
     private Set<String> convertSetToStringSet(Set<Integer> integerSet) {

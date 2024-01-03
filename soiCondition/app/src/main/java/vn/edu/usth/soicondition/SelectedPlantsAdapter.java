@@ -39,13 +39,20 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        PlantData plantData = selectedPlants.get(position);
 
-        // Bind the plant data to the ViewHolder
-        // Set the plant's common name and thumbnail (modify as per your data structure)
-        holder.textViewCommonName.setText(plantData.getCommon_name());
-        // Set the thumbnail using Picasso or any other image loading library
-        Picasso.get().load(plantData.getDefaultImage().getThumbnail()).into(holder.imageViewThumbnail);
+        PlantData plant = selectedPlants.get(position);
+        default_Image defaultImage = plant.getDefaultImage();
+        if (defaultImage != null) {
+            String thumbnailUrl = defaultImage.getThumbnail();
+            Log.d("Selected Plant Details", "Thumbnail URL: " + thumbnailUrl);
+            if (!TextUtils.isEmpty(thumbnailUrl)) {
+                Picasso.get().load(thumbnailUrl).into(holder.thumbnailImageView);
+            }
+        } else {
+            Log.d("Selected Plant Details", "DefaultImage Not found");
+        }
+        holder.nameTextView.setText(plant.getCommon_name());
+
     }
 
     @Override
@@ -53,15 +60,54 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
         return selectedPlants.size();
     }
 
-    // ViewHolder class to hold references to UI components
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewCommonName;
-        ImageView imageViewThumbnail;
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        private ImageView thumbnailImageView, arrowImageView;
+        private TextView nameTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewCommonName = itemView.findViewById(R.id.selectedPlantsTextView);
-            imageViewThumbnail = itemView.findViewById(R.id.selectedPlantsImageView);
+            thumbnailImageView = itemView.findViewById(R.id.imageViewThumbnail);
+            nameTextView = itemView.findViewById(R.id.textViewCommonName);
+            arrowImageView = itemView.findViewById(R.id.ArrowSelectedPlant);
+        }
+
+    }
+
+    public void toggleRecyclerViewVisibility(ImageView arrowImageView, RecyclerView selectedPlantsRecyclerView) {
+        if (selectedPlantsRecyclerView != null) {
+            expanded = !expanded;
+            notifyDataSetChanged();
+            Log.d("Selected Plant Details", "Recycle View Not null and Clicked" + expanded);
+            // Rotate the arrow icon
+            float newRotation = expanded ? 180f : 0f;
+            arrowImageView.animate().rotation(newRotation).start();
+            adjustRecyclerViewHeight(selectedPlantsRecyclerView);
+        } else {
+            Log.d("Selected Plant Details", "Recycle View null");
         }
     }
+
+    public void setData(List<PlantData> newData) {
+        selectedPlants.clear();
+        selectedPlants.addAll(newData);
+        expanded = false;
+        notifyDataSetChanged();
+    }
+
+    private void adjustRecyclerViewHeight(RecyclerView recyclerView) {
+        if (recyclerView != null && expanded) {
+            int maxRecyclerViewHeight = 200; // Set your maximum height in pixels
+            int recyclerViewHeight = recyclerView.getMeasuredHeight();
+
+            if (recyclerViewHeight > maxRecyclerViewHeight) {
+                ViewGroup.LayoutParams layoutParams = recyclerView.getLayoutParams();
+                layoutParams.height = maxRecyclerViewHeight;
+                recyclerView.setLayoutParams(layoutParams);
+            }
+        }
+
+    }
+
 }

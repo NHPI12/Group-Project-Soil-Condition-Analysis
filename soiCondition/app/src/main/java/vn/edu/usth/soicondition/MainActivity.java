@@ -47,6 +47,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -287,7 +288,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         Intent intent = new Intent(MainActivity.this, setting.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
-        finish();
     }
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void expandHumid(View view) {
@@ -559,6 +559,17 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                         selectedPlantsAdapter.toggleRecyclerViewVisibility(arrowImageView, selectedPlantsRecyclerView);
                     }
                 });
+                PlantData topItemPlantData = selectedPlantsAdapter.getTopItem();
+                if (topItemPlantData != null) {
+                    // Now you can access watering and sunlight information
+                    int wateringValue = topItemPlantData.convertWateringToValue();
+
+                    // Convert sunlight to numerical value
+                    int sunlightValue = topItemPlantData.convertSunlightToValue();
+                    // Use the information as needed
+                    Log.d("Selected Plant Details", "Watering Before Clicked: " + wateringValue);
+                    Log.d("Selected Plant Details", "Sunlight Before Clicked: " + sunlightValue);
+                }
             }
         } else {
             // If no plants are selected, hide the CardView
@@ -574,6 +585,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         for (PlantData plantData : plantList) {
             if (plantData.getId() == plantId) {
                 String commonName = plantData.getCommon_name();
+                Log.d("Selected Plant Details", "ID: " + plantId);
                 Log.d("Selected Plant Details", "Common Name: " + commonName);
                 return plantData; // Return the entire PlantData object if needed
             }
@@ -602,10 +614,18 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         if (allSelectedPlants != null && selectedPlantsAdapter != null && position < allSelectedPlants.size()) {
             Collections.swap(allSelectedPlants, position, 0);
             selectedPlantsAdapter.notifyItemMoved(position, 0);
-        } else if (allSelectedPlants == null){
+            PlantData topItemPlantData = selectedPlantsAdapter.getPlantDataAtPosition(0);
+            if (topItemPlantData != null) {
+                int wateringValue = topItemPlantData.convertWateringToValue();
+                int sunlightValue = topItemPlantData.convertSunlightToValue();;
+                Log.d("Selected Plant Details", "Watering: " + wateringValue);
+                Log.d("Selected Plant Details", "Sunlight: " + sunlightValue);
+            }
+        } else if (allSelectedPlants == null) {
             Log.d("Selected Plant Details", "All selected plant is null");
-        } else if (selectedPlantsAdapter == null){
+        } else if (selectedPlantsAdapter == null) {
             Log.d("Selected Plant Details", "Selected Plant Adapter is null");
         }
     }
+
 }

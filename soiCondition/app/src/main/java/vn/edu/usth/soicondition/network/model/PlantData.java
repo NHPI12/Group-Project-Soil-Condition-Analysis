@@ -2,6 +2,7 @@ package vn.edu.usth.soicondition.network.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -135,10 +136,70 @@ public class PlantData implements Parcelable {
         dest.writeStringList(sunlight);
         dest.writeParcelable(defaultImage, flags);
     }
+
     public boolean isChecked() {
         return isChecked;
     }
+
     public void setChecked(boolean checked) {
         isChecked = checked;
+    }
+
+    public int convertWateringToValue() {
+        String wateringInfo = getWatering();
+        switch (wateringInfo) {
+            case "Frequent":
+                return 75;
+            case "Average":
+                return 68;
+            case "Minimum":
+                return 60;
+            case "None":
+                return 40;
+            default:
+                return 0; // Handle the default case or invalid values as needed
+        }
+    }
+
+    public int convertSunlightToValue() {
+        List<String> sunlightInfo = getSunlight();
+        if (sunlightInfo.isEmpty()) {
+            return 0;
+        }
+
+        int total = 0;
+        int count = 0;
+        int smallestFullShade = Integer.MAX_VALUE;
+        int largestFullSun = Integer.MIN_VALUE;
+
+        for (String sunlight : sunlightInfo) {
+            switch (sunlight) {
+                case "full shade":
+                    smallestFullShade = Math.min(smallestFullShade, 15);
+                    break;
+                case "part shade":
+                case "part sun/part shade":
+                    total += (18 + 27) / 2;
+                    count++;
+                    break;
+                case "filtered shade":
+                    total += (16 + 25) / 2;
+                    count++;
+                    break;
+                case "full sun":
+                    largestFullSun = Math.max(largestFullSun, 33);
+                    break;
+                default:
+                    // Handle unknown sunlight types or add more cases as needed
+                    break;
+            }
+        }
+
+        if (smallestFullShade != Integer.MAX_VALUE && largestFullSun != Integer.MIN_VALUE) {
+            total += (smallestFullShade + largestFullSun) / 2;
+            count++;
+        }
+
+        return count > 0 ? total / count : 0;
     }
 }

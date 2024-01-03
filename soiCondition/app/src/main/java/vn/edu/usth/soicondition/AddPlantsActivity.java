@@ -114,7 +114,6 @@ public class AddPlantsActivity extends AppCompatActivity {
         intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
         startActivity(intent);
         overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-        finish();
     }
     private Set<String> convertSetToStringSet(Set<Integer> integerSet) {
         Set<String> stringSet = new HashSet<>();

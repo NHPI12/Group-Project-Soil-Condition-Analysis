@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.LayoutTransition;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -44,11 +43,11 @@ import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -67,7 +66,6 @@ import vn.edu.usth.soicondition.network.DatabaseLocal.RetrofitDatabase;
 import vn.edu.usth.soicondition.network.JSONPlaceHolder;
 import vn.edu.usth.soicondition.network.TimeAxisValueFormatter;
 import vn.edu.usth.soicondition.network.model.PlantData;
-import vn.edu.usth.soicondition.network.model.PlantDetails;
 import vn.edu.usth.soicondition.network.model.PlantResponse;
 
 
@@ -81,14 +79,10 @@ public class MainActivity extends AppCompatActivity {
     private List<PlantData> plantList;
     private Plant_List_Recycle_Adapter plantListRecycleAdapter;
     private boolean isDataFetched = false;
-    plantListActivity plantListActivity = new plantListActivity();
-    AddPlantsActivity addPlantsActivity = new AddPlantsActivity();
-    private SharedPreferences sharedPreferences;
-    private TextView selectedPlantsTextView;
-    private ImageView selectedPlantsImageView;
     private CardView selectedPlantsCardView;
     private RecyclerView selectedPlantsRecyclerView;
     private SelectedPlantsAdapter selectedPlantsAdapter;
+    private ImageView arrowImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,12 +103,8 @@ public class MainActivity extends AppCompatActivity {
         plantList = new ArrayList<>();
 
         selectedPlantsCardView = findViewById(R.id.selectedPlantsCardView);
-        selectedPlantsTextView = findViewById(R.id.selectedPlantsTextView);
-        selectedPlantsImageView = findViewById(R.id.selectedPlantsImageView);
         selectedPlantsRecyclerView = findViewById(R.id.selectedPlantsRecyclerView);
-
-        // Display selected plants in the CardView
-        updateSelectedPlantsCard();
+        arrowImageView = findViewById(R.id.ArrowSelectedPlant);
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://smart-pot-1d7b5-default-rtdb.firebaseio.com/");
         DatabaseReference databaseReference1 = firebaseDatabase.getReference("sensor_data");
@@ -133,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         handler = new Handler(handlerThread.getLooper());
         // Fetch data from local SQL database
         // Start fetching data periodically
+        fetchData();
         startFetchingData();
 
         databaseReferenceSoil.addValueEventListener(new ValueEventListener() {
@@ -234,26 +225,27 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 if (id == R.id.list_plants) {
-                    fetchData(plantListActivity);
+                    Intent intent = new Intent(MainActivity.this, plantListActivity.class);
+                    intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
                 } else if (id == R.id.item_5) {
                     openSettings();
-                }
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
-                } 
+                } return false;
+            }
         });
         TextView addTextView = findViewById(R.id.add_text);
         TextView removeTextView = findViewById(R.id.remove_text);
         addTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(MainActivity.this, AddPlantsActivity.class);
                 intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
                 startActivity(intent);
                 overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
                 finish();
-
             }
         });
         removeTextView.setOnClickListener(new View.OnClickListener() {
@@ -263,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void openActivity(Class<?> destinationClass) {
         Intent intent = new Intent(MainActivity.this, destinationClass);
@@ -287,18 +280,8 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
     private void openSettings() {
         Intent intent = new Intent(MainActivity.this, setting.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(intent);
-        finish();
-    }
-
-    // Method to open PlantListActivity
-    private void openPlantListActivity(){
-        Intent intent = new Intent(MainActivity.this, plantListActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
         finish();
@@ -502,7 +485,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void fetchData(Activity activity) {
+    private void fetchData() {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://perenual.com/api/")
@@ -512,48 +495,29 @@ public class MainActivity extends AppCompatActivity {
         JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
 
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
-
         String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-
-        //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
         //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
             if (!isDataFetched) {
                 // Fetch data only if it hasn't been fetched yet
-                fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1,activity);
-            } else {
-                // Start Activity directly with the existing data
-                if (activity instanceof plantListActivity){
-                    startPlantListActivity();
-                }else if(activity instanceof AddPlantsActivity){
-                    startAddPlantsActivity();
-                }
-
+                fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
             }
     }
 
-    private void fetchDatafromMultiplePages(JSONPlaceHolder jsonPlaceHolder, String apiKey, int pageNumber, Activity activity) {
+    private void fetchDatafromMultiplePages(JSONPlaceHolder jsonPlaceHolder, String apiKey, int pageNumber) {
         Call<PlantResponse> call = jsonPlaceHolder.getData(apiKey, pageNumber);
         call.enqueue(new Callback<PlantResponse>() {
             @Override
             public void onResponse(Call<PlantResponse> call, Response<PlantResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     PlantResponse plantResponse = response.body();
-                    List<PlantData> plantList = plantResponse.getPlantDataList();
+                    plantList = plantResponse.getPlantDataList();
+                    updateSelectedPlantsCard(plantList);
                     // Pass data to Activity
-                    if (pageNumber <= 1) {
-                        fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, pageNumber + 1,activity);
-                    } else {
-                        Log.d("PlantList", "DONE" + plantList);
-                        // Pass data to Activity
-                        if (activity instanceof plantListActivity){
-                            startPlantListActivity(plantList);
-                        }else if(activity instanceof AddPlantsActivity){
-                            startAddPlantsActivity(plantList);
-                        }
+                    if (pageNumber < 2) {
+                        fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, pageNumber + 1);
                     }
                 } else {
                     Log.e("PlantList", "Error" + response.code());
@@ -565,51 +529,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void startPlantListActivity(List<PlantData> plantList) {
-        Intent intent = new Intent(MainActivity.this, plantListActivity.class);
-        intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
-        startActivity(intent);
-        overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
-    }
-    private void startPlantListActivity() {
-        // Start PlantListActivity without passing data
-        Intent intent = new Intent(MainActivity.this, plantListActivity.class);
-        intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
-        startActivity(intent);
-        overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
-    }
-    private void startAddPlantsActivity(List<PlantData> plantList){
-        // Start AddPlantsActivity with passing data
-        Intent intent = new Intent(MainActivity.this,AddPlantsActivity.class);
-        intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
-        startActivity(intent);
-    }
-    private void startAddPlantsActivity(){
-        Intent intent = new Intent(MainActivity.this,AddPlantsActivity.class);
-        intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(intent);
-    }
-    private void updateSelectedPlantsCard() {
+    private void updateSelectedPlantsCard(List<PlantData> plantList) {
         SharedPreferences sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
         Set<String> selectedPlantIdsStringSet = sharedPreferences.getStringSet("selected_plants", new HashSet<>());
-        selectedPlantsAdapter = new SelectedPlantsAdapter(plantList);
-        selectedPlantsRecyclerView.setAdapter(selectedPlantsAdapter);
-        selectedPlantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        selectedPlantsCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Toggle the visibility of the RecyclerView
-                if (selectedPlantsRecyclerView.getVisibility() == View.VISIBLE) {
-                    selectedPlantsRecyclerView.setVisibility(View.GONE);
-                } else {
-                    selectedPlantsRecyclerView.setVisibility(View.VISIBLE);
-                    // Update the RecyclerView with the list of selected plants
-                    selectedPlantsAdapter.setPlantList(getAllSelectedPlants());
-                    selectedPlantsAdapter.notifyDataSetChanged();
-                }
-            }
-        });
+
         // Convert String set to Set<Integer>
         Set<Integer> selectedPlantIds = new HashSet<>();
         for (String id : selectedPlantIdsStringSet) {
@@ -620,7 +543,7 @@ public class MainActivity extends AppCompatActivity {
         if (!selectedPlantIds.isEmpty()) {
             // Update the CardView with the details of the last selected plant
             int lastSelectedPlantId = getLastSelectedPlantId(selectedPlantIds);
-            PlantData lastSelectedPlant = getPlantDataById(lastSelectedPlantId);
+            PlantData lastSelectedPlant = getPlantDataById(lastSelectedPlantId, plantList);
 
             if (lastSelectedPlant != null) {
                 List<PlantData> allSelectedPlants = getAllSelectedPlants(sharedPreferences);
@@ -654,44 +577,36 @@ public class MainActivity extends AppCompatActivity {
             selectedPlantsCardView.setVisibility(View.GONE);
         }
     }
-    private PlantData getPlantDataById(int plantId) {
-        // Iterate through the fetched plant list to find the plant with the specified ID
+    private PlantData getPlantDataById(int plantId, List<PlantData> plantList) {
+        if (plantList == null || plantList.isEmpty()) {
+            Log.d("Selected Plant Details" ,"Null " + plantList.size());
+            return null;
+        }
+        else Log.d("Selected Plant Details" ,"Not Null " + plantList.size());
         for (PlantData plantData : plantList) {
             if (plantData.getId() == plantId) {
-                // Found the matching plant, extract Common_name and Thumbnail
                 String commonName = plantData.getCommon_name();
-                String thumbnailUrl = plantData.getDefaultImage().getThumbnail();
-                // Now, you have the Common_name and Thumbnail for the specified plant
-                Log.d("Selected Plant Details", "Common Name: " + commonName + ", Thumbnail: " + thumbnailUrl);
+                Log.d("Selected Plant Details", "Common Name: " + commonName);
                 return plantData; // Return the entire PlantData object if needed
             }
         }
         // Plant with the specified ID not found
         Log.e("Selected Plant Details", "Plant with ID " + plantId + " not found");
-        return null; // Return null or handle the case as needed
+        return null;
     }
     private int getLastSelectedPlantId(Set<Integer> selectedPlantIds) {
-        // Get the last element from the set
-        int lastSelectedPlantId = -1;
-        for (int id : selectedPlantIds) {
-            lastSelectedPlantId = id;
-        }
-        return lastSelectedPlantId;
+        return selectedPlantIds.isEmpty() ? -1 : Collections.max(selectedPlantIds);
     }
-    private List<PlantData> getAllSelectedPlants() {
-        // Assuming you have a method to get PlantData by ID
+    private List<PlantData> getAllSelectedPlants(SharedPreferences sharedPreferences) {
         Set<String> selectedPlantIdsStringSet = sharedPreferences.getStringSet("selected_plants", new HashSet<>());
         List<PlantData> selectedPlants = new ArrayList<>();
-
         for (String id : selectedPlantIdsStringSet) {
             int plantId = Integer.parseInt(id);
-            PlantData plantData = getPlantDataById(plantId);
+            PlantData plantData = getPlantDataById(plantId, plantList);
             if (plantData != null) {
                 selectedPlants.add(plantData);
             }
         }
-
         return selectedPlants;
     }
 }
-

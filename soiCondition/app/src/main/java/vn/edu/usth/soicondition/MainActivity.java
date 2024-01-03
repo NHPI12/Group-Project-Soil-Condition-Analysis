@@ -234,7 +234,13 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     openSettings();
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
-                } return false;
+                }else if (id == R.id.item_2){
+                    Intent intent = new Intent(MainActivity.this,Your_Plant_Activity.class);
+                    intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+                }
+                return false;
             }
         });
         TextView addTextView = findViewById(R.id.add_text);
@@ -246,13 +252,15 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
                 startActivity(intent);
                 overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-                finish();
             }
         });
         removeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivity(RemovePlantsActivity.class);
+                Intent intent = new Intent(MainActivity.this, RemovePlantsActivity.class);
+                intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
+                startActivity(intent);
+                overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
             }
         });
     }
@@ -265,12 +273,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         overridePendingTransition(R.anim.slide_up, R.anim.slide_up_out);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation_menu, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

@@ -173,11 +173,4 @@ public class Your_Plant_Activity extends AppCompatActivity {
         startActivity(intent);
         //finish();
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

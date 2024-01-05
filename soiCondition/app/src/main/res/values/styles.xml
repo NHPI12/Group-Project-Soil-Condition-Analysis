@@ -13,4 +13,11 @@
     <style name="paddingNavigation">
         <item name="android:layout_marginBottom">20dp</item>
     </style>
+    <style name="AppThemeForAddAndRemove." parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
 </resources>

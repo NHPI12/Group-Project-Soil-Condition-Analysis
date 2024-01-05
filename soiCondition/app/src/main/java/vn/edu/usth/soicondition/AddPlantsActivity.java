@@ -1,8 +1,10 @@
 package vn.edu.usth.soicondition;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,10 +13,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,9 +40,31 @@ public class AddPlantsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_plants);
+        Toolbar toolbar = findViewById(R.id.Add_toolbar);
+        setSupportActionBar(toolbar);
 
+        Button button = new Button(this);
+        int color = ContextCompat.getColor(this, R.color.black);
+        int colorBtn = ContextCompat.getColor(this, R.color.white);
+        button.setBackgroundColor(color);
+        button.setTextColor(colorBtn);
+        button.setText("All");
+
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                plantAddRecycleAdapter.switchAllChecked();
+            }
+        });
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setCustomView(button, new ActionBar.LayoutParams(
+                ActionBar.LayoutParams.WRAP_CONTENT,
+                ActionBar.LayoutParams.WRAP_CONTENT,
+                Gravity.END
+        ));
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24);
         Intent intent = getIntent();
         if (intent.hasExtra("plantList")) {
             plantList = intent.getParcelableArrayListExtra("plantList");
@@ -46,13 +73,13 @@ public class AddPlantsActivity extends AppCompatActivity {
             plantAddRecycleAdapter = new Plant_Add_Recycle_Adapter(this, plantList);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(plantAddRecycleAdapter);
-            Button checkAllButton = findViewById(R.id.CheckButtonAll);
-            checkAllButton.setOnClickListener(new View.OnClickListener() {
+            //Button checkAllButton = findViewById(R.id.CheckButtonAll);
+            /**checkAllButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     plantAddRecycleAdapter.switchAllChecked();
                 }
-            });
+            });*/
         } else {
             Toast.makeText(this, "No plant data available", Toast.LENGTH_SHORT).show();
             finish();
@@ -131,5 +158,10 @@ public class AddPlantsActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public boolean onSupportNavigateUp(){
+        onBackPressed();
+        return true;
     }
 }

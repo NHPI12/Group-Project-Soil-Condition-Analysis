@@ -3,27 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RemovePlantsActivity">
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/CheckRemoveButtonAll"
-        android:text="@string/checkAll"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/plant_remove_recycle_View"
+    tools:context=".RemovePlantsActivity"
+    android:background="@color/leaf">
+    <ListView
+        android:id="@+id/plant_remove_list_View"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp" />
-
+        android:layout_margin="10dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"/>
     <Button
         android:id="@+id/btnRemovePlants"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"

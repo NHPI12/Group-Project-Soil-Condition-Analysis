@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,30 +27,36 @@ import java.util.Set;
 import vn.edu.usth.soicondition.network.model.PlantData;
 
 public class RemovePlantsActivity extends AppCompatActivity {
-    private ListView listView;
-    private Plant_Add_ListView_Adapter plantRemoveListAdapter;
+    private RecyclerView recyclerView;
+    private Plant_Add_Recycle_Adapter plantRemoveRecycleAdapter;
     private Button btnRemovePlants;
     private SharedPreferences sharedPreferences;
     private static final String PREF_SELECTED_PLANTS = "selected_plants";
     private List<PlantData> plantList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remove_plants);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // Get your plant list
+        sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences",MODE_PRIVATE);
+        Set<String> selectedPlantIdsStringSet = sharedPreferences.getStringSet("selected_plants",new HashSet<>());
 
-        sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
-
+        Set<Integer> selectedPlantIds = new HashSet<>();
+        for (String id : selectedPlantIdsStringSet){
+            selectedPlantIds.add(Integer.valueOf(id));
+        }
+        //recycle View display your plant list
         Intent intent = getIntent();
         if (intent.hasExtra("plantList")) {
             plantList = intent.getParcelableArrayListExtra("plantList");
+            Log.d("New Data", "" + plantList);
             List<PlantData> allSelectedPlants = getAllSelectedPlants(sharedPreferences);
-
-            listView = findViewById(R.id.plant_remove_list_View);
-            plantRemoveListAdapter = new Plant_Add_ListView_Adapter(this, allSelectedPlants);
-            listView.setAdapter(plantRemoveListAdapter);
-
+            recyclerView = findViewById(R.id.plant_remove_recycle_View);
+            plantRemoveRecycleAdapter = new Plant_Add_Recycle_Adapter(this, allSelectedPlants);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(plantRemoveRecycleAdapter);
             // Inflate custom ActionBar layout
             LayoutInflater inflater = LayoutInflater.from(this);
             View customActionBarView = inflater.inflate(R.layout.actionbar_custom_layout, null);
@@ -71,24 +76,21 @@ public class RemovePlantsActivity extends AppCompatActivity {
 
                 checkAllView.setOnClickListener(v -> {
                     checkBox.setChecked(!checkBox.isChecked());
-                    plantRemoveListAdapter.switchAllChecked();
+                    plantRemoveRecycleAdapter.switchAllChecked();
                 });
-
                 checkBox.setOnClickListener(v -> {
-                    plantRemoveListAdapter.switchAllChecked();
+                    plantRemoveRecycleAdapter.switchAllChecked();
                 });
             }
         }
-
         btnRemovePlants = findViewById(R.id.btnRemovePlants);
-        btnRemovePlants.setVisibility(View.GONE);
-        plantRemoveListAdapter.setOnCheckedChangeListener(new Plant_Add_ListView_Adapter.OnCheckedChangeListener() {
+        btnRemovePlants.setVisibility(View.GONE); // initially set the button as gone
+        plantRemoveRecycleAdapter.setOnCheckedChangeListener(new Plant_Add_Recycle_Adapter.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(boolean isAtLeastOneChecked) {
                 btnRemovePlants.setVisibility(isAtLeastOneChecked ? View.VISIBLE : View.GONE);
             }
         });
-
         btnRemovePlants.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +98,6 @@ public class RemovePlantsActivity extends AppCompatActivity {
             }
         });
     }
-
     private Set<String> convertSetToStringSet(Set<Integer> integerSet) {
         Set<String> stringSet = new HashSet<>();
         for (Integer value : integerSet) {
@@ -144,7 +145,7 @@ public class RemovePlantsActivity extends AppCompatActivity {
     }
     private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        int selectedPlantCount = plantRemoveListAdapter.getSelectedPlantIds().size();
+        int selectedPlantCount = plantRemoveRecycleAdapter.getSelectedPlantIds().size();
         builder.setTitle("Confirmation");
         builder.setMessage("Are you sure you want to remove " + selectedPlantCount +" plant(s) from your plants list?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -172,7 +173,7 @@ public class RemovePlantsActivity extends AppCompatActivity {
             existingPlantIds.add(Integer.valueOf(id));
         }
         // Remove the plants that were selected for removal
-        existingPlantIds.removeAll(plantRemoveListAdapter.getSelectedPlantIds());
+        existingPlantIds.removeAll(plantRemoveRecycleAdapter.getSelectedPlantIds());
         // Save the updated set back to SharedPreferences
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putStringSet(PREF_SELECTED_PLANTS, convertSetToStringSet(existingPlantIds));

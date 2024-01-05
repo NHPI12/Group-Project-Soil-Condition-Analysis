@@ -443,7 +443,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         limitLine.setLineColor(Color.RED);
         leftAxis.addLimitLine(limitLine); 
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setLabelRotationAngle(45f);
+        xAxis.setLabelRotationAngle(90f);
         YAxis rightAxis = lineChart.getAxisLeft();
         rightAxis.setEnabled(false);
         dataSet.setLineWidth(1f); // Line width

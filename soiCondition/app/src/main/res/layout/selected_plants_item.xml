@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text=""
+        android:textColor="@color/verybrown"
         android:textSize="18sp"
         android:maxLines="1"
         app:autoSizeMinTextSize="5sp"

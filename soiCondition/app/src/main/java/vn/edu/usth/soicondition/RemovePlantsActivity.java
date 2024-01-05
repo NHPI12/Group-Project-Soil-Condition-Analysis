@@ -2,6 +2,8 @@ package vn.edu.usth.soicondition;
 
 import androidx.annotation.NonNull;
 
+import androidx.appcompat.app.ActionBar;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,10 +17,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+
+import android.view.LayoutInflater;
+
 import android.view.Gravity;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -83,7 +91,31 @@ public class RemovePlantsActivity extends AppCompatActivity {
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(plantRemoveRecycleAdapter);
-            Button checkAllButton = findViewById(R.id.CheckRemoveButtonAll);
+            // Inflate custom ActionBar layout
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View customActionBarView = inflater.inflate(R.layout.actionbar_custom_layout, null);
+
+            // Set custom ActionBar layout
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setDisplayShowCustomEnabled(true);
+                actionBar.setCustomView(customActionBarView, new ActionBar.LayoutParams(
+                        ActionBar.LayoutParams.MATCH_PARENT,
+                        ActionBar.LayoutParams.MATCH_PARENT
+                ));
+
+                LinearLayout checkAllView = findViewById(R.id.checkAllView);
+                CheckBox checkBox = findViewById(R.id.checkAllCheckBox);
+
+                checkAllView.setOnClickListener(v -> {
+                    checkBox.setChecked(!checkBox.isChecked());
+                    plantRemoveRecycleAdapter.switchAllChecked();
+                });
+                checkBox.setOnClickListener(v -> {
+                    plantRemoveRecycleAdapter.switchAllChecked();
+                });
+            }
         }
         btnRemovePlants = findViewById(R.id.btnRemovePlants);
         btnRemovePlants.setVisibility(View.GONE); // initially set the button as gone

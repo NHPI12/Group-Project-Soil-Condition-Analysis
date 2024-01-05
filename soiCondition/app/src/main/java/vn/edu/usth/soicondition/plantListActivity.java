@@ -53,6 +53,37 @@ public class plantListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_list);
 
+        // RecycleView
+        Intent intent = getIntent();
+        if (intent.hasExtra("plantList")) {
+            plantList = intent.getParcelableArrayListExtra("plantList");
+            Log.d("New Data", "" + plantList);
+            recyclerView = findViewById(R.id.plant_list_recycle_View);
+            plantListRecycleAdapter = new Plant_List_Recycle_Adapter(this, plantList);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            plantListRecycleAdapter.setOnItemClickListener(new Plant_List_Recycle_Adapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    PlantData clickedPlant = plantList.get(position);
+                    default_Image clickedPlantImage = clickedPlant.getDefaultImage();
+                    Intent intent = new Intent(plantListActivity.this, PlantDetailsActivity.class);
+                    // Pass data to PlantDetailsActivity
+                    intent.putExtra("original_url", clickedPlantImage.getOriginalUrl());
+                    Log.d("PlantListActivity", "Original URL: " + clickedPlantImage.getOriginalUrl());
+                    intent.putExtra("scientific_name", new ArrayList<>(clickedPlant.getScientific_name()));
+                    intent.putExtra("sunlight", new ArrayList<>(clickedPlant.getSunlight()));
+                    intent.putExtra("common_name", clickedPlant.getCommon_name());
+                    intent.putExtra("cycle", clickedPlant.getCycle());
+                    intent.putExtra("watering", clickedPlant.getWatering());
+                    intent.putExtra("id", clickedPlant.getId());
+                    startActivity(intent);
+
+                }
+            });
+        }
+        recyclerView.setAdapter(plantListRecycleAdapter);
+
         //Navigation menu
         drawerLayout = findViewById(R.id.plant_list_nav_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
@@ -69,6 +100,7 @@ public class plantListActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 if (id == R.id.stats_plant) {
                     Intent intent = new Intent(plantListActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intent);
                     overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
                     finish();
@@ -95,8 +127,8 @@ public class plantListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent addIntent = new Intent(plantListActivity.this, AddPlantsActivity.class);
                 addIntent.putExtra("plantList", new ArrayList<>(plantList));
-                openActivity(AddPlantsActivity.class);
-                overridePendingTransition(R.anim.slide_up, R.anim.slide_up_out);
+                startActivity(addIntent);
+                overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
             }
         });
         removeTextView.setOnClickListener(new View.OnClickListener() {
@@ -108,37 +140,6 @@ public class plantListActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
             }
         });
-        // RecycleView
-        Intent intent = getIntent();
-        if (intent.hasExtra("plantList")) {
-            List<PlantData> plantList = intent.getParcelableArrayListExtra("plantList");
-            Log.d("New Data", "" + plantList);
-            recyclerView = findViewById(R.id.plant_list_recycle_View);
-            plantListRecycleAdapter = new Plant_List_Recycle_Adapter(this, plantList);
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            plantListRecycleAdapter.setOnItemClickListener(new Plant_List_Recycle_Adapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(int position) {
-                    PlantData clickedPlant = plantList.get(position);
-                    default_Image clickedPlantImage = clickedPlant.getDefaultImage();
-                    Intent intent = new Intent(plantListActivity.this, PlantDetailsActivity.class);
-                    // Pass data to PlantDetailsActivity
-                    intent.putExtra("original_url", clickedPlantImage.getOriginalUrl());
-                    Log.d("PlantListActivity", "Original URL: " + clickedPlantImage.getOriginalUrl());
-                    intent.putExtra("scientific_name", new ArrayList<>(clickedPlant.getScientific_name()));
-                    intent.putExtra("sunlight", new ArrayList<>(clickedPlant.getSunlight()));
-                    intent.putExtra("common_name", clickedPlant.getCommon_name());
-                    intent.putExtra("cycle", clickedPlant.getCycle());
-                    intent.putExtra("watering", clickedPlant.getWatering());
-                    intent.putExtra("id", clickedPlant.getId());
-                    startActivity(intent);
-
-                }
-            });
-        }
-            recyclerView.setAdapter(plantListRecycleAdapter);
-
         }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -171,11 +172,6 @@ public class plantListActivity extends AppCompatActivity {
         });
         return  super.onCreateOptionsMenu(menu);
         }
-    private void openActivity(Class<?> destinationClass) {
-        Intent intent = new Intent(plantListActivity.this, destinationClass);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(intent);
-    }
 }
 
 

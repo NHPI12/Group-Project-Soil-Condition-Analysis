@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/leaf">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -22,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/lilwhite"
             app:cardElevation="10dp">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -49,6 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            app:cardBackgroundColor="@color/lilwhite"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
             app:contentPadding="20dp">
@@ -70,13 +73,14 @@
                     android:textSize="32sp"
                     android:textStyle="bold"
                     android:text="@string/humid"
-                    android:textColor="@color/red">
+                    android:textColor="@color/verybrown">
                 </TextView>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
-                    android:id="@+id/humidData"/>
+                    android:id="@+id/humidData"
+                    android:textColor="@color/lilbrown"/>
             </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChartHumid"
@@ -89,6 +93,7 @@
         <androidx.cardview.widget.CardView
             android:onClick="expandTemp"
             android:layout_width="match_parent"
+            app:cardBackgroundColor="@color/lilwhite"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             app:cardCornerRadius="20dp"
@@ -112,13 +117,14 @@
                     android:textSize="32sp"
                     android:textStyle="bold"
                     android:text="@string/temperature"
-                    android:textColor="@color/red">
+                    android:textColor="@color/verybrown">
                 </TextView>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
-                    android:id="@+id/tempData"/>
+                    android:id="@+id/tempData"
+                    android:textColor="@color/lilbrown"/>
             </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChartTemp"
@@ -133,6 +139,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            app:cardBackgroundColor="@color/lilwhite"
+
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
             app:contentPadding="20dp">
@@ -154,13 +162,14 @@
                     android:textSize="32sp"
                     android:textStyle="bold"
                     android:text="@string/soil_moisture"
-                    android:textColor="@color/red">
+                    android:textColor="@color/verybrown">
                 </TextView>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
-                    android:id="@+id/soilData"/>
+                    android:id="@+id/soilData"
+                    android:textColor="@color/lilbrown"/>
                 </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChartSoil"
@@ -179,6 +188,8 @@
         android:id="@+id/nav_view"
         app:itemTextAppearance="@style/NavigationViewItemStyle"
         app:menu="@menu/navigation_menu"
+        android:background="@color/lilwhite"
+        app:itemTextColor="@color/verybrown"
         app:itemIconSize="40dp"
         app:itemVerticalPadding="20dp">
         <LinearLayout
@@ -201,11 +212,11 @@
                     android:text="Add"
                     android:textStyle="bold"
                     android:id="@+id/add_text"
-                    android:textColor="@color/gray"/>
+                    android:textColor="@color/lilbrown"/>
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/gray" />
+                    android:background="@color/lilbrown" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -214,7 +225,7 @@
                     android:id="@+id/remove_text"
                     android:textStyle="bold"
                     android:paddingLeft="40dp"
-                    android:textColor="@color/gray"/>
+                    android:textColor="@color/lilbrown"/>
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>

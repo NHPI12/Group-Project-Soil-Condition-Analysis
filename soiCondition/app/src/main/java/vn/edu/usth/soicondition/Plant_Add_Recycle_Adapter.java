@@ -69,12 +69,24 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
         }
         setSunlightIcons(plantData.getSunlight(), holder.sunlightIconContainer);
         holder.Add_cycle.setText(plantData.getCycle());
-        if(isAllChecked == false){
-            holder.checkBox.setChecked(false);
-        }else{
-            holder.checkBox.setChecked(true);
-        }
+        holder.checkBox.setOnCheckedChangeListener(null); // Remove previous listener to avoid conflicts
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                plantData.setChecked(isChecked);
 
+                // Update the selectedPlants list based on checkbox state
+                if (isChecked) {
+                    selectedPlants.add(plantData);
+                } else {
+                    selectedPlants.remove(plantData);
+                }
+
+                if (onCheckedChangeListener != null) {
+                    onCheckedChangeListener.onCheckedChanged(isAtLeastOneChecked());
+                }
+            }
+        });
     }
     public void switchAllChecked(){
         this.isAllChecked = !this.isAllChecked;
@@ -102,28 +114,6 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
             wateringIcon = itemView.findViewById(R.id.AddwateringIcon);
             sunlightIconContainer = itemView.findViewById(R.id.AddsunlightIconsContainer);
             checkBox = itemView.findViewById(R.id.checkbox_plant);
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        PlantData plantData = PlantData.get(position);
-                        if (plantData != null) {
-                            plantData.setChecked(isChecked);
-
-                            // Update the selectedPlants list based on checkbox state
-                            if (isChecked) {
-                                selectedPlants.add(plantData);
-                            } else {
-                                selectedPlants.remove(plantData);
-                            }
-                            if (onCheckedChangeListener != null) {
-                                onCheckedChangeListener.onCheckedChanged(isAtLeastOneChecked());
-                            }
-                        }
-                    }
-                }
-            });
         }
     }
     private int getWateringIcon(String wateringText) {
@@ -177,7 +167,8 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
     public Set<Integer> getSelectedPlantIds() {
         Set<Integer> selectedPlantIds = new HashSet<>();
         for (PlantData selectedPlant : selectedPlants) {
-            selectedPlantIds.add(Integer.valueOf(selectedPlant.getId())); // Assuming the PlantData has a method getId()
+            selectedPlantIds.add(Integer.valueOf(selectedPlant.getId()));// Assuming the PlantData has a method getId()
+            Log.d("Selected Plant Details", "Add ID: " + selectedPlantIds);
         }
         return selectedPlantIds;
     }

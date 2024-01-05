@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/checkAllView"
+    android:orientation="horizontal"
+    android:gravity="center|end">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CHECK ALL"
+            android:textColor="@color/lilwhite"/>
+        <CheckBox
+            android:id="@+id/checkAllCheckBox"
+            android:layout_marginStart="5dp"
+            style="@style/WhiteCheckBoxStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>

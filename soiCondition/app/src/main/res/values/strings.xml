@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">Soil Condition Analysis</string>
+
+    <string name="app_name">PlantSync</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
-
     <string name="season">Season</string>
     <string name="cycle">Cycle</string>
     <string name="humidity">Humidity</string>
@@ -11,5 +12,4 @@
     <string name="temperature">Temperature</string>
     <string name="soil_moisture">Soil Moisture</string>
     <string name="checkAll">Check All</string>
-
 </resources>

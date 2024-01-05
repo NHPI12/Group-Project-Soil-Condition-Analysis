@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Your_Plant_Activity"
-    android:id="@+id/your_plant_nav_layout">
+    android:id="@+id/your_plant_nav_layout"
+    android:background="@color/leaf">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/your_plant_recycle_View"
         android:layout_width="match_parent"
@@ -23,7 +24,8 @@
         app:itemTextAppearance="@style/NavigationViewItemStyle"
         app:menu="@menu/navigation_menu"
         app:itemIconSize="40dp"
-        app:itemVerticalPadding="20dp">
+        app:itemVerticalPadding="20dp"
+        android:background="@color/lilwhite">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,11 +46,11 @@
                     android:text="Add"
                     android:id="@+id/add_text"
                     android:textStyle="bold"
-                    android:textColor="@color/gray"/>
+                    android:textColor="@color/lilbrown"/>
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/gray" />
+                    android:background="@color/lilbrown" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -57,7 +59,7 @@
                     android:id="@+id/remove_text"
                     android:textStyle="bold"
                     android:paddingLeft="40dp"
-                    android:textColor="@color/gray"/>
+                    android:textColor="@color/lilbrown"/>
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>

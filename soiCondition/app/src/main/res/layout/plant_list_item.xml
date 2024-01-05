@@ -11,7 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/lilwhite">
         <androidx.cardview.widget.CardView
             android:layout_width="75dp"
             android:layout_height="75dp"
@@ -34,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Title"
-                android:textColor="@color/black"
+                android:textColor="@color/verybrown"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:id="@+id/common_name"
@@ -68,6 +69,7 @@
                         android:layout_width="85dp"
                         android:layout_height="match_parent"
                         android:id = "@+id/cycle"
+                        android:textColor="@color/verybrown"
                         android:layout_gravity="end"/>
                 </LinearLayout>
         </LinearLayout>

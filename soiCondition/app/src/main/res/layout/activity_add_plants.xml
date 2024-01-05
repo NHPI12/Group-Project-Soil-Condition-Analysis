@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddPlantsActivity"
+
+    android:background="@color/leaf"
     android:orientation="vertical">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/Add_toolbar"
@@ -16,14 +18,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/plant_add_recycle_View"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="10dp"/>
     <Button
         android:id="@+id/btnAddPlants"
         android:layout_width="150dp"
@@ -32,8 +33,9 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="16dp"
         android:background="@drawable/add_button_background"
-        android:text="Add Plants +"
-        android:textColor="@color/white"
+        android:text="Add Plants  +"
+        android:textSize="15sp"
+        android:textColor="@color/lilwhite"
         android:visibility="visible" />
     </RelativeLayout>
 </LinearLayout>

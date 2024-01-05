@@ -13,10 +13,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
+
+import android.view.Gravity;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -40,65 +44,64 @@ public class AddPlantsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_plants);
-        Toolbar toolbar = findViewById(R.id.Add_toolbar);
-        setSupportActionBar(toolbar);
 
-        Button button = new Button(this);
-        int color = ContextCompat.getColor(this, R.color.black);
-        int colorBtn = ContextCompat.getColor(this, R.color.white);
-        button.setBackgroundColor(color);
-        button.setTextColor(colorBtn);
-        button.setText("All");
-
-        button.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                plantAddRecycleAdapter.switchAllChecked();
-            }
-        });
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setCustomView(button, new ActionBar.LayoutParams(
-                ActionBar.LayoutParams.WRAP_CONTENT,
-                ActionBar.LayoutParams.WRAP_CONTENT,
-                Gravity.END
-        ));
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24);
+
+        sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
+        btnAddPlants = findViewById(R.id.btnAddPlants);
+        btnAddPlants.setVisibility(View.GONE);
+
         Intent intent = getIntent();
         if (intent.hasExtra("plantList")) {
             plantList = intent.getParcelableArrayListExtra("plantList");
-
             recyclerView = findViewById(R.id.plant_add_recycle_View);
             plantAddRecycleAdapter = new Plant_Add_Recycle_Adapter(this, plantList);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(plantAddRecycleAdapter);
-            //Button checkAllButton = findViewById(R.id.CheckButtonAll);
-            /**checkAllButton.setOnClickListener(new View.OnClickListener() {
+
+            plantAddRecycleAdapter.setOnCheckedChangeListener(new Plant_Add_Recycle_Adapter.OnCheckedChangeListener() {
+
                 @Override
-                public void onClick(View v) {
-                    plantAddRecycleAdapter.switchAllChecked();
+                public void onCheckedChanged(boolean isAtLeastOneChecked) {
+                    btnAddPlants.setVisibility(isAtLeastOneChecked ? View.VISIBLE : View.GONE);
                 }
-            });*/
+            });
+            // Inflate custom ActionBar layout
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View customActionBarView = inflater.inflate(R.layout.actionbar_custom_layout, null);
+
+            // Set custom ActionBar layout
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setDisplayShowCustomEnabled(true);
+                actionBar.setCustomView(customActionBarView, new ActionBar.LayoutParams(
+                        ActionBar.LayoutParams.MATCH_PARENT,
+                        ActionBar.LayoutParams.MATCH_PARENT
+                ));
+
+                LinearLayout checkAllView = findViewById(R.id.checkAllView);
+                CheckBox checkBox = findViewById(R.id.checkAllCheckBox);
+
+                checkAllView.setOnClickListener(v -> {
+                    checkBox.setChecked(!checkBox.isChecked());
+                    plantAddRecycleAdapter.switchAllChecked();
+                });
+                checkBox.setOnClickListener(v -> {
+                    plantAddRecycleAdapter.switchAllChecked();
+                });
+                btnAddPlants.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showConfirmationDialog();
+                    }
+                });
+            }
+
         } else {
             Toast.makeText(this, "No plant data available", Toast.LENGTH_SHORT).show();
             finish();
         }
-        sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
-        btnAddPlants = findViewById(R.id.btnAddPlants);
-        btnAddPlants.setVisibility(View.GONE); // initially set the button as gone
-        plantAddRecycleAdapter.setOnCheckedChangeListener(new Plant_Add_Recycle_Adapter.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(boolean isAtLeastOneChecked) {
-                btnAddPlants.setVisibility(isAtLeastOneChecked ? View.VISIBLE : View.GONE);
-            }
-        });
-        btnAddPlants.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showConfirmationDialog();
-            }
-        });
     }
     private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

@@ -32,7 +32,6 @@ public class Your_Plant_Activity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Plant_List_Recycle_Adapter YourPlantRecycleAdapter;
     private List<PlantData> plantList;
-    private NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,19 +39,18 @@ public class Your_Plant_Activity extends AppCompatActivity {
 
         drawerLayout = findViewById(R.id.your_plant_nav_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-        navigationView = findViewById(R.id.your_plant_nav);
+        NavigationView navigationView = findViewById(R.id.your_plant_nav);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        NavigationView navigationView = findViewById(R.id.your_plant_nav);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 if (id == R.id.stats_plant) {
                     Intent intent = new Intent(Your_Plant_Activity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intent);
                     overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
                     finish();
@@ -61,6 +59,7 @@ public class Your_Plant_Activity extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }else if (id == R.id.list_plants){
                     Intent intent = new Intent(Your_Plant_Activity.this, plantListActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
                     startActivity(intent);
                     overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
@@ -70,7 +69,6 @@ public class Your_Plant_Activity extends AppCompatActivity {
                 return true;
             }
         });
-
         TextView addTextView = findViewById(R.id.add_text);
         TextView removeTextView = findViewById(R.id.remove_text);
         addTextView.setOnClickListener(new View.OnClickListener() {
@@ -79,8 +77,7 @@ public class Your_Plant_Activity extends AppCompatActivity {
                 Intent addIntent = new Intent(Your_Plant_Activity.this, AddPlantsActivity.class);
                 addIntent.putExtra("plantList", new ArrayList<>(plantList));
                 startActivity(addIntent);
-                overridePendingTransition(R.anim.slide_up, R.anim.slide_up_out);
-
+                overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
             }
         });
         removeTextView.setOnClickListener(new View.OnClickListener() {
@@ -89,8 +86,7 @@ public class Your_Plant_Activity extends AppCompatActivity {
                 Intent removeIntent = new Intent(Your_Plant_Activity.this, RemovePlantsActivity.class);
                 removeIntent.putExtra("plantList", new ArrayList<>(plantList));
                 startActivity(removeIntent);
-                overridePendingTransition(R.anim.slide_up, R.anim.slide_up_out);
-
+                overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
             }
         });
 
@@ -112,7 +108,7 @@ public class Your_Plant_Activity extends AppCompatActivity {
             YourPlantRecycleAdapter = new Plant_List_Recycle_Adapter(this, allSelectedPlants);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            /**YourPlantRecycleAdapter.setOnItemClickListener(new Plant_List_Recycle_Adapter.OnItemClickListener() {
+            YourPlantRecycleAdapter.setOnItemClickListener(new Plant_List_Recycle_Adapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
                     PlantData clickedPlant = plantList.get(position);
@@ -128,13 +124,10 @@ public class Your_Plant_Activity extends AppCompatActivity {
                     intent.putExtra("watering", clickedPlant.getWatering());
                     intent.putExtra("id", clickedPlant.getId());
                     startActivity(intent);
-
                 }
-            });*/
+            });
         }
-
         recyclerView.setAdapter(YourPlantRecycleAdapter);
-
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -180,9 +173,11 @@ public class Your_Plant_Activity extends AppCompatActivity {
         startActivity(intent);
         //finish();
     }
-    private void openActivity(Class<?> destinationClass) {
-        Intent intent = new Intent(Your_Plant_Activity.this, destinationClass);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(intent);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

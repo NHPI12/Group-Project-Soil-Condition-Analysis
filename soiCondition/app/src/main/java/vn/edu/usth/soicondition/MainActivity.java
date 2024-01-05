@@ -265,16 +265,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
         });
     }
-
-
-    private void openActivity(Class<?> destinationClass) {
-        Intent intent = new Intent(MainActivity.this, destinationClass);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_up, R.anim.slide_up_out);
-    }
-
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
@@ -487,9 +477,9 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
     private void statusbarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.black, this.getTheme()));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.verybrown, this.getTheme()));
         } else {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.black));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.verybrown));
         }
     }
 
@@ -505,9 +495,9 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
-        String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
+        //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
-        //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
+        String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
             if (!isDataFetched) {
                 // Fetch data only if it hasn't been fetched yet
                 fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);

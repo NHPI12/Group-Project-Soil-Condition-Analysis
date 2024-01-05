@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="max_cardview_height">300dp</dimen> <!-- Adjust the value as needed -->
+</resources>

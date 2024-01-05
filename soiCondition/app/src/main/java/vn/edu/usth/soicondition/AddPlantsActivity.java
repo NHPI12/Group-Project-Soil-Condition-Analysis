@@ -54,8 +54,14 @@ public class AddPlantsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent.hasExtra("plantList")) {
             plantList = intent.getParcelableArrayListExtra("plantList");
+            Set<String> addedPlantIdsStringSet = sharedPreferences.getStringSet(PREF_SELECTED_PLANTS, new HashSet<>());
+            Set<Integer> addedPlantIds = new HashSet<>();
+            for (String id : addedPlantIdsStringSet) {
+                addedPlantIds.add(Integer.valueOf(id));
+            }
+            List<PlantData> filteredPlantList = filterAddedPlants(plantList, addedPlantIds);
             recyclerView = findViewById(R.id.plant_add_recycle_View);
-            plantAddRecycleAdapter = new Plant_Add_Recycle_Adapter(this, plantList);
+            plantAddRecycleAdapter = new Plant_Add_Recycle_Adapter(this, filteredPlantList);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(plantAddRecycleAdapter);
 
@@ -166,5 +172,14 @@ public class AddPlantsActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp(){
         onBackPressed();
         return true;
+    }
+    private List<PlantData> filterAddedPlants(List<PlantData> plantDataList, Set<Integer> addedPlantIds) {
+        List<PlantData> filteredList = new ArrayList<>();
+        for (PlantData plantData : plantDataList) {
+            if (!addedPlantIds.contains(plantData.getId())) {
+                filteredList.add(plantData);
+            }
+        }
+        return filteredList;
     }
 }

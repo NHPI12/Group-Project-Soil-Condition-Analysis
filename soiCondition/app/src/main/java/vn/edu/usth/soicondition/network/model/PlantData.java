@@ -142,7 +142,6 @@ public class PlantData implements Parcelable {
     public void setChecked(boolean checked) {
         isChecked = checked;
     }
-
     public int convertWateringToValue() {
         String wateringInfo = getWatering();
         switch (wateringInfo) {
@@ -207,4 +206,5 @@ public class PlantData implements Parcelable {
                 return 0; // Handle the default case or invalid values as needed
         }
     }
+
 }

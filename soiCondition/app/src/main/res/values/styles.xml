@@ -14,6 +14,7 @@
     <style name="paddingNavigation">
         <item name="android:layout_marginBottom">20dp</item>
     </style>
+
     <style name="CustomCheckboxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:buttonTint">@color/verybrown</item>
     </style>

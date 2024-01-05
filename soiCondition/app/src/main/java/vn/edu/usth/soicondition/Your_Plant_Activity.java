@@ -89,6 +89,7 @@ public class Your_Plant_Activity extends AppCompatActivity {
                 overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
             }
         });
+
         SharedPreferences sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
         Set<String> selectedPlantIdsStringSet = sharedPreferences.getStringSet("selected_plants", new HashSet<>());
 
@@ -127,6 +128,15 @@ public class Your_Plant_Activity extends AppCompatActivity {
             });
         }
         recyclerView.setAdapter(YourPlantRecycleAdapter);
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
     private PlantData getPlantDataById(int plantId, List<PlantData> plantList) {
         if (plantList == null || plantList.isEmpty()) {

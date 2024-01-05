@@ -94,7 +94,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
-        //fetchPlantDetails(ID,apiKey);
+        fetchPlantDetails(ID,apiKey);
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

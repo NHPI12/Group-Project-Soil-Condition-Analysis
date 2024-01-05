@@ -151,7 +151,7 @@ public class PlantData implements Parcelable {
             case "Frequent":
                 return 75;
             case "Average":
-                return 68;
+                return 25;
             case "Minimum":
                 return 60;
             case "None":
@@ -169,14 +169,11 @@ public class PlantData implements Parcelable {
 
         int total = 0;
         int count = 0;
-        int smallestFullShade = Integer.MAX_VALUE;
-        int largestFullSun = Integer.MIN_VALUE;
-
         for (String sunlight : sunlightInfo) {
             switch (sunlight) {
                 case "full shade":
-                    smallestFullShade = Math.min(smallestFullShade, 15);
-                    break;
+                    total += (15 + 24) / 2;
+                    count++;
                 case "part shade":
                 case "part sun/part shade":
                     total += (18 + 27) / 2;
@@ -187,19 +184,29 @@ public class PlantData implements Parcelable {
                     count++;
                     break;
                 case "full sun":
-                    largestFullSun = Math.max(largestFullSun, 33);
+                    total += (18 + 33) / 2;
+                    count++;
                     break;
                 default:
                     // Handle unknown sunlight types or add more cases as needed
                     break;
             }
         }
-
-        if (smallestFullShade != Integer.MAX_VALUE && largestFullSun != Integer.MIN_VALUE) {
-            total += (smallestFullShade + largestFullSun) / 2;
-            count++;
-        }
-
         return count > 0 ? total / count : 0;
+    }
+    public int convertWateringToSoilMoisture() {
+        String wateringInfo = getWatering();
+        switch (wateringInfo) {
+            case "Frequent":
+                return 760; // Adjust the value based on your specific mapping
+            case "Average":
+                return 840; // Adjust the value based on your specific mapping
+            case "Minimum":
+                return 980; // Adjust the value based on your specific mapping
+            case "None":
+                return 1020; // Adjust the value based on your specific mapping
+            default:
+                return 0; // Handle the default case or invalid values as needed
+        }
     }
 }

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -126,8 +128,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         // Fetch data from local SQL database
         // Start fetching data periodically
         fetchData();
-        startFetchingData();
-
         databaseReferenceSoil.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         }
         TransitionManager.beginDelayedTransition(clickedLayout, new AutoTransition());
     }
-    private void startFetchingData() {
+    private void startFetchingData(int wateringValue, int temperatureValue, int soilValue) {
         // Define a Runnable that fetches data and updates UI
         Runnable fetchDataRunnable = new Runnable() {
             @Override
@@ -324,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        updateUI(newData);
+                        updateUI(newData, wateringValue, temperatureValue, soilValue);
                     }
                 });
 
@@ -335,7 +335,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         // Schedule the initial data fetch with a delay of 0 seconds
         handler.postDelayed(fetchDataRunnable, 0);
     }
-    private void updateUI(List<Measurements> newData) {
+    private void updateUI(List<Measurements> newData, int wateringValue, int temperatureValue, int soilValue) {
         ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
         Call<List<Measurements>> call = apiService.fetchData();
         call.enqueue(new Callback<List<Measurements>>() {
@@ -362,9 +362,9 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
                     if (!timestamps.isEmpty()) {
                         // Update the line charts with the new data
-                        updateLineChart(lineChartHumid, humidityEntries, "Humidity", timestamps);
-                        updateLineChart(lineChartTemp, temperatureEntries, "Temperature", timestamps);
-                        updateLineChart(lineChartSoil, soilMoistureEntries, "Soil Moisture", timestamps);
+                        updateLineChart(lineChartHumid, humidityEntries, "Humidity", timestamps, wateringValue);
+                        updateLineChart(lineChartTemp, temperatureEntries, "Temperature", timestamps, temperatureValue);
+                        updateLineChart(lineChartSoil, soilMoistureEntries, "Soil Moisture", timestamps, soilValue);
                     } else {
                         // Handle the case when there are no timestamps
                         Log.d("YourActivity", "No timestamps available for updating line charts");
@@ -405,7 +405,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         });
         return null;
     }
-    private void updateLineChart(LineChart lineChart, List<Entry> entries, String label, List<String> timestamps) {
+    private void updateLineChart(LineChart lineChart, List<Entry> entries, String label, List<String> timestamps, int Value) {
         int maxDataPoints = 100;
         int dataSize = entries.size();
         if (dataSize > maxDataPoints) {
@@ -446,7 +446,12 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 }
             }
         });
-        // Apply custom value formatter to x-axis
+        YAxis leftAxis = lineChart.getAxisRight();
+        // Add a LimitLine for the watering value
+        LimitLine limitLine = new LimitLine(Value, "Average Level");
+        limitLine.setLineWidth(2f);
+        limitLine.setLineColor(Color.RED);
+        leftAxis.addLimitLine(limitLine); 
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setLabelRotationAngle(90f);
         YAxis rightAxis = lineChart.getAxisLeft();
@@ -566,9 +571,12 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
                     // Convert sunlight to numerical value
                     int sunlightValue = topItemPlantData.convertSunlightToValue();
+                    int soilMoistureValue = topItemPlantData.convertWateringToSoilMoisture();
                     // Use the information as needed
                     Log.d("Selected Plant Details", "Watering Before Clicked: " + wateringValue);
                     Log.d("Selected Plant Details", "Sunlight Before Clicked: " + sunlightValue);
+                    Log.d("Selected Plant Details", "SoilMoisture Before Clicked: " + soilMoistureValue);
+                    startFetchingData(wateringValue,sunlightValue,soilMoistureValue);
                 }
             }
         } else {

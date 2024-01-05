@@ -1,6 +1,7 @@
 package vn.edu.usth.soicondition;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,10 +33,10 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
     private Context context;
     private boolean isAllChecked = false;
     private List<PlantData> selectedPlants = new ArrayList<>();
-
     public  Plant_Add_Recycle_Adapter(Context context, List<PlantData> plantData){
         this.context = context;
         this.PlantData = plantData;
+        setHasStableIds(true);
     }
     @NonNull
     @Override
@@ -44,7 +45,6 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
                 .inflate(R.layout.add_plant_item,parent,false);
         return new MyViewHolder2(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull Plant_Add_Recycle_Adapter.MyViewHolder2 holder, int position) {
         PlantData plantData = PlantData.get(position);
@@ -64,12 +64,11 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
         }
         if (holder.wateringIcon != null){
             int wateringIcon = getWateringIcon(plantData.getWatering());
-            // Set the icon to the ImageView
             holder.wateringIcon.setBackgroundResource(getWateringIcon((plantData.getWatering())));
         }
         setSunlightIcons(plantData.getSunlight(), holder.sunlightIconContainer);
         holder.Add_cycle.setText(plantData.getCycle());
-        holder.checkBox.setOnCheckedChangeListener(null); // Remove previous listener to avoid conflicts
+        holder.checkBox.setOnCheckedChangeListener(null);
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -88,9 +87,16 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
             }
         });
     }
-    public void switchAllChecked(){
+    public void switchAllChecked() {
         this.isAllChecked = !this.isAllChecked;
-        notifyDataSetChanged();
+        for (int i = 0; i < PlantData.size(); i++) {
+            notifyItemChanged(i);
+        }
+    }
+    @Override
+    public void onViewRecycled(@NonNull MyViewHolder2 holder) {
+        holder.checkBox.setOnCheckedChangeListener(null);
+        super.onViewRecycled(holder);
     }
 
     @Override
@@ -194,4 +200,9 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
         }
         return false;
     }
+    @Override
+    public long getItemId(int position) {
+        return PlantData.get(position).getId();
+    }
+
 }

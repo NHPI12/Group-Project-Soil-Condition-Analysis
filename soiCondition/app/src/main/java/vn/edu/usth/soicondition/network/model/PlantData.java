@@ -136,11 +136,9 @@ public class PlantData implements Parcelable {
         dest.writeStringList(sunlight);
         dest.writeParcelable(defaultImage, flags);
     }
-
     public boolean isChecked() {
         return isChecked;
     }
-
     public void setChecked(boolean checked) {
         isChecked = checked;
     }

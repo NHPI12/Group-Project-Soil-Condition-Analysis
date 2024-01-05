@@ -21,8 +21,10 @@ import com.squareup.picasso.Picasso;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import vn.edu.usth.soicondition.network.model.PlantData;
@@ -33,9 +35,13 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
     private Context context;
     private boolean isAllChecked = false;
     private List<PlantData> selectedPlants = new ArrayList<>();
+    private Set<Integer> addedPlantIds;
+    private Map<Integer, Boolean> checkedStates = new HashMap<>();
+
     public  Plant_Add_Recycle_Adapter(Context context, List<PlantData> plantData){
         this.context = context;
-        this.PlantData = plantData;
+        this.addedPlantIds = addedPlantIds;
+        this.PlantData = filterAddedPlants(plantData, addedPlantIds);
         setHasStableIds(true);
     }
     @NonNull
@@ -69,32 +75,39 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
         setSunlightIcons(plantData.getSunlight(), holder.sunlightIconContainer);
         holder.Add_cycle.setText(plantData.getCycle());
         holder.checkBox.setOnCheckedChangeListener(null);
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                plantData.setChecked(isChecked);
+        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            plantData.setChecked(isChecked);
 
-                // Update the selectedPlants list based on checkbox state
-                if (isChecked) {
-                    selectedPlants.add(plantData);
-                } else {
-                    selectedPlants.remove(plantData);
-                }
+            if (isChecked) {
+                selectedPlants.add(plantData);
+            } else {
+                selectedPlants.remove(plantData);
+            }
 
-                if (onCheckedChangeListener != null) {
-                    onCheckedChangeListener.onCheckedChanged(isAtLeastOneChecked());
-                }
+            if (onCheckedChangeListener != null) {
+                onCheckedChangeListener.onCheckedChanged(isAtLeastOneChecked());
             }
         });
     }
     public void switchAllChecked() {
         this.isAllChecked = !this.isAllChecked;
-        for (int i = 0; i < PlantData.size(); i++) {
-            notifyItemChanged(i);
+        for (PlantData plantData : PlantData) {
+            plantData.setChecked(isAllChecked);
+        }
+        notifyDataSetChanged();
+        if (onCheckedChangeListener != null) {
+            onCheckedChangeListener.onCheckedChanged(isAtLeastOneChecked());
         }
     }
     @Override
     public void onViewRecycled(@NonNull MyViewHolder2 holder) {
+        int position = holder.getAdapterPosition();
+        if (position != RecyclerView.NO_POSITION) {
+            PlantData plantData = PlantData.get(position);
+            if (plantData != null) {
+                checkedStates.remove(plantData.getId());
+            }
+        }
         holder.checkBox.setOnCheckedChangeListener(null);
         super.onViewRecycled(holder);
     }
@@ -203,6 +216,26 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
     @Override
     public long getItemId(int position) {
         return PlantData.get(position).getId();
+    }
+    private List<PlantData> filterAddedPlants(List<PlantData> plantDataList, Set<Integer> addedPlantIds) {
+        List<PlantData> filteredList = new ArrayList<>();
+        // Check if addedPlantIds is null and initialize it if needed
+        if (addedPlantIds == null) {
+            addedPlantIds = new HashSet<>();
+        }
+        for (PlantData plantData : plantDataList) {
+            if (!addedPlantIds.contains(plantData.getId())) {
+                filteredList.add(plantData);
+            }
+        }
+        return filteredList;
+    }
+    private boolean getCheckedState(int itemId) {
+        return checkedStates.containsKey(itemId) && checkedStates.get(itemId);
+    }
+
+    private void setCheckedState(int itemId, boolean isChecked) {
+        checkedStates.put(itemId, isChecked);
     }
 
 }

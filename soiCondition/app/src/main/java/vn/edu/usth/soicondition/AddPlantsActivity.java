@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,7 +19,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+
+import android.view.Gravity;
+import android.widget.ImageButton;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,6 +44,7 @@ public class AddPlantsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_plants);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
@@ -52,7 +58,9 @@ public class AddPlantsActivity extends AppCompatActivity {
             plantAddRecycleAdapter = new Plant_Add_Recycle_Adapter(this, plantList);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(plantAddRecycleAdapter);
+
             plantAddRecycleAdapter.setOnCheckedChangeListener(new Plant_Add_Recycle_Adapter.OnCheckedChangeListener() {
+
                 @Override
                 public void onCheckedChanged(boolean isAtLeastOneChecked) {
                     btnAddPlants.setVisibility(isAtLeastOneChecked ? View.VISIBLE : View.GONE);
@@ -89,6 +97,7 @@ public class AddPlantsActivity extends AppCompatActivity {
                     }
                 });
             }
+
         } else {
             Toast.makeText(this, "No plant data available", Toast.LENGTH_SHORT).show();
             finish();
@@ -152,5 +161,10 @@ public class AddPlantsActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public boolean onSupportNavigateUp(){
+        onBackPressed();
+        return true;
     }
 }

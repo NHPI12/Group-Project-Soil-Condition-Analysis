@@ -1,9 +1,14 @@
 package vn.edu.usth.soicondition;
 
 import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.ActionBar;
+
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,7 +17,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+
 import android.view.LayoutInflater;
+
+import android.view.Gravity;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -37,7 +46,32 @@ public class RemovePlantsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remove_plants);
+        Toolbar toolbar = findViewById(R.id.Remove_toolbar);
+        setSupportActionBar(toolbar);
+
+        Button button = new Button(this);
+        int color = ContextCompat.getColor(this, R.color.black);
+        int colorBtn = ContextCompat.getColor(this, R.color.white);
+        button.setBackgroundColor(color);
+        button.setTextColor(colorBtn);
+        button.setText("All");
+
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                plantRemoveRecycleAdapter.switchAllChecked();
+            }
+        });
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setCustomView(button, new ActionBar.LayoutParams(
+                ActionBar.LayoutParams.WRAP_CONTENT,
+                ActionBar.LayoutParams.WRAP_CONTENT,
+                Gravity.END
+        ));
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24);
+
         // Get your plant list
         sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences",MODE_PRIVATE);
         Set<String> selectedPlantIdsStringSet = sharedPreferences.getStringSet("selected_plants",new HashSet<>());

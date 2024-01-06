@@ -21,11 +21,9 @@ import android.os.HandlerThread;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.util.Log;
-import android.view.Menu;
+
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -49,7 +47,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -615,7 +612,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             PlantData topItemPlantData = selectedPlantsAdapter.getPlantDataAtPosition(0);
             if (topItemPlantData != null) {
                 int wateringValue = topItemPlantData.convertWateringToValue();
-                int sunlightValue = topItemPlantData.convertSunlightToValue();;
+                int sunlightValue = topItemPlantData.convertSunlightToValue();
                 Log.d("Selected Plant Details", "Watering: " + wateringValue);
                 Log.d("Selected Plant Details", "Sunlight: " + sunlightValue);
             }

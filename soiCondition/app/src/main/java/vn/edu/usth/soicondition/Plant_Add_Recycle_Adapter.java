@@ -31,12 +31,19 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
     private CheckBox checkBoxAll;
     private boolean isAllChecked = false;
     private Set<Integer> addedPlantIds;
+
     private SparseBooleanArray selectedItems = new SparseBooleanArray();
+
+    private Map<Integer, Boolean> checkedStates = new HashMap<>();
+    private List<PlantData> SearchList;
+
 
     public Plant_Add_Recycle_Adapter(Context context, List<PlantData> plantData) {
         this.context = context;
         this.addedPlantIds = addedPlantIds;
+
         this.PlantData = filterAddedPlants(plantData, addedPlantIds);
+        this.SearchList = new ArrayList<>(filterAddedPlants(plantData,addedPlantIds));
         setHasStableIds(true);
         initializeSelectedItems();
     }
@@ -53,6 +60,21 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.add_plant_item, parent, false);
         return new MyViewHolder2(view);
+    }
+
+    public void filterList(String text){
+        PlantData.clear();
+        if(text.isEmpty()){
+            PlantData.addAll(SearchList);
+        }else{
+            text = text.toLowerCase();
+            for(PlantData plantDataItem : SearchList){
+                if(plantDataItem.getCommon_name().toLowerCase().contains(text)){
+                    PlantData.add(plantDataItem);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @Override

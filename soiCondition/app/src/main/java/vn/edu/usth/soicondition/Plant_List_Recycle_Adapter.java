@@ -26,15 +26,16 @@ import java.util.List;
 import java.util.Set;
 
 import vn.edu.usth.soicondition.network.model.PlantData;
-import vn.edu.usth.soicondition.network.model.PlantResponse;
 import vn.edu.usth.soicondition.network.model.default_Image;
 
 public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_Recycle_Adapter.MyViewHolder> {
     private List<PlantData> PlantData;
     private Context context;
+    private List<PlantData> SearchList;
     public Plant_List_Recycle_Adapter(Context context, List<PlantData> plantData) {
         this.context = context;
         this.PlantData = plantData;
+        this.SearchList = new ArrayList<>(plantData);
     }
     @NonNull
     @Override
@@ -43,7 +44,20 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
                 .inflate(R.layout.plant_list_item,parent,false);
         return new MyViewHolder(view);
     }
-
+    public void filterList(String text){
+        PlantData.clear();
+        if(text.isEmpty()){
+            PlantData.addAll(SearchList);
+        }else{
+            text = text.toLowerCase();
+            for(PlantData plantDataItem : SearchList){
+                if(plantDataItem.getCommon_name().toLowerCase().contains(text)){
+                    PlantData.add(plantDataItem);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         PlantData plantData = PlantData.get(position);

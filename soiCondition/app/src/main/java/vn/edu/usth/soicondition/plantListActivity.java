@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -167,7 +168,8 @@ public class plantListActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                plantListRecycleAdapter.filterList(newText);
+                return true;
             }
         });
         return  super.onCreateOptionsMenu(menu);

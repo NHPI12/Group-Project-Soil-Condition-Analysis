@@ -1,5 +1,6 @@
 package vn.edu.usth.soicondition;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
@@ -9,6 +10,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ public class setting extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
 
         View inflatedView = getLayoutInflater().inflate(R.layout.activity_main, null);
         TextView temperature = (TextView)inflatedView.findViewById(R.id.tempData);
@@ -56,26 +59,22 @@ public class setting extends AppCompatActivity {
                 editor.apply();
             }
         });
-
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //Tempunit
         tempswitch = findViewById(R.id.tempswitch);
         sharedPreferences_temp = getSharedPreferences("MODE", Context.MODE_PRIVATE);
         tempMode = sharedPreferences_temp.getBoolean("tempmode", false);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Handle action bar item clicks here
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            // This is called when the up/back button is pressed
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

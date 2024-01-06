@@ -90,7 +90,7 @@ public class AddPlantsActivity extends AppCompatActivity {
 
                 LinearLayout checkAllView = findViewById(R.id.checkAllView);
                 CheckBox checkBox = findViewById(R.id.checkAllCheckBox);
-
+                plantAddRecycleAdapter.setCheckBoxAll(checkBox);
                 checkAllView.setOnClickListener(v -> {
                     checkBox.setChecked(!checkBox.isChecked());
                     plantAddRecycleAdapter.switchAllChecked();

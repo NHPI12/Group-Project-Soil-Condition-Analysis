@@ -23,7 +23,8 @@
         app:menu="@menu/navigation_menu"
         app:itemIconSize="40dp"
         app:itemVerticalPadding="20dp"
-        android:background="@color/lilwhite">
+        android:background="@color/lilwhite"
+        tools:ignore="VisualLintBounds">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,12 +35,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:ignore="UselessParent">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingRight="40dp"
-                    android:paddingLeft="35dp"
+                    android:paddingEnd="40dp"
+                    android:paddingStart="35dp"
                     android:textSize="20sp"
                     android:text="Add"
                     android:id="@+id/add_text"
@@ -56,8 +58,9 @@
                     android:text="Remove"
                     android:id="@+id/remove_text"
                     android:textStyle="bold"
-                    android:paddingLeft="40dp"
-                    android:textColor="@color/lilbrown"/>
+                    android:paddingStart="40dp"
+                    android:textColor="@color/lilbrown"
+                    tools:ignore="RtlSymmetry" />
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>

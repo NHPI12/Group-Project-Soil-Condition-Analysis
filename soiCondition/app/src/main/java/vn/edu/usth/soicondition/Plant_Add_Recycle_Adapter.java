@@ -15,8 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import vn.edu.usth.soicondition.network.model.PlantData;
@@ -30,12 +32,11 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
     private Set<Integer> addedPlantIds;
 
     private SparseBooleanArray selectedItems = new SparseBooleanArray();
-    private List<PlantData> SearchList;
-
+    private final List<PlantData> SearchList;
 
     public Plant_Add_Recycle_Adapter(Context context, List<PlantData> plantData) {
         this.context = context;
-        this.PlantData = filterAddedPlants(plantData, new HashSet<>()); // Initialize addedPlantIds as an empty set
+        this.PlantData = filterAddedPlants(plantData, addedPlantIds);
         this.SearchList = new ArrayList<>(filterAddedPlants(plantData,addedPlantIds));
         setHasStableIds(true);
         initializeSelectedItems();

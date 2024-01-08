@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import android.view.View;
 import android.widget.TextView;
 
@@ -47,50 +48,41 @@ public class Your_Plant_Activity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                if (id == R.id.stats_plant) {
-                    Intent intent = new Intent(Your_Plant_Activity.this, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-                    finish();
-                } else if (id == R.id.item_5) {
-                    openSettings();
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                }else if (id == R.id.list_plants){
-                    Intent intent = new Intent(Your_Plant_Activity.this, plantListActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-                    finish();
-                }
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.stats_plant) {
+                Intent intent = new Intent(Your_Plant_Activity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+                finish();
+            } else if (id == R.id.item_5) {
+                openSettings();
                 drawerLayout.closeDrawer(GravityCompat.START);
-                return true;
+            }else if (id == R.id.list_plants){
+                Intent intent = new Intent(Your_Plant_Activity.this, plantListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
+                startActivity(intent);
+                overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+                finish();
             }
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
         });
         TextView addTextView = findViewById(R.id.add_text);
         TextView removeTextView = findViewById(R.id.remove_text);
-        addTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent addIntent = new Intent(Your_Plant_Activity.this, AddPlantsActivity.class);
-                addIntent.putExtra("plantList", new ArrayList<>(plantList));
-                startActivity(addIntent);
-                overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-            }
+        addTextView.setOnClickListener(v -> {
+            Intent addIntent = new Intent(Your_Plant_Activity.this, AddPlantsActivity.class);
+            addIntent.putExtra("plantList", new ArrayList<>(plantList));
+            startActivity(addIntent);
+            overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
         });
-        removeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent removeIntent = new Intent(Your_Plant_Activity.this, RemovePlantsActivity.class);
-                removeIntent.putExtra("plantList", new ArrayList<>(plantList));
-                startActivity(removeIntent);
-                overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-            }
+        removeTextView.setOnClickListener(v -> {
+            Intent removeIntent = new Intent(Your_Plant_Activity.this, RemovePlantsActivity.class);
+            removeIntent.putExtra("plantList", new ArrayList<>(plantList));
+            startActivity(removeIntent);
+            overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
         });
 
         SharedPreferences sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
@@ -111,23 +103,20 @@ public class Your_Plant_Activity extends AppCompatActivity {
             YourPlantRecycleAdapter = new Plant_List_Recycle_Adapter(this, allSelectedPlants);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            YourPlantRecycleAdapter.setOnItemClickListener(new Plant_List_Recycle_Adapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(int position) {
-                    PlantData clickedPlant = plantList.get(position);
-                    default_Image clickedPlantImage = clickedPlant.getDefaultImage();
-                    Intent intent = new Intent(Your_Plant_Activity.this, PlantDetailsActivity.class);
-                    // Pass data to PlantDetailsActivity
-                    intent.putExtra("original_url", clickedPlantImage.getOriginalUrl());
-                    Log.d("PlantListActivity", "Original URL: " + clickedPlantImage.getOriginalUrl());
-                    intent.putExtra("scientific_name", new ArrayList<>(clickedPlant.getScientific_name()));
-                    intent.putExtra("sunlight", new ArrayList<>(clickedPlant.getSunlight()));
-                    intent.putExtra("common_name", clickedPlant.getCommon_name());
-                    intent.putExtra("cycle", clickedPlant.getCycle());
-                    intent.putExtra("watering", clickedPlant.getWatering());
-                    intent.putExtra("id", clickedPlant.getId());
-                    startActivity(intent);
-                }
+            YourPlantRecycleAdapter.setOnItemClickListener(position -> {
+                PlantData clickedPlant = plantList.get(position);
+                default_Image clickedPlantImage = clickedPlant.getDefaultImage();
+                Intent intent1 = new Intent(Your_Plant_Activity.this, PlantDetailsActivity.class);
+                // Pass data to PlantDetailsActivity
+                intent1.putExtra("original_url", clickedPlantImage.getOriginalUrl());
+                Log.d("PlantListActivity", "Original URL: " + clickedPlantImage.getOriginalUrl());
+                intent1.putExtra("scientific_name", new ArrayList<>(clickedPlant.getScientific_name()));
+                intent1.putExtra("sunlight", new ArrayList<>(clickedPlant.getSunlight()));
+                intent1.putExtra("common_name", clickedPlant.getCommon_name());
+                intent1.putExtra("cycle", clickedPlant.getCycle());
+                intent1.putExtra("watering", clickedPlant.getWatering());
+                intent1.putExtra("id", clickedPlant.getId());
+                startActivity(intent1);
             });
             recyclerView.setAdapter(YourPlantRecycleAdapter);
             if (allSelectedPlants.isEmpty()) {
@@ -136,17 +125,14 @@ public class Your_Plant_Activity extends AppCompatActivity {
                 TextView addPlantNowText = findViewById(R.id.add_plant_now_text);
                 addPlantNowText.setVisibility(View.VISIBLE);
                 addPlantNowText.setPaintFlags(addPlantNowText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                addPlantNowText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Start the AddPlantsActivity when the TextView is clicked
-                        Intent addIntent = new Intent(Your_Plant_Activity.this, AddPlantsActivity.class);
-                        addIntent.putExtra("plantList", new ArrayList<>(plantList));
-                        startActivity(addIntent);
-                        overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-                        finish();
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                    }
+                addPlantNowText.setOnClickListener(v -> {
+                    // Start the AddPlantsActivity when the TextView is clicked
+                    Intent addIntent = new Intent(Your_Plant_Activity.this, AddPlantsActivity.class);
+                    addIntent.putExtra("plantList", new ArrayList<>(plantList));
+                    startActivity(addIntent);
+                    overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+                    finish();
+                    drawerLayout.closeDrawer(GravityCompat.START);
                 });
             } else {
                 findViewById(R.id.no_plants_text).setVisibility(View.GONE);

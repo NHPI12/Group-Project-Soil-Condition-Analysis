@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddPlantsActivity"
-    android:background="@color/leaf"
-    android:orientation="vertical">
-    <RelativeLayout
+    android:background="@color/leaf">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/plant_add_recycle_View"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/plant_add_recycle_View"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp" />
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"/>
 
         <Button
             android:id="@+id/btnAddPlants"
@@ -27,6 +22,10 @@
             android:text="Add Plants  +"
             android:textColor="@color/lilwhite"
             android:textSize="15sp"
-            android:visibility="visible" />
-    </RelativeLayout>
-</LinearLayout>
+
+            android:visibility="visible"
+            tools:ignore="TextSizeCheck" />
+
+</RelativeLayout>
+
+

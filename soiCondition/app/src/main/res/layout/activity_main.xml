@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="top">
         <androidx.cardview.widget.CardView
@@ -196,7 +196,8 @@
         android:background="@color/lilwhite"
         app:itemTextColor="@color/verybrown"
         app:itemIconSize="40dp"
-        app:itemVerticalPadding="20dp">
+        app:itemVerticalPadding="20dp"
+        tools:ignore="VisualLintBounds">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -213,7 +214,7 @@
                     android:layout_height="wrap_content"
                     android:paddingRight="40dp"
                     android:paddingLeft="35dp"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:text="Add"
                     android:textStyle="bold"
                     android:id="@+id/add_text"
@@ -225,12 +226,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:text="Remove"
                     android:id="@+id/remove_text"
                     android:textStyle="bold"
                     android:paddingLeft="40dp"
-                    android:textColor="@color/lilbrown"/>
+                    android:textColor="@color/lilbrown"
+                    tools:ignore="RtlSymmetry" />
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>

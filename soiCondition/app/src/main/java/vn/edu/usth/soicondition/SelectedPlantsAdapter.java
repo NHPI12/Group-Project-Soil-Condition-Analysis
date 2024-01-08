@@ -128,4 +128,10 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
             return null;
         }
     }
-}
+    public void collapseRecyclerView(ImageView arrowImageView, RecyclerView recyclerView) {
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+            float newRotation = expanded ? 180f : 0f;
+            arrowImageView.animate().rotation(newRotation).start();
+        }
+    }}

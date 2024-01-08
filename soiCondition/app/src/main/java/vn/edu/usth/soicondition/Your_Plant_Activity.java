@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -116,8 +117,32 @@ public class Your_Plant_Activity extends AppCompatActivity {
                 intent1.putExtra("id", clickedPlant.getId());
                 startActivity(intent1);
             });
+            recyclerView.setAdapter(YourPlantRecycleAdapter);
+            if (allSelectedPlants.isEmpty()) {
+                recyclerView.setVisibility(View.GONE);
+                // Show the "Add Plant Now!" TextView and set click listener
+                TextView addPlantNowText = findViewById(R.id.add_plant_now_text);
+                addPlantNowText.setVisibility(View.VISIBLE);
+                addPlantNowText.setPaintFlags(addPlantNowText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                addPlantNowText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Start the AddPlantsActivity when the TextView is clicked
+                        Intent addIntent = new Intent(Your_Plant_Activity.this, AddPlantsActivity.class);
+                        addIntent.putExtra("plantList", new ArrayList<>(plantList));
+                        startActivity(addIntent);
+                        overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+                        finish();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                    }
+                });
+            } else {
+                findViewById(R.id.no_plants_text).setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                findViewById(R.id.add_plant_now_text).setVisibility(View.GONE);
+            }
         }
-        recyclerView.setAdapter(YourPlantRecycleAdapter);
+
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

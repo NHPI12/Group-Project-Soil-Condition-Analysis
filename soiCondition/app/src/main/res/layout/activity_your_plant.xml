@@ -8,14 +8,41 @@
     tools:context=".Your_Plant_Activity"
     android:id="@+id/your_plant_nav_layout"
     android:background="@color/leaf">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/your_plant_recycle_View"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp" />
+        android:layout_margin="10dp"
+        android:visibility="gone"/>
+        <TextView
+            android:id="@+id/no_plants_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You don't have\nany plants."
+            android:textAlignment="center"
+            android:layout_marginTop="-100dp"
+            android:textSize="35sp"
+            android:textColor="@color/lilwhite"
+            android:visibility="visible"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/add_plant_now_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:clickable="true"
+            android:text="ADD PLANTS NOW"
+            android:textAlignment="center"
+            android:textColor="@color/lilwhite"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+    </RelativeLayout>
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

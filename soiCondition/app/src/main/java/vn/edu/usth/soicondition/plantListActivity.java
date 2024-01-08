@@ -107,6 +107,7 @@ public class plantListActivity extends AppCompatActivity {
 
         TextView addTextView = findViewById(R.id.add_text);
         TextView removeTextView = findViewById(R.id.remove_text);
+        
         addTextView.setOnClickListener(v -> {
             Intent addIntent = new Intent(plantListActivity.this, AddPlantsActivity.class);
             addIntent.putExtra("plantList", new ArrayList<>(plantList));
@@ -118,6 +119,7 @@ public class plantListActivity extends AppCompatActivity {
             removeIntent.putExtra("plantList", new ArrayList<>(plantList));
             startActivity(removeIntent);
             overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
+
         });
         }
     @Override

@@ -245,30 +245,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         });
         TextView addTextView = findViewById(R.id.add_text);
         TextView removeTextView = findViewById(R.id.remove_text);
-        addTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddPlantsActivity.class);
-                intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
-                startActivity(intent);
-                overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-                drawerLayout.closeDrawer(GravityCompat.START);
-            }
-        });
-        removeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RemovePlantsActivity.class);
-                intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
-                startActivity(intent);
-                overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
-                drawerLayout.closeDrawer(GravityCompat.START);
-
-            }
-            return false;
-        });
-        TextView addTextView = findViewById(R.id.add_text);
-        TextView removeTextView = findViewById(R.id.remove_text);
         addTextView.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddPlantsActivity.class);
             intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));

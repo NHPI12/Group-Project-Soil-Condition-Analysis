@@ -1,16 +1,15 @@
 package vn.edu.usth.soicondition;
 
 
-import android.annotation.SuppressLint;
+
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.media.Image;
+
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageSwitcher;
+
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,9 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+
 import java.util.List;
-import java.util.Set;
+
 
 import vn.edu.usth.soicondition.network.model.PlantData;
 import vn.edu.usth.soicondition.network.model.default_Image;
@@ -82,13 +81,10 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
         }
         setSunlightIcons(plantData.getSunlight(), holder.sunlightIconsContainer);
         holder.cycle.setText(plantData.getCycle());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int adapterPosition = holder.getAdapterPosition();
-                if (adapterPosition != RecyclerView.NO_POSITION && onItemClickListener != null) {
-                    onItemClickListener.onItemClick(adapterPosition);
-                }
+        holder.itemView.setOnClickListener(v -> {
+            int adapterPosition = holder.getAdapterPosition();
+            if (adapterPosition != RecyclerView.NO_POSITION && onItemClickListener != null) {
+                onItemClickListener.onItemClick(adapterPosition);
             }
         });
     }

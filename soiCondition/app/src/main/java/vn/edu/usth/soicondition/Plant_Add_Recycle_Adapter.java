@@ -18,8 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import vn.edu.usth.soicondition.network.model.PlantData;
@@ -34,13 +36,12 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
 
     private SparseBooleanArray selectedItems = new SparseBooleanArray();
 
-    private Map<Integer, Boolean> checkedStates = new HashMap<>();
-    private List<PlantData> SearchList;
+    private final List<PlantData> SearchList;
 
 
     public Plant_Add_Recycle_Adapter(Context context, List<PlantData> plantData) {
         this.context = context;
-        this.addedPlantIds = addedPlantIds;
+
 
         this.PlantData = filterAddedPlants(plantData, addedPlantIds);
         this.SearchList = new ArrayList<>(filterAddedPlants(plantData,addedPlantIds));

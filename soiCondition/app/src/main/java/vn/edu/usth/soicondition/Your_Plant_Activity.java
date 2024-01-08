@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -124,17 +125,14 @@ public class Your_Plant_Activity extends AppCompatActivity {
                 TextView addPlantNowText = findViewById(R.id.add_plant_now_text);
                 addPlantNowText.setVisibility(View.VISIBLE);
                 addPlantNowText.setPaintFlags(addPlantNowText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                addPlantNowText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Start the AddPlantsActivity when the TextView is clicked
-                        Intent addIntent = new Intent(Your_Plant_Activity.this, AddPlantsActivity.class);
-                        addIntent.putExtra("plantList", new ArrayList<>(plantList));
-                        startActivity(addIntent);
-                        overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-                        finish();
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                    }
+                addPlantNowText.setOnClickListener(v -> {
+                    // Start the AddPlantsActivity when the TextView is clicked
+                    Intent addIntent = new Intent(Your_Plant_Activity.this, AddPlantsActivity.class);
+                    addIntent.putExtra("plantList", new ArrayList<>(plantList));
+                    startActivity(addIntent);
+                    overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+                    finish();
+                    drawerLayout.closeDrawer(GravityCompat.START);
                 });
             } else {
                 findViewById(R.id.no_plants_text).setVisibility(View.GONE);

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.LayoutTransition;
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         // Start fetching data periodically
         fetchData();
         databaseReferenceSoil.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
@@ -147,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 }
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle errors
@@ -155,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
         });
         databaseReferenceTemp.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
@@ -175,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 }
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle errors
@@ -183,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
         });
         databaseReferenceHumid.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
@@ -203,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 }
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle errors
@@ -219,29 +225,24 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                if (id == R.id.list_plants) {
-                    Intent intent = new Intent(MainActivity.this, plantListActivity.class);
-                    intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                } else if (id == R.id.item_5) {
-                    openSettings();
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    return true;
-                }else if (id == R.id.item_2){
-                    Intent intent = new Intent(MainActivity.this,Your_Plant_Activity.class);
-                    intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                }
-                return false;
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.list_plants) {
+                Intent intent = new Intent(MainActivity.this, plantListActivity.class);
+                intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
+                startActivity(intent);
+                overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+            } else if (id == R.id.item_5) {
+                openSettings();
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }else if (id == R.id.item_2){
+                Intent intent = new Intent(MainActivity.this,Your_Plant_Activity.class);
+                intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
+                startActivity(intent);
+                overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
             }
+            return false;
         });
         TextView addTextView = findViewById(R.id.add_text);
         TextView removeTextView = findViewById(R.id.remove_text);
@@ -626,18 +627,12 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         new AlertDialog.Builder(this)
                 .setTitle("Exit Confirmation")
                 .setMessage("Are you sure you want to exit?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        exitConfirmationShown = true;
-                        finish(); // Terminate the activity
-                    }
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    exitConfirmationShown = true;
+                    finish(); // Terminate the activity
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // User clicked "No," do nothing or dismiss the dialog
-                    }
+                .setNegativeButton("No", (dialog, which) -> {
+                    // User clicked "No," do nothing or dismiss the dialog
                 })
                 .show();
     }

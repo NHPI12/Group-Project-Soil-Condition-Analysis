@@ -13,7 +13,6 @@ public class RetrofitDatabase {
     //private static final String BASE_URL = "http://192.168.1.150/codes/fetchdata.php/"; // 40th floor Tan Hoang Minh 4016
     private static final String BASE_URL = "http://192.168.1.149/codes/fetchdata.php/"; // 42th floor Tan Hoang Minh 4217
     private static Retrofit retrofit;
-
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()

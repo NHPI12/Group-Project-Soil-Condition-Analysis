@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".AddPlantsActivity"
     android:background="@color/leaf">
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/plant_add_recycle_View"
         android:layout_width="match_parent"
@@ -18,10 +17,7 @@
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_margin="16dp"
             android:background="@drawable/add_button_background"
             android:text="Add Plants  +"
             android:textColor="@color/lilwhite"

@@ -3,6 +3,7 @@ package vn.edu.usth.soicondition;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.LayoutTransition;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     private LineChart lineChartTemp, lineChartSoil, lineChartHumid;
     LinearLayout humidLayout, tempLayout, soilLayout;
     private HandlerThread handlerThread;
+    private boolean exitConfirmationShown = false;
     private Handler handler;
     private List<PlantData> plantList;
     private Plant_List_Recycle_Adapter plantListRecycleAdapter;
@@ -231,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
                     startActivity(intent);
                     overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+                    drawerLayout.closeDrawer(GravityCompat.START);
                 } else if (id == R.id.item_5) {
                     openSettings();
                     drawerLayout.closeDrawer(GravityCompat.START);
@@ -240,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
                     startActivity(intent);
                     overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+                    drawerLayout.closeDrawer(GravityCompat.START);
                 }
                 return false;
             }
@@ -253,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
                 startActivity(intent);
                 overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+                drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
         removeTextView.setOnClickListener(new View.OnClickListener() {
@@ -262,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
                 startActivity(intent);
                 overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
+                drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
     }
@@ -278,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         Intent intent = new Intent(MainActivity.this, setting.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+        drawerLayout.closeDrawer(GravityCompat.START);
     }
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void expandHumid(View view) {
@@ -625,5 +633,35 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             Log.d("Selected Plant Details", "Selected Plant Adapter is null");
         }
     }
-
+    @Override
+    public void onBackPressed() {
+            if (exitConfirmationShown) {
+                // If exit confirmation is already shown, perform default behavior
+                super.onBackPressed();
+            } else {
+                // Show exit confirmation
+                showExitConfirmation();
+            }
+        }
+    private void showExitConfirmation() {
+        // Add code to show your exit confirmation dialog
+        // Example: You can use an AlertDialog to prompt the user
+        new AlertDialog.Builder(this)
+                .setTitle("Exit Confirmation")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        exitConfirmationShown = true;
+                        finish(); // Terminate the activity
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // User clicked "No," do nothing or dismiss the dialog
+                    }
+                })
+                .show();
+    }
 }

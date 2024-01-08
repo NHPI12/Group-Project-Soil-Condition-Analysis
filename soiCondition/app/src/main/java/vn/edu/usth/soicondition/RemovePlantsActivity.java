@@ -9,12 +9,14 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -27,6 +29,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -68,29 +73,49 @@ public class RemovePlantsActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(plantRemoveRecycleAdapter);
             // Inflate custom ActionBar layout
-            LayoutInflater inflater = LayoutInflater.from(this);
-            View customActionBarView = inflater.inflate(R.layout.actionbar_custom_layout, null);
-
-            // Set custom ActionBar layout
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.setDisplayHomeAsUpEnabled(true);
-                actionBar.setDisplayShowCustomEnabled(true);
-                actionBar.setCustomView(customActionBarView, new ActionBar.LayoutParams(
-                        ActionBar.LayoutParams.MATCH_PARENT,
-                        ActionBar.LayoutParams.MATCH_PARENT
-                ));
-
-                LinearLayout checkAllView = findViewById(R.id.checkAllView);
-                CheckBox checkBox = findViewById(R.id.checkAllCheckBox);
-                plantRemoveRecycleAdapter.setCheckBoxAll(checkBox);
-                checkAllView.setOnClickListener(v -> {
-                    checkBox.setChecked(!checkBox.isChecked());
-                    plantRemoveRecycleAdapter.switchAllChecked();
+            if (allSelectedPlants.isEmpty()) {
+                recyclerView.setVisibility(View.GONE);
+                // Show the "Add Plant Now!" TextView and set click listener
+                TextView addPlantNowText = findViewById(R.id.add_plant_now_text);
+                addPlantNowText.setVisibility(View.VISIBLE);
+                addPlantNowText.setPaintFlags(addPlantNowText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                addPlantNowText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Start the AddPlantsActivity when the TextView is clicked
+                        Intent addIntent = new Intent(RemovePlantsActivity.this, AddPlantsActivity.class);
+                        addIntent.putExtra("plantList", new ArrayList<>(plantList));
+                        startActivity(addIntent);
+                        overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+                        finish();
+                    }
                 });
-                checkBox.setOnClickListener(v -> {
-                    plantRemoveRecycleAdapter.switchAllChecked();
-                });
+            } else {
+                findViewById(R.id.no_plants_text).setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                findViewById(R.id.add_plant_now_text).setVisibility(View.GONE);
+                LayoutInflater inflater = LayoutInflater.from(this);
+                View customActionBarView = inflater.inflate(R.layout.actionbar_custom_layout, null);
+                // Set custom ActionBar layout
+                ActionBar actionBar = getSupportActionBar();
+                if (actionBar != null) {
+                    actionBar.setDisplayHomeAsUpEnabled(true);
+                    actionBar.setDisplayShowCustomEnabled(true);
+                    actionBar.setCustomView(customActionBarView, new ActionBar.LayoutParams(
+                            ActionBar.LayoutParams.MATCH_PARENT,
+                            ActionBar.LayoutParams.MATCH_PARENT
+                    ));
+                    LinearLayout checkAllView = findViewById(R.id.checkAllView);
+                    CheckBox checkBox = findViewById(R.id.checkAllCheckBox);
+                    plantRemoveRecycleAdapter.setCheckBoxAll(checkBox);
+                    checkAllView.setOnClickListener(v -> {
+                        checkBox.setChecked(!checkBox.isChecked());
+                        plantRemoveRecycleAdapter.switchAllChecked();
+                    });
+                    checkBox.setOnClickListener(v -> {
+                        plantRemoveRecycleAdapter.switchAllChecked();
+                    });
+                }
             }
         }
         btnRemovePlants = findViewById(R.id.btnRemovePlants);

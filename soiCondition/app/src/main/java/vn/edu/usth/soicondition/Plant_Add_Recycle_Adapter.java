@@ -227,17 +227,6 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
         return false;
     }
 
-    @Override
-    public long getItemId(int position) {
-        return PlantData.get(position).getId();
-    }
-    public PlantData getItem(int position) {
-        if (position >= 0 && position < PlantData.size()) {
-            return PlantData.get(position);
-        }
-        return null;
-    }
-
     private List<PlantData> filterAddedPlants(List<PlantData> plantDataList, Set<Integer> addedPlantIds) {
         List<PlantData> filteredList = new ArrayList<>();
         if (addedPlantIds == null) {
@@ -255,14 +244,10 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
             selectedItems.put(plantData.getId(), isSelected);
         }
         notifyDataSetChanged();
-        // Update the isAllChecked state
         isAllChecked = isSelected;
-
-        // Update the state of "Check All" checkbox if available
         if (checkBoxAll != null) {
             checkBoxAll.setChecked(isSelected);
         }
-
         if (onCheckedChangeListener != null) {
             onCheckedChangeListener.onCheckedChanged(isAtLeastOneChecked());
         }

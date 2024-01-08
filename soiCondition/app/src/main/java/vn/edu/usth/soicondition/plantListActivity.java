@@ -129,6 +129,7 @@ public class plantListActivity extends AppCompatActivity {
                 addIntent.putExtra("plantList", new ArrayList<>(plantList));
                 startActivity(addIntent);
                 overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+                drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
         removeTextView.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +139,7 @@ public class plantListActivity extends AppCompatActivity {
                 removeIntent.putExtra("plantList", new ArrayList<>(plantList));
                 startActivity(removeIntent);
                 overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
+                drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
         }

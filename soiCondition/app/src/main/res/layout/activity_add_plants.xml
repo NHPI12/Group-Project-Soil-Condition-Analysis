@@ -14,17 +14,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"/>
-    <Button
-        android:id="@+id/btnAddPlants"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
-        android:background="@drawable/add_button_background"
-        android:text="Add Plants  +"
-        android:textSize="15sp"
-        android:textColor="@color/lilwhite"
-        android:visibility="visible" />
+
+        <Button
+            android:id="@+id/btnAddPlants"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/add_button_background"
+            android:text="Add Plants  +"
+            android:textColor="@color/lilwhite"
+            android:textSize="15sp"
+            android:visibility="visible" />
     </RelativeLayout>
 </LinearLayout>

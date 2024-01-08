@@ -19,7 +19,7 @@
 
             android:layout_gravity="center"
             android:text="Setting"
-            android:textSize="30dp" />
+            android:textSize="30sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,12 +33,14 @@
                 android:layout_marginEnd="216dp"
 
                 android:text="Light mode"
-                android:textSize="20dp" />
+                android:textSize="20sp"
+                tools:ignore="TextSizeCheck" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/lighswitch"
                 android:layout_width="50dp"
-                android:layout_height="40dp" />
+                android:layout_height="40dp"
+                tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
 
         </LinearLayout>
 
@@ -54,12 +56,14 @@
                 android:layout_marginEnd="121dp"
 
                 android:text="Temperature Unit"
-                android:textSize="20dp" />
+                android:textSize="20sp"
+                tools:ignore="TextSizeCheck" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/tempswitch"
                 android:layout_width="50dp"
-                android:layout_height="40dp" />
+                android:layout_height="40dp"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </LinearLayout>
 
@@ -75,12 +79,14 @@
                 android:layout_marginEnd="230dp"
 
                 android:text="Language"
-                android:textSize="20dp" />
+                android:textSize="20sp"
+                tools:ignore="TextSizeCheck" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/langswitch"
                 android:layout_width="50dp"
-                android:layout_height="40dp" />
+                android:layout_height="40dp"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </LinearLayout>
 

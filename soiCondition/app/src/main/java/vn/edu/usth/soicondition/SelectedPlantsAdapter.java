@@ -51,12 +51,9 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
             Log.d("Selected Plant Details", "DefaultImage Not found");
         }
         holder.nameTextView.setText(plant.getCommon_name());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    listener.onItemClick(position);
-                }
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(position);
             }
         });
     }
@@ -72,21 +69,18 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView thumbnailImageView, arrowImageView;
+        private ImageView thumbnailImageView;
         private TextView nameTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             thumbnailImageView = itemView.findViewById(R.id.imageViewThumbnail);
             nameTextView = itemView.findViewById(R.id.textViewCommonName);
-            arrowImageView = itemView.findViewById(R.id.ArrowSelectedPlant);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION && listener != null) {
-                        listener.onItemClick(position);
-                    }
+            ImageView arrowImageView = itemView.findViewById(R.id.ArrowSelectedPlant);
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onItemClick(position);
                 }
             });
         }

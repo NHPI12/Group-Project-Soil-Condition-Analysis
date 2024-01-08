@@ -12,4 +12,5 @@
     <string name="temperature">Temperature</string>
     <string name="soil_moisture">Soil Moisture</string>
     <string name="checkAll">Check All</string>
+
 </resources>

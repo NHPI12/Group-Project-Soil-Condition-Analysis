@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddPlantsActivity"
-    android:background="@color/leaf"
-    android:orientation="vertical">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    android:background="@color/leaf">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/plant_add_recycle_View"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"/>
-    <Button
-        android:id="@+id/btnAddPlants"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
-        android:background="@drawable/add_button_background"
-        android:text="Add Plants  +"
-        android:textSize="15sp"
-        android:textColor="@color/lilwhite"
-        android:visibility="visible" />
-    </RelativeLayout>
-</LinearLayout>
+
+        <Button
+            android:id="@+id/btnAddPlants"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/add_button_background"
+            android:text="Add Plants  +"
+            android:textColor="@color/lilwhite"
+            android:textSize="15sp"
+            android:visibility="visible"
+            tools:ignore="TextSizeCheck" />
+
+</RelativeLayout>

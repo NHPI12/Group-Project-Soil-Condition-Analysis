@@ -11,12 +11,9 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -33,16 +30,12 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
     private Set<Integer> addedPlantIds;
 
     private SparseBooleanArray selectedItems = new SparseBooleanArray();
-
-    private Map<Integer, Boolean> checkedStates = new HashMap<>();
     private List<PlantData> SearchList;
 
 
     public Plant_Add_Recycle_Adapter(Context context, List<PlantData> plantData) {
         this.context = context;
-        this.addedPlantIds = addedPlantIds;
-
-        this.PlantData = filterAddedPlants(plantData, addedPlantIds);
+        this.PlantData = filterAddedPlants(plantData, new HashSet<>()); // Initialize addedPlantIds as an empty set
         this.SearchList = new ArrayList<>(filterAddedPlants(plantData,addedPlantIds));
         setHasStableIds(true);
         initializeSelectedItems();
@@ -291,4 +284,5 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
             checkBoxAll.setChecked(areAllItemsSelected());
         }
     }
+
 }

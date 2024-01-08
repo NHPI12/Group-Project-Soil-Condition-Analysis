@@ -56,6 +56,7 @@ public class AddPlantsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent.hasExtra("plantList")) {
             plantList = intent.getParcelableArrayListExtra("plantList");
+            Log.d("AddPlantsActivity", "onCreate: " + plantList.size());
             Set<String> addedPlantIdsStringSet = sharedPreferences.getStringSet(PREF_SELECTED_PLANTS, new HashSet<>());
             Set<Integer> addedPlantIds = new HashSet<>();
             for (String id : addedPlantIdsStringSet) {

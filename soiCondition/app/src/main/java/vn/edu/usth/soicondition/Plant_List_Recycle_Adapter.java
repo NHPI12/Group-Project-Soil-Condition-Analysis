@@ -64,6 +64,7 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
         if(plantData == null){
             return;
         }
+        setSunlightIcons(plantData.getSunlight(), holder.sunlightIconsContainer);
         holder.common_name.setText((plantData.getCommon_name()));
         default_Image defaultImage = plantData.getDefaultImage();
         if (defaultImage != null) {
@@ -76,11 +77,9 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
             Log.d("Thumbnail", "Not found");
         }
         if (holder.wateringIcon != null) {
-            int wateringIcon = getWateringIcon(plantData.getWatering());
             // Set the icon to the ImageView
             holder.wateringIcon.setBackgroundResource(getWateringIcon((plantData.getWatering())));
         }
-        setSunlightIcons(plantData.getSunlight(), holder.sunlightIconsContainer);
         holder.cycle.setText(plantData.getCycle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,28 +151,25 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
         }
     }
     private void setSunlightIcons(List<String> sunlightConditions, ViewGroup sunlightContainer) {
-        // Clear previous icons
-        sunlightContainer.removeAllViews();
-
+        sunlightContainer.removeAllViews(); // Clear existing views
         if (sunlightConditions.isEmpty()) {
             // Set default icon if the list is empty
             ImageView defaultIcon = createSunlightIcon(R.drawable.ic_thumbnail);
             sunlightContainer.addView(defaultIcon);
-            return;
-        }
-
-        // Create and add icons for each sunlight condition
-        for (String sunlightCondition : sunlightConditions) {
-            int iconResourceId = getSunlightIcon(sunlightCondition);
-            ImageView icon = createSunlightIcon(iconResourceId);
-            sunlightContainer.addView(icon);
+        } else {
+            // Create and add icons for each sunlight condition
+            for (String sunlightCondition : sunlightConditions) {
+                int iconResourceId = getSunlightIcon(sunlightCondition);
+                ImageView icon = createSunlightIcon(iconResourceId);
+                sunlightContainer.addView(icon);
+            }
         }
     }
     private ImageView createSunlightIcon(int iconResourceId) {
         ImageView icon = new ImageView(context);
         icon.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         icon.setImageResource(iconResourceId);
-        icon.setPadding(0, 0, 20, 0); // Add padding between icons if needed
+        icon.setPadding(0, 0, 16, 0);
         return icon;
     }
 }

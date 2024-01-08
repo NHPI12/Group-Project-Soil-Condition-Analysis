@@ -25,6 +25,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import vn.edu.usth.soicondition.network.model.PlantData;
@@ -33,7 +34,6 @@ import vn.edu.usth.soicondition.network.model.default_Image;
 public class Your_Plant_Activity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-    private RecyclerView recyclerView;
     private Plant_List_Recycle_Adapter YourPlantRecycleAdapter;
     private List<PlantData> plantList;
     @Override
@@ -46,7 +46,7 @@ public class Your_Plant_Activity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.your_plant_nav);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar(),"cannot be null").setDisplayHomeAsUpEnabled(true);
 
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -86,12 +86,6 @@ public class Your_Plant_Activity extends AppCompatActivity {
         });
 
         SharedPreferences sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
-        Set<String> selectedPlantIdsStringSet = sharedPreferences.getStringSet("selected_plants", new HashSet<>());
-
-        Set<Integer> selectedPlantIds = new HashSet<>();
-        for (String id : selectedPlantIdsStringSet) {
-            selectedPlantIds.add(Integer.valueOf(id));
-        }
 
         Intent intent = getIntent();
         if (intent.hasExtra("plantList")) {
@@ -99,7 +93,7 @@ public class Your_Plant_Activity extends AppCompatActivity {
             Log.d("New Data", "" + plantList);
             List<PlantData> allSelectedPlants = getAllSelectedPlants(sharedPreferences);
 
-            recyclerView = findViewById(R.id.your_plant_recycle_View);
+            RecyclerView recyclerView = findViewById(R.id.your_plant_recycle_View);
             YourPlantRecycleAdapter = new Plant_List_Recycle_Adapter(this, allSelectedPlants);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -153,7 +147,7 @@ public class Your_Plant_Activity extends AppCompatActivity {
     }
     private PlantData getPlantDataById(int plantId, List<PlantData> plantList) {
         if (plantList == null || plantList.isEmpty()) {
-            Log.d("Selected Plant Details" ,"Null " + plantList.size());
+            Log.d("Selected Plant Details" ,"Null " + Objects.requireNonNull(plantList).size());
             return null;
         }
         else Log.d("Selected Plant Details" ,"Not Null " + plantList.size());
@@ -191,7 +185,7 @@ public class Your_Plant_Activity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.search_bar_menu,menu);
         MenuItem menuItem = menu.findItem(R.id.search_action_bar);
         SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        Objects.requireNonNull(searchView).setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;

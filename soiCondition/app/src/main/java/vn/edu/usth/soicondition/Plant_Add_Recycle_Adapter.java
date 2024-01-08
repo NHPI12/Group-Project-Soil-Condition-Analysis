@@ -1,5 +1,6 @@
 package vn.edu.usth.soicondition;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,30 +16,28 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+
 import java.util.Set;
 
 import vn.edu.usth.soicondition.network.model.PlantData;
 import vn.edu.usth.soicondition.network.model.default_Image;
 
 public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Recycle_Adapter.MyViewHolder2> {
-    private List<PlantData> PlantData;
-    private Context context;
+    private final List<PlantData> PlantData;
+    private final Context context;
     private CheckBox checkBoxAll;
     private boolean isAllChecked = false;
-    private Set<Integer> addedPlantIds;
-
-    private SparseBooleanArray selectedItems = new SparseBooleanArray();
+    private final SparseBooleanArray selectedItems = new SparseBooleanArray();
     private final List<PlantData> SearchList;
 
     public Plant_Add_Recycle_Adapter(Context context, List<PlantData> plantData) {
         this.context = context;
-        this.PlantData = filterAddedPlants(plantData, addedPlantIds);
-        this.SearchList = new ArrayList<>(filterAddedPlants(plantData,addedPlantIds));
-        setHasStableIds(true);
+        this.PlantData = plantData;
+        this.SearchList = new ArrayList<>(plantData);
+        //setHasStableIds(true);
         initializeSelectedItems();
     }
 
@@ -56,6 +55,7 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
         return new MyViewHolder2(view);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void filterList(String text){
         PlantData.clear();
         if(text.isEmpty()){
@@ -74,9 +74,11 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
     @Override
     public void onBindViewHolder(@NonNull Plant_Add_Recycle_Adapter.MyViewHolder2 holder, int position) {
         PlantData plantData = PlantData.get(position);
+        //holder.setIsRecyclable(false);
         if (plantData == null) {
             return;
         }
+        setSunlightIcons(plantData.getSunlight(), holder.sunlightIconContainer);
         holder.Add_common_name.setText((plantData.getCommon_name()));
         holder.checkBox.setChecked(selectedItems.get(plantData.getId()));
         default_Image defaultImage = plantData.getDefaultImage();
@@ -89,14 +91,13 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
             Log.d("Thumbnail", "Not found");
         }
         if (holder.wateringIcon != null) {
-            int wateringIcon = getWateringIcon(plantData.getWatering());
+
             holder.wateringIcon.setBackgroundResource(getWateringIcon((plantData.getWatering())));
         }
-        setSunlightIcons(plantData.getSunlight(), holder.sunlightIconContainer);
         holder.Add_cycle.setText(plantData.getCycle());
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             selectedItems.put(plantData.getId(), isChecked);
-            onItemCheckedChanged(isAtLeastOneChecked());
+            onItemCheckedChanged();
             isAllChecked = isAllItemsChecked();
             if (onCheckedChangeListener != null) {
                 onCheckedChangeListener.onCheckedChanged(isAtLeastOneChecked());
@@ -134,7 +135,7 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
         return PlantData.size();
     }
 
-    public class MyViewHolder2 extends RecyclerView.ViewHolder {
+    public static class MyViewHolder2 extends RecyclerView.ViewHolder {
         LinearLayout sunlightIconContainer;
         private final TextView Add_common_name;
         private final TextView Add_cycle;
@@ -243,18 +244,8 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
         return false;
     }
 
-    private List<PlantData> filterAddedPlants(List<PlantData> plantDataList, Set<Integer> addedPlantIds) {
-        List<PlantData> filteredList = new ArrayList<>();
-        if (addedPlantIds == null) {
-            addedPlantIds = new HashSet<>();
-        }
-        for (PlantData plantData : plantDataList) {
-            if (!addedPlantIds.contains(plantData.getId())) {
-                filteredList.add(plantData);
-            }
-        }
-        return filteredList;
-    }
+
+    @SuppressLint("NotifyDataSetChanged")
     public void selectAllItems(boolean isSelected) {
         for (PlantData plantData : PlantData) {
             selectedItems.put(plantData.getId(), isSelected);
@@ -279,7 +270,7 @@ public class Plant_Add_Recycle_Adapter extends RecyclerView.Adapter<Plant_Add_Re
         }
         return true;
     }
-    private void onItemCheckedChanged(boolean isAtLeastOneChecked) {
+    private void onItemCheckedChanged() {
         // Update the state of "Check All" checkbox based on all items' selection state
         if (checkBoxAll != null) {
             checkBoxAll.setChecked(areAllItemsSelected());

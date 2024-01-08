@@ -54,6 +54,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 
 import okhttp3.OkHttpClient;
@@ -222,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -308,14 +309,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 @Override
                 public void run() {
                     List<Measurements> newData = fetchDataFromLocalDatabase();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            updateUI(wateringValue, temperatureValue, soilValue);
-                        }
-                    });
-
-       
+                    runOnUiThread(() -> updateUI(wateringValue, temperatureValue, soilValue));
 
                     // Schedule the next data fetch after 2 seconds
                     handler.postDelayed(this, 2000);
@@ -334,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             Call<List<Measurements>> call = apiService.fetchData();
             call.enqueue(new Callback<List<Measurements>>() {
                 @Override
-                public void onResponse(Call<List<Measurements>> call, Response<List<Measurements>> response) {
+                public void onResponse(@NonNull Call<List<Measurements>> call, @NonNull Response<List<Measurements>> response) {
                     if (response.isSuccessful()) {
                         List<Measurements> data = response.body();
                         List<String> timestamps = new ArrayList<>();
@@ -343,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                         List<Float> soilMoistureValues = new ArrayList<>();
                         ArrayList<String> xLabel = new ArrayList<>();
 
-                        for (Measurements item : data) {
+                        for (Measurements item : Objects.requireNonNull(data)) {
                             timestamps.add(item.getTimestamps());
                             xLabel.addAll(timestamps);
                             humidityValues.add(item.getHumidity());
@@ -371,7 +365,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 }
 
                 @Override
-                public void onFailure(Call<List<Measurements>> call, Throwable t) {
+                public void onFailure(@NonNull Call<List<Measurements>> call, @NonNull Throwable t) {
                     Log.e("NguActivity", "Data loading failed. Exception: " + t.getMessage());
                 }
             });
@@ -380,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             Call<List<Measurements>> call = apiService.fetchData();
             call.enqueue(new Callback<List<Measurements>>() {
                 @Override
-                public void onResponse(Call<List<Measurements>> call, Response<List<Measurements>> response) {
+                public void onResponse(@NonNull Call<List<Measurements>> call, @NonNull Response<List<Measurements>> response) {
 
                     List<Measurements> data = response.body();
                     List<String> timestamps = new ArrayList<>();
@@ -389,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     List<Float> soilMoistureValues = new ArrayList<>();
                     ArrayList<String> xLabel = new ArrayList<>();
 
-                    for (Measurements item : data) {
+                    for (Measurements item : Objects.requireNonNull(data)) {
                         timestamps.add(item.getTimestamps());
                         xLabel.addAll(timestamps);
                         humidityValues.add(item.getHumidity());
@@ -421,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             @Override
             public void onResponse(@NonNull Call<List<Measurements>> call, @NonNull Response<List<Measurements>> response) {
                 if (response.isSuccessful()) {
-                    List<Measurements> data = response.body();
+                    List<Measurements> data = response.body(); // THis variable is not used anywhere. DELETE?
                     Log.d("SoilActivity", "Data loading successfully");
                 } else {
                     // Handle the case when the response is not successful
@@ -462,9 +456,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                         // Parse timestamp and format time
                         Date date = dateFormat.parse(currentTimestamp);
                         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                        String formattedTime = timeFormat.format(date);
 
-                        return formattedTime;
+                        return timeFormat.format(Objects.requireNonNull(date));
                     } else {
                         Log.e("YourActivity", "Index out of bounds: " + dataIndex);
                         return "";
@@ -524,13 +517,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         // Quit the background thread
         handlerThread.quit();
     }
-    private void statusbarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.verybrown, this.getTheme()));
-        } else {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.verybrown));
-        }
-    }
+
 
     private void fetchData() {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
@@ -576,7 +563,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
             @Override
             public void onFailure(@NonNull Call<PlantResponse> call, @NonNull Throwable t) {
-                Log.d("error", t.getMessage());
+                Log.d("error", Objects.requireNonNull(t.getMessage()));
             }
         });
     }
@@ -615,16 +602,17 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     Log.d("Selected Plant Details", "Watering Before Clicked: " + wateringValue);
                     Log.d("Selected Plant Details", "Sunlight Before Clicked: " + sunlightValue);
                     Log.d("Selected Plant Details", "SoilMoisture Before Clicked: " + soilMoistureValue);
-                    startFetchingData(wateringValue,sunlightValue,soilMoistureValue);
+                    startFetchingData(wateringValue, sunlightValue, soilMoistureValue);
 
                 }
-            }else
-        {
-            startFetchingDataWithDefaults();
-            // If no plants are selected, hide the CardView
-            selectedPlantsCardView.setVisibility(View.GONE);
+            } else {
+                startFetchingDataWithDefaults();
+                // If no plants are selected, hide the CardView
+                selectedPlantsCardView.setVisibility(View.GONE);
+            }
         }
     }
+    //This function is never used. DELETE?
     private void startFetchingDataFromPlant(PlantData plantData) {
         PlantData topItemPlantData = selectedPlantsAdapter.getTopItem();
         if (topItemPlantData != null) {
@@ -647,7 +635,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
     private PlantData getPlantDataById(int plantId, List<PlantData> plantList) {
         if (plantList == null || plantList.isEmpty()) {
-            Log.d("Selected Plant Details" ,"Null " + plantList.size());
+            Log.d("Selected Plant Details" ,"Null " + Objects.requireNonNull(plantList).size());
             return null;
         }
         else Log.d("Selected Plant Details" ,"Not Null " + plantList.size());

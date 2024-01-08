@@ -37,6 +37,7 @@ import vn.edu.usth.soicondition.network.model.PlantData;
 public class AddPlantsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Plant_Add_Recycle_Adapter plantAddRecycleAdapter;
+
     private Button btnAddPlants;
     private SharedPreferences sharedPreferences;
     private static final String PREF_SELECTED_PLANTS = "selected_plants";
@@ -76,6 +77,7 @@ public class AddPlantsActivity extends AppCompatActivity {
                 }
             });
             // Inflate custom ActionBar layout
+
             LayoutInflater inflater = LayoutInflater.from(this);
             View customActionBarView = inflater.inflate(R.layout.actionbar_custom_layout, null);
 
@@ -112,6 +114,7 @@ public class AddPlantsActivity extends AppCompatActivity {
             finish();
         }
     }
+
     private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         int selectedPlantCount = plantAddRecycleAdapter.getSelectedPlantIds().size();

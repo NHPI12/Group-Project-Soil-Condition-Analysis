@@ -11,10 +11,12 @@
             android:id="@+id/Check_All_Text"
             android:text="CHECK ALL"
             android:textColor="@color/lilwhite"/>
-        <CheckBox
-            android:id="@+id/checkAllCheckBox"
-            android:layout_marginStart="5dp"
-            style="@style/WhiteCheckBoxStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/checkAllCheckBox"
+        style="@style/WhiteCheckBoxStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:minWidth="48dp" />
     </LinearLayout>

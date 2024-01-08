@@ -12,7 +12,7 @@
             android:background="@color/lilwhite">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -34,22 +34,23 @@
                                 android:paddingTop="20dp">
 
                                 <TextView
+                                    android:id="@+id/Scientific_details_name"
                                     android:layout_width="205dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:text="Scientific name"
-                                    android:id="@+id/Scientific_details_name"
+                                    android:layout_marginStart="10dp"
                                     android:autoSizeTextType="uniform"
                                     android:maxLines="2"
+                                    android:text="Scientific name"
+                                    android:textColor="@color/lilbrown"
                                     android:textSize="20sp"
-                                    app:autoSizeMinTextSize="10sp"
                                     app:autoSizeMaxTextSize="20sp"
+                                    app:autoSizeMinTextSize="10sp"
                                     app:autoSizeStepGranularity="1sp"
-                                    android:textColor="@color/lilbrown"/>
+                                    tools:ignore="TextContrastCheck" />
                                 <TextView
                                     android:layout_width="205dp"
                                     android:layout_height="130dp"
-                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginStart="10dp"
                                     android:layout_marginTop="5dp"
                                     android:text="Common Name"
                                     android:id="@+id/Common_details_name"
@@ -68,13 +69,14 @@
                                 app:cardBackgroundColor="@android:color/white"
                                 app:cardCornerRadius="100dp"
                                 app:cardElevation="2dp"
-                                android:layout_marginLeft="20dp"
+                                android:layout_marginStart="20dp"
                                 android:layout_marginTop="-20dp">
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:id="@+id/ImageBigDetails"/>
+                                    android:id="@+id/ImageBigDetails"
+                                    tools:ignore="ContentDescription" />
                             </androidx.cardview.widget.CardView>
                         </LinearLayout>
 
@@ -99,9 +101,10 @@
                                     <ImageView
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
-                                        android:layout_marginLeft="20dp"
+                                        android:layout_marginStart="20dp"
                                         android:layout_marginTop="15dp"
-                                        android:id="@+id/Flowering_Season_Icon"/>
+                                        android:id="@+id/Flowering_Season_Icon"
+                                        tools:ignore="ContentDescription" />
                                     <LinearLayout
                                         android:layout_width="122dp"
                                         android:layout_height="80dp"
@@ -110,17 +113,18 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginStart="10dp"
                                             android:layout_marginTop="10dp"
                                             android:text="@string/season"
                                             android:textColor="@color/lilbrown"
-                                            android:textSize="17dp"
-                                            android:textStyle="bold" />
+                                            android:textSize="17sp"
+                                            android:textStyle="bold"
+                                            tools:ignore="TextContrastCheck,TextSizeCheck,TooDeepLayout" />
 
                                         <TextView
                                             android:layout_width="100dp"
                                             android:layout_height="30dp"
-                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginStart="10dp"
                                             android:layout_marginTop="2dp"
                                             android:id="@+id/SeasonsDetails"
                                             android:text="Spring"
@@ -131,7 +135,8 @@
                                             android:textSize="10sp"
                                             app:autoSizeMinTextSize="5sp"
                                             app:autoSizeMaxTextSize="10sp"
-                                            app:autoSizeStepGranularity="1sp"/>
+                                            app:autoSizeStepGranularity="1sp"
+                                            tools:ignore="SmallSp" />
                                     </LinearLayout>
 
                                 </LinearLayout>
@@ -139,7 +144,7 @@
                                 <LinearLayout
                                     android:layout_width="182dp"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginStart="5dp"
                                     android:orientation="horizontal">
 
                                     <ImageView
@@ -147,7 +152,8 @@
                                         android:layout_height="50dp"
                                         android:layout_marginLeft="10dp"
                                         android:layout_marginTop="15dp"
-                                        android:src="@drawable/cycle_icon"/>
+                                        android:src="@drawable/cycle_icon"
+                                        tools:ignore="ContentDescription,RtlHardcoded" />
                                     <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
@@ -156,17 +162,18 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginStart="10dp"
                                             android:layout_marginTop="10dp"
                                             android:text="@string/cycle"
                                             android:textColor="@color/lilbrown"
-                                            android:textSize="17dp"
-                                            android:textStyle="bold" />
+                                            android:textSize="17sp"
+                                            android:textStyle="bold"
+                                            tools:ignore="TextSizeCheck,TextContrastCheck" />
 
                                         <TextView
                                             android:layout_width="112dp"
                                             android:layout_height="32dp"
-                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginStart="10dp"
                                             android:text="Perennial"
                                             android:id="@+id/cycle_details"
                                             android:textColor="@color/verybrown"
@@ -176,7 +183,8 @@
                                             android:textSize="10sp"
                                             app:autoSizeMinTextSize="5sp"
                                             app:autoSizeMaxTextSize="10sp"
-                                            app:autoSizeStepGranularity="1sp"/>
+                                            app:autoSizeStepGranularity="1sp"
+                                            tools:ignore="SmallSp" />
                                     </LinearLayout>
                                 </LinearLayout>
                             </LinearLayout>
@@ -196,7 +204,8 @@
                                         android:layout_height="50dp"
                                         android:layout_marginLeft="20dp"
                                         android:layout_marginTop="15dp"
-                                        android:src="@drawable/temperature_icon" />
+                                        android:src="@drawable/temperature_icon"
+                                        tools:ignore="ContentDescription,RtlHardcoded" />
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
@@ -206,18 +215,19 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginStart="10dp"
                                             android:layout_marginTop="10dp"
                                             android:text="@string/temperature"
                                             android:textColor="@color/lilbrown"
-                                            android:textSize="17dp"
-                                            android:textStyle="bold" />
+                                            android:textSize="17sp"
+                                            android:textStyle="bold"
+                                            tools:ignore="TextSizeCheck,TextContrastCheck" />
 
                                         <TextView
                                             android:layout_width="100dp"
                                             android:layout_height="50dp"
                                             android:layout_marginTop="2dp"
-                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginStart="10dp"
                                             android:id="@+id/temperatureDetails"
                                             android:text="44°F - 64°F"
                                             android:textColor="@color/verybrown"
@@ -227,21 +237,23 @@
                                             android:textSize="10sp"
                                             app:autoSizeMinTextSize="5sp"
                                             app:autoSizeMaxTextSize="10sp"
-                                            app:autoSizeStepGranularity="1sp" />
+                                            app:autoSizeStepGranularity="1sp"
+                                            tools:ignore="SmallSp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="181dp"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="5dp">
+                                    android:layout_marginStart="5dp">
 
                                     <ImageView
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
                                         android:layout_marginLeft="10dp"
                                         android:layout_marginTop="10dp"
-                                        android:src="@drawable/humidity" />
+                                        android:src="@drawable/humidity"
+                                        tools:ignore="ContentDescription,ImageContrastCheck,RtlHardcoded" />
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
@@ -251,17 +263,18 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginStart="10dp"
                                             android:layout_marginTop="10dp"
                                             android:text="@string/humidity"
                                             android:textColor="@color/lilbrown"
-                                            android:textSize="17dp"
-                                            android:textStyle="bold" />
+                                            android:textSize="17sp"
+                                            android:textStyle="bold"
+                                            tools:ignore="TextSizeCheck,TextContrastCheck" />
 
                                         <TextView
                                             android:layout_width="112dp"
                                             android:layout_height="32dp"
-                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginStart="10dp"
                                             android:text="High"
                                             android:id="@+id/humidity_details"
                                             android:textColor="@color/verybrown"
@@ -271,49 +284,45 @@
                                             android:textSize="10sp"
                                             app:autoSizeMinTextSize="5sp"
                                             app:autoSizeMaxTextSize="10sp"
-                                            app:autoSizeStepGranularity="1sp"/>
+                                            app:autoSizeStepGranularity="1sp"
+                                            tools:ignore="SmallSp" />
                                     </LinearLayout>
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
+
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="150dp">
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp">
-                    <TextView
+                    android:layout_height="265dp">
+
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingTop="5dp"
-                        android:paddingLeft="7dp"
-                        android:textColor="@color/verybrown"
-                        android:textSize="17sp"
-                        android:id="@+id/descriptionDetails"
-                        android:maxLines="100"
-                        android:scrollbars="vertical"
-                        android:background="@color/lilwhite">
-                    </TextView>
-                </androidx.cardview.widget.CardView>
-                </androidx.core.widget.NestedScrollView>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-                        <androidx.recyclerview.widget.RecyclerView
+                        android:layout_height="150dp">
+
+                        <TextView
+                            android:id="@+id/descriptionDetails"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:id="@+id/imageListRecycleView"
-                            android:background="@color/lilwhite"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                            android:background="@color/lilwhite"
+                            android:maxLines="100"
+                            android:paddingStart="7dp"
+                            android:paddingTop="5dp"
+                            android:scrollbars="vertical"
+                            android:textColor="@color/verybrown"
+                            android:textSize="17sp"
+                            tools:ignore="RtlSymmetry"></TextView>
+                    </androidx.cardview.widget.CardView>
+                </androidx.core.widget.NestedScrollView>
+
+                <Button
+                    android:id="@+id/details_button"
+                    android:layout_width="250dp"
+                    android:layout_height="58dp"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
             </LinearLayout>
         </ScrollView>
 </FrameLayout>

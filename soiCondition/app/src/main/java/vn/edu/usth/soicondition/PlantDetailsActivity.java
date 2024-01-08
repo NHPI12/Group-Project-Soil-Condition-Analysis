@@ -1,27 +1,33 @@
 package vn.edu.usth.soicondition;
 
-import android.content.Context;
+
+import android.annotation.SuppressLint;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
+
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
+
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -29,24 +35,48 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import vn.edu.usth.soicondition.Plant_Details_Image_Recycle_Adapter;
+
 import vn.edu.usth.soicondition.network.JSONPlaceHolder;
-import vn.edu.usth.soicondition.network.model.PlantData;
+
 import vn.edu.usth.soicondition.network.model.PlantDetailsResponse;
 
 public class PlantDetailsActivity extends AppCompatActivity {
-    private static final String ARG_PLANT = "plant";
 
+    private SharedPreferences sharedPreferences ;
+    private static final String PREF_SELECTED_PLANTS="selected_plants";
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_details);
+        sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences",MODE_PRIVATE);
+        Set<String> existingPlantIdsStringSet = sharedPreferences.getStringSet(PREF_SELECTED_PLANTS,new HashSet<>());
+        Set<Integer> existingPlantIds = new HashSet<>();
+        for (String id : existingPlantIdsStringSet){
+            existingPlantIds.add(Integer.valueOf(id));
+        }
         // Initialize and set up your RecyclerView and Adapter here
-        RecyclerView recyclerView = findViewById(R.id.imageListRecycleView);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+        Button DetailsButton = findViewById(R.id.details_button);
 
         Intent intent = getIntent();
+        int ID = intent.getIntExtra("id", 0);
+        if(!existingPlantIds.contains(ID)){
+            DetailsButton.setText("Add Plant");
+            DetailsButton.setBackgroundResource(R.color.lightgreen);
+            DetailsButton.setOnClickListener(v -> {
+                //Add function
+                showConfirmationDialogAdd(ID);
+            });
+        }else{
+            DetailsButton.setText("Remove Plant");
+            DetailsButton.setBackgroundResource(R.color.lightRed);
+            DetailsButton.setOnClickListener(v -> {
+                //Remove function
+                showConfirmationDialogRemove(ID);
+            });
+        }
+
+
         ArrayList<String> scientificNames = intent.getStringArrayListExtra("scientific_name");
         String commonName = intent.getStringExtra("common_name");
         String cycle = intent.getStringExtra("cycle");
@@ -54,7 +84,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
         String originalUrl = intent.getStringExtra("original_url");
         ArrayList<String> sunlight = intent.getStringArrayListExtra("sunlight");
         Log.d("Common",""+ commonName);
-        int ID = intent.getIntExtra("id", 0);
+
         Log.d("Okabcde","Original URL: " + originalUrl);
         Log.d("Okabcde","Common Name: " + commonName);
 
@@ -79,23 +109,79 @@ public class PlantDetailsActivity extends AppCompatActivity {
             Picasso.get().load(R.drawable.ic_thumbnail).into(BigImageDetails);
         }
 
-        List<Integer> imageList = Arrays.asList(
-                R.drawable.ic_thumbnail,
-                R.drawable.ic_thumbnail,
-                R.drawable.ic_thumbnail,
-                R.drawable.ic_thumbnail
-        );
-
-        Plant_Details_Image_Recycle_Adapter adapter = new Plant_Details_Image_Recycle_Adapter(this, imageList);
-        recyclerView.setAdapter(adapter);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-        String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
+        String apiKey ="sk-MUZ5659b830f829253689"; //Nguyen 3rd
         fetchPlantDetails(ID,apiKey);
     }
+    //Show confirmation and Remove Plant
+    private void showConfirmationDialogRemove(int id) {AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmation");
+        builder.setMessage("Are you sure you want to REMOVE this plant to your list?");
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            dialog.dismiss();
+            removeSelectedPlants(id);
+        });
+        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+    //Remove selected plants
+    private void removeSelectedPlants(int IntId) {
+        Set<String> existingPlantIdsStringSet = sharedPreferences.getStringSet(PREF_SELECTED_PLANTS,new HashSet<>());
+        Set<Integer> existingPlantIds = new HashSet<>();
+        for (String id : existingPlantIdsStringSet){
+            existingPlantIds.add(Integer.valueOf(id));
+        }
+        existingPlantIds.remove(IntId);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet(PREF_SELECTED_PLANTS,convertSetToStringSet(existingPlantIds));
+        editor.apply();
+        Log.d("Selected plant IDs", existingPlantIds.toString());
+        recreate();
+    }
+
+    // Show confirmation and Add the plant
+    private void showConfirmationDialogAdd(int IntId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmation");
+        builder.setMessage("Are you sure you want to ADD this plant to your list?");
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            dialog.dismiss();
+            saveSelectedPlants(IntId);
+        });
+        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    // Save the selected plant
+    private void saveSelectedPlants(int IntId){
+        Set<String> existingPlantIdsStringSet = sharedPreferences.getStringSet(PREF_SELECTED_PLANTS,new HashSet<>());
+        Set<Integer> existingPlantIds = new HashSet<>();
+        for (String id : existingPlantIdsStringSet){
+            existingPlantIds.add(Integer.valueOf(id));
+        }
+        existingPlantIds.add(IntId);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet(PREF_SELECTED_PLANTS,convertSetToStringSet(existingPlantIds));
+        editor.apply();
+        Log.d("Selected plant IDs", existingPlantIds.toString());
+        recreate();
+    }
+
+    private Set<String> convertSetToStringSet(Set<Integer> IntegerSet) {
+        Set<String> stringSet = new HashSet<>();
+        for(Integer value : IntegerSet){
+            stringSet.add(String.valueOf(value));
+        }
+        return stringSet;
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here
@@ -130,7 +216,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
         Call<PlantDetailsResponse> call = jsonPlaceHolder.getPlantDetails(plantId, apiKey);
         call.enqueue(new Callback<PlantDetailsResponse>() {
             @Override
-            public void onResponse(Call<PlantDetailsResponse> call, Response<PlantDetailsResponse> response) {
+            public void onResponse(@NonNull Call<PlantDetailsResponse> call, @NonNull Response<PlantDetailsResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     PlantDetailsResponse plantDetails = response.body();
                     String wateringPeriod = plantDetails.getWatering_period();
@@ -151,7 +237,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onFailure(Call<PlantDetailsResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<PlantDetailsResponse> call, @NonNull Throwable t) {
                 Log.e("PlantDetails", "Error: " + t.getMessage());
             }
         });

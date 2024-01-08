@@ -9,10 +9,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Switch;
 import android.widget.TextView;
 
 public class setting extends AppCompatActivity {
@@ -21,7 +20,7 @@ public class setting extends AppCompatActivity {
 
     boolean nightMode, tempMode;
     SharedPreferences sharedPreferences, sharedPreferences_temp;
-    SharedPreferences.Editor editor, editor_temp;
+    SharedPreferences.Editor editor;
 
 
     @SuppressLint("SetTextI18n")
@@ -43,21 +42,18 @@ public class setting extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
 
-        lightswitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                if(nightMode){
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    editor = sharedPreferences.edit();
-                    editor.putBoolean("nightmode", false);
-                }
-                else{
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    editor = sharedPreferences.edit();
-                    editor.putBoolean("nightmode", true);
-                }
-                editor.apply();
+        lightswitch.setOnClickListener(view -> {
+            if(nightMode){
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                editor = sharedPreferences.edit();
+                editor.putBoolean("nightmode", false);
             }
+            else{
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                editor = sharedPreferences.edit();
+                editor.putBoolean("nightmode", true);
+            }
+            editor.apply();
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //Tempunit

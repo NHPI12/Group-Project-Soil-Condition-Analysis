@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.LayoutTransition;
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -80,9 +80,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     private boolean exitConfirmationShown = false;
     private Handler handler;
     private List<PlantData> plantList;
-    private Plant_List_Recycle_Adapter plantListRecycleAdapter;
     private List<PlantData> allSelectedPlants;
-    private boolean isDataFetched = false;
     private CardView selectedPlantsCardView;
     private RecyclerView selectedPlantsRecyclerView;
     private SelectedPlantsAdapter selectedPlantsAdapter;
@@ -129,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         // Start fetching data periodically
         fetchData();
         databaseReferenceSoil.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
@@ -149,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 }
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle errors
@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
         });
         databaseReferenceTemp.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
@@ -177,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 }
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle errors
@@ -185,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
         });
         databaseReferenceHumid.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
@@ -205,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 }
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle errors
@@ -220,53 +224,39 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        plantListRecycleAdapter = new Plant_List_Recycle_Adapter(MainActivity.this, plantList);
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                if (id == R.id.list_plants) {
-                    Intent intent = new Intent(MainActivity.this, plantListActivity.class);
-                    intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                } else if (id == R.id.item_5) {
-                    openSettings();
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    return true;
-                }else if (id == R.id.item_2){
-                    Intent intent = new Intent(MainActivity.this,Your_Plant_Activity.class);
-                    intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                }
-                return false;
-            }
-        });
-        TextView addTextView = findViewById(R.id.add_text);
-        TextView removeTextView = findViewById(R.id.remove_text);
-        addTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddPlantsActivity.class);
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.list_plants) {
+                Intent intent = new Intent(MainActivity.this, plantListActivity.class);
                 intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
                 startActivity(intent);
                 overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+            } else if (id == R.id.item_5) {
+                openSettings();
                 drawerLayout.closeDrawer(GravityCompat.START);
-            }
-        });
-        removeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RemovePlantsActivity.class);
+                return true;
+            }else if (id == R.id.item_2){
+                Intent intent = new Intent(MainActivity.this,Your_Plant_Activity.class);
                 intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
                 startActivity(intent);
-                overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
-                drawerLayout.closeDrawer(GravityCompat.START);
+                overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
             }
+            return false;
+        });
+        TextView addTextView = findViewById(R.id.add_text);
+        TextView removeTextView = findViewById(R.id.remove_text);
+        addTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddPlantsActivity.class);
+            intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
+            startActivity(intent);
+            overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+        });
+        removeTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, RemovePlantsActivity.class);
+            intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
+            startActivity(intent);
+            overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
         });
     }
     @Override
@@ -311,82 +301,27 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         TransitionManager.beginDelayedTransition(clickedLayout, new AutoTransition());
     }
     private void startFetchingData(int wateringValue, int temperatureValue, int soilValue) {
-        if (wateringValue != -9999 && temperatureValue != -9999 && soilValue != -9999) {
-            // Define a Runnable that fetches data and updates UI
-            Runnable fetchDataRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    List<Measurements> newData = fetchDataFromLocalDatabase();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            updateUI(wateringValue, temperatureValue, soilValue);
-                        }
-                    });
+        // Define a Runnable that fetches data and updates UI
+        Runnable fetchDataRunnable = new Runnable() {
+            @Override
+            public void run() {
+                List<Measurements> newData = fetchDataFromLocalDatabase();
+                runOnUiThread(() -> updateUI(newData, wateringValue, temperatureValue, soilValue));
 
-                    // Schedule the next data fetch after 2 seconds
-                    handler.postDelayed(this, 2000);
-                }
-            };
-            // Schedule the initial data fetch with a delay of 0 seconds
-            handler.postDelayed(fetchDataRunnable, 0);
-        } else {
-            updateUI(wateringValue, temperatureValue, soilValue);
-        }
+                // Schedule the next data fetch after 2 seconds
+                handler.postDelayed(this, 2000);
+            }
+        };
+        // Schedule the initial data fetch with a delay of 0 seconds
+        handler.postDelayed(fetchDataRunnable, 0);
     }
-    private void updateUI(int wateringValue, int temperatureValue, int soilValue) {
-        if (wateringValue != -9999 && temperatureValue != -9999 && soilValue != -9999) {
-            ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
-            Call<List<Measurements>> call = apiService.fetchData();
-            call.enqueue(new Callback<List<Measurements>>() {
-                @Override
-                public void onResponse(Call<List<Measurements>> call, Response<List<Measurements>> response) {
-                    if (response.isSuccessful()) {
-                        List<Measurements> data = response.body();
-                        List<String> timestamps = new ArrayList<>();
-                        List<Float> humidityValues = new ArrayList<>();
-                        List<Float> temperatureValues = new ArrayList<>();
-                        List<Float> soilMoistureValues = new ArrayList<>();
-                        ArrayList<String> xLabel = new ArrayList<>();
-
-                        for (Measurements item : data) {
-                            timestamps.add(item.getTimestamps());
-                            xLabel.addAll(timestamps);
-                            humidityValues.add(item.getHumidity());
-                            temperatureValues.add(item.getTemperature());
-                            soilMoistureValues.add(item.getSoil_moisture());
-                        }
-                        List<Entry> humidityEntries = TimeAxisValueFormatter.createEntryList(timestamps, humidityValues);
-                        List<Entry> temperatureEntries = TimeAxisValueFormatter.createEntryList(timestamps, temperatureValues);
-                        List<Entry> soilMoistureEntries = TimeAxisValueFormatter.createEntryList(timestamps, soilMoistureValues);
-
-                        if (!timestamps.isEmpty()) {
-                            // Update the line charts with the new data
-                            updateLineChart(lineChartHumid, humidityEntries, "Humidity", timestamps, wateringValue, 0, 130);
-                            updateLineChart(lineChartTemp, temperatureEntries, "Temperature", timestamps, temperatureValue, 0, 40);
-                            updateLineChart(lineChartSoil, soilMoistureEntries, "Soil Moisture", timestamps, soilValue, 400, 1300);
-                        } else {
-                            // Handle the case when there are no timestamps
-                            Log.d("YourActivity", "No timestamps available for updating line charts");
-                        }
-                        Log.d("YourActivity", "Data loaded successfully: " + data.size() + " items");
-                    } else {
-                        // Handle the case when the response is not successful
-                        Log.e("SoilActivity", "Data loading failed. Error code: " + response.code());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Measurements>> call, Throwable t) {
-                    Log.e("NguActivity", "Data loading failed. Exception: " + t.getMessage());
-                }
-            });
-        } else {
-            ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
-            Call<List<Measurements>> call = apiService.fetchData();
-            call.enqueue(new Callback<List<Measurements>>() {
-                @Override
-                public void onResponse(Call<List<Measurements>> call, Response<List<Measurements>> response) {
+    private void updateUI(List<Measurements> newData, int wateringValue, int temperatureValue, int soilValue) {
+        ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
+        Call<List<Measurements>> call = apiService.fetchData();
+        call.enqueue(new Callback<List<Measurements>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Measurements>> call, @NonNull Response<List<Measurements>> response) {
+                if (response.isSuccessful()) {
                     List<Measurements> data = response.body();
                     List<String> timestamps = new ArrayList<>();
                     List<Float> humidityValues = new ArrayList<>();
@@ -405,25 +340,34 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     List<Entry> temperatureEntries = TimeAxisValueFormatter.createEntryList(timestamps, temperatureValues);
                     List<Entry> soilMoistureEntries = TimeAxisValueFormatter.createEntryList(timestamps, soilMoistureValues);
 
-                    // Update the line charts with empty data
-                    updateLineChart(lineChartHumid, humidityEntries, "Humidity", timestamps, wateringValue, 0, 130);
-                    updateLineChart(lineChartTemp, temperatureEntries, "Temperature", timestamps, temperatureValue, 0, 40);
-                    updateLineChart(lineChartSoil, soilMoistureEntries, "Soil Moisture", timestamps, soilValue, 400, 1300);
+                    if (!timestamps.isEmpty()) {
+                        // Update the line charts with the new data
+                        updateLineChart(lineChartHumid, humidityEntries, "Humidity", timestamps, wateringValue);
+                        updateLineChart(lineChartTemp, temperatureEntries, "Temperature", timestamps, temperatureValue);
+                        updateLineChart(lineChartSoil, soilMoistureEntries, "Soil Moisture", timestamps, soilValue);
+                    } else {
+                        // Handle the case when there are no timestamps
+                        Log.d("YourActivity", "No timestamps available for updating line charts");
+                    }
+                    Log.d("YourActivity", "Data loaded successfully: " + data.size() + " items");
+                } else {
+                    // Handle the case when the response is not successful
+                    Log.e("SoilActivity", "Data loading failed. Error code: " + response.code());
                 }
+            }
 
-                @Override
-                public void onFailure(Call<List<Measurements>> call, Throwable t) {
-                    Log.e("NguActivity", "Data loading failed. Exception: " + t.getMessage());
-                }
+            @Override
+            public void onFailure(@NonNull Call<List<Measurements>> call, @NonNull Throwable t) {
+                Log.e("NguActivity", "Data loading failed. Exception: " + t.getMessage());
+            }
         });
-        }
     }
     private List<Measurements> fetchDataFromLocalDatabase() {
         ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
         Call<List<Measurements>> call = apiService.fetchData();
         call.enqueue(new Callback<List<Measurements>>() {
             @Override
-            public void onResponse(Call<List<Measurements>> call, Response<List<Measurements>> response) {
+            public void onResponse(@NonNull Call<List<Measurements>> call, @NonNull Response<List<Measurements>> response) {
                 if (response.isSuccessful()) {
                     List<Measurements> data = response.body();
                     Log.d("SoilActivity", "Data loading successfully");
@@ -434,14 +378,14 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
 
             @Override
-            public void onFailure(Call<List<Measurements>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Measurements>> call, @NonNull Throwable t) {
                 // Handle the case when the network request fails
                 Log.e("SoilActivity", "Data loading failed. Exception: " + t.getMessage());
             }
         });
         return null;
     }
-    private void updateLineChart(LineChart lineChart, List<Entry> entries, String label, List<String> timestamps, int Value, int minValue, int maxValue) {
+    private void updateLineChart(LineChart lineChart, List<Entry> entries, String label, List<String> timestamps, int Value) {
         int maxDataPoints = 100;
         int dataSize = entries.size();
         if (dataSize > maxDataPoints) {
@@ -483,18 +427,11 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
         });
         YAxis leftAxis = lineChart.getAxisRight();
-        leftAxis.setAxisMinimum(minValue);
-        leftAxis.setAxisMaximum(maxValue);
-        if ((maxValue - minValue) > 500) {
-            leftAxis.setLabelCount((maxValue - minValue) / 100); // Set label count with 100-unit interval
-        } else {
-            leftAxis.setLabelCount((maxValue - minValue) / 10); // Set label count with 10-unit interval
-        }
         // Add a LimitLine for the watering value
         LimitLine limitLine = new LimitLine(Value, "Average Level");
         limitLine.setLineWidth(2f);
         limitLine.setLineColor(Color.RED);
-        leftAxis.addLimitLine(limitLine);
+        leftAxis.addLimitLine(limitLine); 
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setLabelRotationAngle(90f);
         YAxis rightAxis = lineChart.getAxisLeft();
@@ -546,12 +483,13 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
 
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
-        //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-        String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
         //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
-            if (!isDataFetched) {
+        boolean isDataFetched = false;
+        if (!isDataFetched) {
                 // Fetch data only if it hasn't been fetched yet
                 fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
             }
@@ -561,22 +499,21 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         Call<PlantResponse> call = jsonPlaceHolder.getData(apiKey, pageNumber);
         call.enqueue(new Callback<PlantResponse>() {
             @Override
-            public void onResponse(Call<PlantResponse> call, Response<PlantResponse> response) {
+            public void onResponse(@NonNull Call<PlantResponse> call, @NonNull Response<PlantResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     PlantResponse plantResponse = response.body();
-                    plantList.addAll(plantResponse.getPlantDataList());
+                    plantList = plantResponse.getPlantDataList();
+                    updateSelectedPlantsCard(plantList);
                     // Pass data to Activity
                     if (pageNumber < 2) {
                         fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, pageNumber + 1);
-                    } else {
-                        updateSelectedPlantsCard(plantList);
                     }
                 } else {
                     Log.e("PlantList", "Error" + response.code());
                 }
             }
             @Override
-            public void onFailure(Call<PlantResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<PlantResponse> call, @NonNull Throwable t) {
                 Log.d("error", t.getMessage());
             }
         });
@@ -602,40 +539,26 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 selectedPlantsAdapter = new SelectedPlantsAdapter(allSelectedPlants, this);
                 selectedPlantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
                 selectedPlantsRecyclerView.setAdapter(selectedPlantsAdapter);
-                arrowImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selectedPlantsAdapter.toggleRecyclerViewVisibility(arrowImageView, selectedPlantsRecyclerView);
-                    }
-                });
-                startFetchingDataFromPlant(lastSelectedPlant);
+                arrowImageView.setOnClickListener(v -> selectedPlantsAdapter.toggleRecyclerViewVisibility(arrowImageView, selectedPlantsRecyclerView));
+                PlantData topItemPlantData = selectedPlantsAdapter.getTopItem();
+                if (topItemPlantData != null) {
+                    // Now you can access watering and sunlight information
+                    int wateringValue = topItemPlantData.convertWateringToValue();
+
+                    // Convert sunlight to numerical value
+                    int sunlightValue = topItemPlantData.convertSunlightToValue();
+                    int soilMoistureValue = topItemPlantData.convertWateringToSoilMoisture();
+                    // Use the information as needed
+                    Log.d("Selected Plant Details", "Watering Before Clicked: " + wateringValue);
+                    Log.d("Selected Plant Details", "Sunlight Before Clicked: " + sunlightValue);
+                    Log.d("Selected Plant Details", "SoilMoisture Before Clicked: " + soilMoistureValue);
+                    startFetchingData(wateringValue,sunlightValue,soilMoistureValue);
                 }
-            }else
-        {
-            startFetchingDataWithDefaults();
+            }
+        } else {
             // If no plants are selected, hide the CardView
             selectedPlantsCardView.setVisibility(View.GONE);
         }
-    }
-    private void startFetchingDataFromPlant(PlantData plantData) {
-        PlantData topItemPlantData = selectedPlantsAdapter.getTopItem();
-        if (topItemPlantData != null) {
-            int wateringValue = plantData.convertWateringToValue();
-            int sunlightValue = plantData.convertSunlightToValue();
-            int soilMoistureValue = plantData.convertWateringToSoilMoisture();
-            Log.d("Selected Plant Details", "Watering Before Clicked: " + wateringValue);
-            Log.d("Selected Plant Details", "Sunlight Before Clicked: " + sunlightValue);
-            Log.d("Selected Plant Details", "SoilMoisture Before Clicked: " + soilMoistureValue);
-            startFetchingData(wateringValue, sunlightValue, soilMoistureValue);
-        }
-    }
-
-    // New method to start fetching data with default values when no plant is selected
-    private void startFetchingDataWithDefaults() {
-        int wateringValueDefault = -9999;
-        int sunlightValueDefault = -9999;
-        int soilMoistureValueDefault = -9999;
-        startFetchingData(wateringValueDefault, sunlightValueDefault, soilMoistureValueDefault);
     }
     private PlantData getPlantDataById(int plantId, List<PlantData> plantList) {
         if (plantList == null || plantList.isEmpty()) {
@@ -704,18 +627,12 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         new AlertDialog.Builder(this)
                 .setTitle("Exit Confirmation")
                 .setMessage("Are you sure you want to exit?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        exitConfirmationShown = true;
-                        finish(); // Terminate the activity
-                    }
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    exitConfirmationShown = true;
+                    finish(); // Terminate the activity
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // User clicked "No," do nothing or dismiss the dialog
-                    }
+                .setNegativeButton("No", (dialog, which) -> {
+                    // User clicked "No," do nothing or dismiss the dialog
                 })
                 .show();
     }

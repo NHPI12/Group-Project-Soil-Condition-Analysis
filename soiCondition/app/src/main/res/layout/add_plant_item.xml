@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
@@ -20,15 +21,17 @@
             app:cardCornerRadius="10dp"
             app:cardElevation="0dp"
             android:layout_gravity="center">
+
             <ImageView
                 android:id="@+id/Addthumbnail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
         </androidx.cardview.widget.CardView>
 
         <LinearLayout
-            android:layout_width="218dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="5dp"
@@ -51,15 +54,17 @@
                 android:layout_height="80px"
                 android:orientation="horizontal"
                 android:layout_marginTop="5dp"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                tools:ignore="PxUsage">
                 <ImageView
                     android:id="@+id/AddwateringIcon"
                     android:layout_width="80px"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="10dp"/>
+                    android:layout_marginStart="10dp"
+                    tools:ignore="ContentDescription" />
                 <LinearLayout
                     android:id="@+id/AddsunlightIconsContainer"
-                    android:layout_width="30dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -83,11 +88,12 @@
 
             <CheckBox
                 android:id="@+id/checkbox_plant"
+                style="@style/CustomCheckboxStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                style="@style/CustomCheckboxStyle"
-                android:checked="false" />
+                android:checked="false"
+                tools:ignore="TouchTargetSizeCheck" />
         </RelativeLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

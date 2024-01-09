@@ -148,11 +148,11 @@ public class PlantData implements Parcelable {
             case "Frequent":
                 return 75;
             case "Average":
-                return 25;
+                return 55;
             case "Minimum":
-                return 60;
+                return 35;
             case "None":
-                return 40;
+                return 15;
             default:
                 return 0; // Handle the default case or invalid values as needed
         }

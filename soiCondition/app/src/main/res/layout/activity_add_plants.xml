@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"/>
-
         <Button
             android:id="@+id/btnAddPlants"
             android:layout_width="150dp"
@@ -26,10 +25,9 @@
             android:text="Add Plants  +"
             android:textColor="@color/lilwhite"
             android:textSize="15sp"
-
             android:visibility="visible"
             tools:ignore="TextSizeCheck" />
-
+    </RelativeLayout>
 </RelativeLayout>
 
 

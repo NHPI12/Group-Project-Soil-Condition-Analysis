@@ -62,15 +62,17 @@ public class PlantDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int ID = intent.getIntExtra("id", 0);
         if(!existingPlantIds.contains(ID)){
-            DetailsButton.setText("Add Plant");
-            DetailsButton.setBackgroundResource(R.color.lightgreen);
+            DetailsButton.setText("ADD PLANT");
+            DetailsButton.setBackgroundResource(R.drawable.background_button_add);
+            DetailsButton.setTextColor(getResources().getColor(R.color.lilwhite));
             DetailsButton.setOnClickListener(v -> {
                 //Add function
                 showConfirmationDialogAdd(ID);
             });
         }else{
             DetailsButton.setText("Remove Plant");
-            DetailsButton.setBackgroundResource(R.color.lightRed);
+            DetailsButton.setBackgroundResource(R.drawable.background_button_remove);
+            DetailsButton.setTextColor(getResources().getColor(R.color.lilwhite));
             DetailsButton.setOnClickListener(v -> {
                 //Remove function
                 showConfirmationDialogRemove(ID);

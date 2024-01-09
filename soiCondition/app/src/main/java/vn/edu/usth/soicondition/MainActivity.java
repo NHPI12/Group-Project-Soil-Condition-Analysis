@@ -6,6 +6,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,9 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -470,18 +473,22 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
                         return timeFormat.format(Objects.requireNonNull(date));
                     } else {
-                        Log.e("YourActivity", "Index out of bounds: " + dataIndex);
+                        Log.e("MainActivityGraph", "Index out of bounds: " + dataIndex);
                         return "";
                     }
                 } catch (ParseException e) {
-                    Log.e("YourActivity", "Error parsing timestamp: " + e.getMessage());
+                    Log.e("MainActivityGraph", "Error parsing timestamp: " + e.getMessage());
                     return "";
                 } catch (Exception e) {
-                    Log.e("YourActivity", "An unexpected error occurred: " + e.getMessage());
+                    Log.e("MainActivityGraph", "An unexpected error occurred: " + e.getMessage());
                     return "";
                 }
             }
         });
+        float overallAverage = calculateOverallAverage(finalEntries);
+        // Dynamically set the limit line color based on the overall average
+        Drawable chartBackground = determineChartBackgroundColor(overallAverage, Value);
+        int graphColor = determineGraphColor(overallAverage, Value);
         YAxis leftAxis = lineChart.getAxisRight();
         leftAxis.setAxisMinimum(minValue);
         leftAxis.setAxisMaximum(maxValue);
@@ -512,6 +519,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         dataSet.setDrawValues(false);
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER); // Smooth line
         dataSet.setDrawFilled(true);
+        dataSet.setFillDrawable(chartBackground);
+        dataSet.setColor(graphColor);
         lineChart.setTouchEnabled(false);
         lineChart.setDragEnabled(false);
         lineChart.setScaleEnabled(false);
@@ -521,6 +530,38 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         lineChart.setHighlightPerTapEnabled(false);
         lineChart.setData(lineData);
         lineChart.invalidate();
+    }
+    private float calculateOverallAverage(List<Entry> entries) {
+        float sum = 0f;
+        for (Entry entry : entries) {
+            sum += entry.getY();
+        }
+        return sum / entries.size();
+    }
+
+    private Drawable determineChartBackgroundColor(float overallAverage, int limitValue) {
+        float threshold = 15f; // You can adjust this threshold based on your requirements
+
+        // Determine the color based on the overall average
+        if (overallAverage <= limitValue + threshold && overallAverage >= limitValue - threshold) {
+            // If overall average is within the threshold, use green gradient
+            return ContextCompat.getDrawable(this, R.drawable.gradient_green);
+        } else {
+            // If overall average exceeds the threshold, use red gradient
+            return ContextCompat.getDrawable(this, R.drawable.gradient_red);
+        }
+    }
+    private int determineGraphColor(float overallAverage, int limitValue) {
+        float threshold = 15f; // You can adjust this threshold based on your requirements
+
+        // Determine the color based on the overall average
+        if (overallAverage <= limitValue + threshold && overallAverage >= limitValue - threshold) {
+            // If overall average is within the threshold, use green color
+            return ContextCompat.getColor(this,R.color.leaf);
+        } else {
+            // If overall average exceeds the threshold, use red color
+            return ContextCompat.getColor(this,R.color.lightRed);
+        }
     }
     @Override
     protected void onDestroy() {
@@ -542,12 +583,9 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
 
 
-        String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
+        //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-
-       
-        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
-
+        String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
         //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd

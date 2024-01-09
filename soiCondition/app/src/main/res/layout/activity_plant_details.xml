@@ -6,20 +6,16 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/lilwhite">
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/lilwhite">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:background="@color/lilwhite">
                         <LinearLayout
@@ -49,7 +45,7 @@
                                     tools:ignore="TextContrastCheck" />
                                 <TextView
                                     android:layout_width="205dp"
-                                    android:layout_height="130dp"
+                                    android:layout_height="110dp"
                                     android:layout_marginStart="10dp"
                                     android:layout_marginTop="5dp"
                                     android:text="Common Name"
@@ -292,15 +288,12 @@
                         </LinearLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="265dp">
-
+                    android:layout_height="245dp">
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="150dp">
-
+                        android:layout_height="wrap_content">
                         <TextView
                             android:id="@+id/descriptionDetails"
                             android:layout_width="match_parent"
@@ -312,17 +305,17 @@
                             android:scrollbars="vertical"
                             android:textColor="@color/verybrown"
                             android:textSize="17sp"
-                            tools:ignore="RtlSymmetry"></TextView>
+                            tools:ignore="RtlSymmetry"/>
                     </androidx.cardview.widget.CardView>
                 </androidx.core.widget.NestedScrollView>
-
                 <Button
                     android:id="@+id/details_button"
-                    android:layout_width="250dp"
-                    android:layout_height="58dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/leaf"
+                    android:layout_margin="10dp"
                     android:textStyle="bold"
+                    android:textColor="@color/lilwhite"
                     android:layout_gravity="center"/>
             </LinearLayout>
-        </ScrollView>
 </FrameLayout>

@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import okhttp3.OkHttpClient;
@@ -96,12 +97,12 @@ public class PlantDetailsActivity extends AppCompatActivity {
         ImageView BigImageDetails = findViewById(R.id.ImageBigDetails);
 
         // Set text in TextView elements
-        scientificNameTextView.setText(joinStrings(scientificNames));
+        scientificNameTextView.setText(joinStrings(Objects.requireNonNull(scientificNames)));
         commonNameTextView.setText(commonName);
         cycleTextView.setText(cycle);
-        customizeSunlightText(sunlight);
+        customizeSunlightText(Objects.requireNonNull(sunlight));
         wateringTextView.setText(watering);
-        customizeHumidityText(watering);
+        customizeHumidityText(Objects.requireNonNull(watering));
 
         if (originalUrl != null && !originalUrl.isEmpty()) {
             Picasso.get().load(originalUrl).into(BigImageDetails);
@@ -109,13 +110,14 @@ public class PlantDetailsActivity extends AppCompatActivity {
             Picasso.get().load(R.drawable.ic_thumbnail).into(BigImageDetails);
         }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         //String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
-        String apiKey ="sk-MUZ5659b830f829253689"; //Nguyen 3rd
+
+        //String apiKey ="sk-MUZ5659b830f829253689"; //Nguyen 3rd
         fetchPlantDetails(ID,apiKey);
     }
     //Show confirmation and Remove Plant
@@ -215,11 +217,11 @@ public class PlantDetailsActivity extends AppCompatActivity {
         JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
         Call<PlantDetailsResponse> call = jsonPlaceHolder.getPlantDetails(plantId, apiKey);
         call.enqueue(new Callback<PlantDetailsResponse>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(@NonNull Call<PlantDetailsResponse> call, @NonNull Response<PlantDetailsResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     PlantDetailsResponse plantDetails = response.body();
-                    String wateringPeriod = plantDetails.getWatering_period();
                     String description = plantDetails.getDescription();
                     TextView flowering_season = findViewById(R.id.SeasonsDetails);
                     TextView description_details = findViewById(R.id.descriptionDetails);

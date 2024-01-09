@@ -11,8 +11,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
+
+import java.util.Objects;
+
 
 public class setting extends AppCompatActivity {
 
@@ -28,10 +29,6 @@ public class setting extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-
-
-        View inflatedView = getLayoutInflater().inflate(R.layout.activity_main, null);
-        TextView temperature = (TextView)inflatedView.findViewById(R.id.tempData);
 
         lightswitch = findViewById(R.id.lighswitch);
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
@@ -55,7 +52,7 @@ public class setting extends AppCompatActivity {
             }
             editor.apply();
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         //Tempunit
         tempswitch = findViewById(R.id.tempswitch);
         sharedPreferences_temp = getSharedPreferences("MODE", Context.MODE_PRIVATE);

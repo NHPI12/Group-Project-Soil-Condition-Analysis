@@ -54,6 +54,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 
 import okhttp3.OkHttpClient;
@@ -225,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         NavigationView navigationView = findViewById(R.id.nav_view);
         plantListRecycleAdapter = new Plant_List_Recycle_Adapter(MainActivity.this, plantList);
 
@@ -323,6 +324,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
 
     private void startFetchingData(int wateringValue, int temperatureValue, int soilValue) {
+
         if (wateringValue != -9999 && temperatureValue != -9999 && soilValue != -9999) {
             // Define a Runnable that fetches data and updates UI
             Runnable fetchDataRunnable = new Runnable() {
@@ -353,6 +355,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             updateUI(wateringValue, temperatureValue, soilValue);
         }
     }
+
     private void updateUI(int wateringValue, int temperatureValue, int soilValue) {
         ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
         Call<List<Measurements>> call = apiService.fetchData();
@@ -368,6 +371,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
                 if (response.isSuccessful()) {
                     PlantData topItem = selectedPlantsAdapter.getTopItem();
+
                     List<Measurements> data = response.body();
                     List<String> timestamps = new ArrayList<>();
                     List<Float> humidityValues = new ArrayList<>();
@@ -375,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     List<Float> soilMoistureValues = new ArrayList<>();
                     ArrayList<String> xLabel = new ArrayList<>();
 
-                    for (Measurements item : data) {
+                    for (Measurements item : Objects.requireNonNull(data)) {
                         timestamps.add(item.getTimestamps());
                         xLabel.addAll(timestamps);
                         humidityValues.add(item.getHumidity());
@@ -386,6 +390,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     List<Entry> humidityEntries = TimeAxisValueFormatter.createEntryList(timestamps, humidityValues);
                     List<Entry> temperatureEntries = TimeAxisValueFormatter.createEntryList(timestamps, temperatureValues);
                     List<Entry> soilMoistureEntries = TimeAxisValueFormatter.createEntryList(timestamps, soilMoistureValues);
+
 
                     // Update the line charts based on the condition
                     if (wateringValue != -9999 && temperatureValue != -9999 && soilValue != -9999) {
@@ -403,8 +408,9 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 } else {
                     // Handle the case when the response is not successful
                     Log.e("MainActivityDatabase", "Data loading failed. Error code: " + response.code());
+
                 }
-            }
+
 
             @Override
             public void onFailure(@NonNull Call<List<Measurements>> call, @NonNull Throwable t) {
@@ -412,6 +418,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 Log.e("MainActivityDatabase", "Data loading failed. Exception: " + t.getMessage());
             }
         });
+        }
     }
     private List<Measurements> fetchDataFromLocalDatabase() {
         ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
@@ -420,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             @Override
             public void onResponse(@NonNull Call<List<Measurements>> call, @NonNull Response<List<Measurements>> response) {
                 if (response.isSuccessful()) {
-                    List<Measurements> data = response.body();
+                    List<Measurements> data = response.body(); // THis variable is not used anywhere. DELETE?
                     Log.d("SoilActivity", "Data loading successfully");
                 } else {
                     // Handle the case when the response is not successful
@@ -460,9 +467,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                         // Parse timestamp and format time
                         Date date = dateFormat.parse(currentTimestamp);
                         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                        String formattedTime = timeFormat.format(date);
 
-                        return formattedTime;
+                        return timeFormat.format(Objects.requireNonNull(date));
                     } else {
                         Log.e("YourActivity", "Index out of bounds: " + dataIndex);
                         return "";
@@ -485,6 +491,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             leftAxis.setLabelCount((maxValue - minValue) / 10); // Set label count with 10-unit interval
         }
         leftAxis.removeAllLimitLines();
+
         // Add a LimitLine for the watering value
         LimitLine limitLine = new LimitLine(Value, "Average Level");
         limitLine.setLineWidth(2f);
@@ -523,13 +530,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         // Quit the background thread
         handlerThread.quit();
     }
-    private void statusbarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.verybrown, this.getTheme()));
-        } else {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.verybrown));
-        }
-    }
+
 
     private void fetchData() {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
@@ -540,9 +541,13 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 .build();
         JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
 
+
         String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+
+       
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
         //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
@@ -560,8 +565,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             public void onResponse(@NonNull Call<PlantResponse> call, @NonNull Response<PlantResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     PlantResponse plantResponse = response.body();
-                    plantList = plantResponse.getPlantDataList();
-                    updateSelectedPlantsCard(plantList);
+                    plantList.addAll(plantResponse.getPlantDataList());
                     // Pass data to Activity
                     if (pageNumber < 2) {
                         fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, pageNumber + 1);
@@ -574,7 +578,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
             @Override
             public void onFailure(@NonNull Call<PlantResponse> call, @NonNull Throwable t) {
-                Log.d("error", t.getMessage());
+                Log.d("error", Objects.requireNonNull(t.getMessage()));
             }
         });
     }
@@ -599,6 +603,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 selectedPlantsCardView.setVisibility(View.VISIBLE);
                 selectedPlantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
                 selectedPlantsRecyclerView.setAdapter(selectedPlantsAdapter);
+
                 arrowImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -614,6 +619,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             selectedPlantsCardView.setVisibility(View.GONE);
         }
     }
+
     private void startFetchingDataFromPlant(PlantData plantData) {
         PlantData topItemPlantData = selectedPlantsAdapter.getTopItem();
         if (topItemPlantData != null) {
@@ -636,7 +642,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
     private PlantData getPlantDataById(int plantId, List<PlantData> plantList) {
         if (plantList == null || plantList.isEmpty()) {
-            Log.d("Selected Plant Details" ,"Null " + plantList.size());
+            Log.d("Selected Plant Details" ,"Null " + Objects.requireNonNull(plantList).size());
             return null;
         }
         else Log.d("Selected Plant Details" ,"Not Null " + plantList.size());

@@ -2,6 +2,7 @@ package vn.edu.usth.soicondition;
 
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import android.text.TextUtils;
@@ -28,9 +29,9 @@ import vn.edu.usth.soicondition.network.model.PlantData;
 import vn.edu.usth.soicondition.network.model.default_Image;
 
 public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_Recycle_Adapter.MyViewHolder> {
-    private List<PlantData> PlantData;
-    private Context context;
-    private List<PlantData> SearchList;
+    private final List<PlantData> PlantData;
+    private final Context context;
+    private final List<PlantData> SearchList;
     public Plant_List_Recycle_Adapter(Context context, List<PlantData> plantData) {
         this.context = context;
         this.PlantData = plantData;
@@ -43,6 +44,7 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
                 .inflate(R.layout.plant_list_item,parent,false);
         return new MyViewHolder(view);
     }
+    @SuppressLint("NotifyDataSetChanged")
     public void filterList(String text){
         PlantData.clear();
         if(text.isEmpty()){
@@ -99,7 +101,7 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
         return PlantData.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
+    static class MyViewHolder extends RecyclerView.ViewHolder{
         LinearLayout sunlightIconsContainer;
         private final TextView common_name;
         private final TextView cycle;

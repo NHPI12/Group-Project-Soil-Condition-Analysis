@@ -28,6 +28,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 import vn.edu.usth.soicondition.network.model.PlantData;
@@ -79,7 +80,7 @@ public class plantListActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         NavigationView navigationView = findViewById(R.id.plant_list_nav);
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -140,6 +141,7 @@ public class plantListActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.search_bar_menu,menu);
         MenuItem menuItem = menu.findItem(R.id.search_action_bar);
         SearchView searchView = (SearchView) menuItem.getActionView();
+        assert searchView != null;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

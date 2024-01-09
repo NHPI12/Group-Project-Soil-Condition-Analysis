@@ -22,7 +22,7 @@ import vn.edu.usth.soicondition.network.model.default_Image;
 public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAdapter.ViewHolder> {
 
     private final List<PlantData> selectedPlants;
-    private OnItemClickListener listener;
+    private final OnItemClickListener listener;
     private boolean expanded;
 
     public SelectedPlantsAdapter(List<PlantData> selectedPlantsList, OnItemClickListener listener) {
@@ -69,14 +69,14 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView thumbnailImageView;
-        private TextView nameTextView;
+        private final ImageView thumbnailImageView;
+        private final TextView nameTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             thumbnailImageView = itemView.findViewById(R.id.imageViewThumbnail);
             nameTextView = itemView.findViewById(R.id.textViewCommonName);
-            ImageView arrowImageView = itemView.findViewById(R.id.ArrowSelectedPlant);
+
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION && listener != null) {
@@ -87,6 +87,7 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void toggleRecyclerViewVisibility(ImageView arrowImageView, RecyclerView selectedPlantsRecyclerView) {
         if (selectedPlantsRecyclerView != null) {
             expanded = !expanded;
@@ -100,6 +101,7 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(List<PlantData> newData) {
         selectedPlants.clear();
         selectedPlants.addAll(newData);
@@ -122,10 +124,4 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
             return null;
         }
     }
-    public void collapseRecyclerView(ImageView arrowImageView, RecyclerView recyclerView) {
-        if (recyclerView.getVisibility() == View.VISIBLE) {
-            recyclerView.setVisibility(View.GONE);
-            float newRotation = expanded ? 180f : 0f;
-            arrowImageView.animate().rotation(newRotation).start();
-        }
-    }}
+}

@@ -411,7 +411,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
                 }
 
-
+            }
             @Override
             public void onFailure(@NonNull Call<List<Measurements>> call, @NonNull Throwable t) {
                 // Log the failure of the API call
@@ -419,7 +419,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
         });
         }
-    }
+
     private List<Measurements> fetchDataFromLocalDatabase() {
         ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
         Call<List<Measurements>> call = apiService.fetchData();

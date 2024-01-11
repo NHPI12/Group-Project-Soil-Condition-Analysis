@@ -7,24 +7,33 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="10dp"
-    tools:ignore="UseCompoundDrawables">
-    <ImageView
-        android:id="@+id/imageViewThumbnail"
+    tools:ignore="UseCompoundDrawables"
+    style="@style/ScreenBackground.2">
+    <androidx.cardview.widget.CardView
         android:layout_width="50dp"
         android:layout_height="50dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
         android:layout_gravity="center"
-        tools:ignore="ContentDescription">
+        style="@style/CardBackground">
+    <ImageView
+        android:id="@+id/imageViewThumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription,ImageContrastCheck">
     </ImageView>
+    </androidx.cardview.widget.CardView>
     <TextView
         android:id="@+id/textViewCommonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@color/verybrown"
+        android:textColor="@color/itemnavi"
         android:textSize="18sp"
         android:maxLines="1"
         app:autoSizeMinTextSize="5sp"
         app:autoSizeMaxTextSize="10sp"
         app:autoSizeStepGranularity="1sp"
-        android:layout_marginStart="10dp"/>
+        android:layout_marginStart="10dp" />
 </LinearLayout>

@@ -9,14 +9,14 @@
     </style>
     <style name="NavigationViewItemStyle">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/verybrown</item>
+        <item name="android:textColor">@color/itemnavi</item>
     </style>
     <style name="paddingNavigation">
         <item name="android:layout_marginBottom">20dp</item>
     </style>
 
     <style name="CustomCheckboxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
-        <item name="android:buttonTint">@color/verybrown</item>
+        <item name="android:buttonTint">@color/itemnavi</item>
     </style>
     <style name="WhiteCheckBoxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:buttonTint">@color/lilwhite</item>

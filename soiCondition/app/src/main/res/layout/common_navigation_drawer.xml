@@ -13,6 +13,7 @@
         app:menu="@menu/navigation_menu"
         app:itemIconSize="40dp"
         app:itemVerticalPadding="20dp"
-        android:background="@color/lilwhite">
+        app:itemTextColor="@color/itemnavi"
+        style="@style/ScreenBackground.2">
     </com.google.android.material.navigation.NavigationView>
 </LinearLayout>

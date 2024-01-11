@@ -15,6 +15,11 @@
     <color name="lilwhite">#F8FAE5</color>
     <color name="lilbrown">#B19470</color>
     <color name="verybrown">#76453B</color>
-    <color name="lightgreen">#75AC51</color>
-    <color name="lightRed">#9E1D1D</color>
+    <color name="itemnavi">#76453B</color>
+    <color name="titleabc">@color/lilbrown</color>
+    <color name="addremove">@color/verybrown</color>
+    <color name="textviewgiday">@color/lilbrown</color>
+    <color name="textdetail">@color/verybrown</color>
+    <color name="lightRed">#F24C3D</color>
+
 </resources>

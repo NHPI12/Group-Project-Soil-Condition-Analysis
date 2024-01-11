@@ -49,7 +49,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="35dp"
-                    android:layout_marginEnd="10dp"/>
+                    android:layout_marginEnd="10dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
@@ -184,9 +184,12 @@
                     android:layout_marginTop="16dp"
                     android:visibility="gone"/>
             </LinearLayout>
+
         </androidx.cardview.widget.CardView>
     </LinearLayout>
+
     </ScrollView>
+
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -194,11 +197,12 @@
         android:id="@+id/nav_view"
         app:itemTextAppearance="@style/NavigationViewItemStyle"
         app:menu="@menu/navigation_menu"
-        app:itemTextColor="@color/itemnavi"
         app:itemIconSize="40dp"
         app:itemVerticalPadding="20dp"
         tools:ignore="VisualLintBounds"
-        style="@style/MyActionBarTheme">
+        app:itemShapeFillColor="@color/itemnavi"
+        app:itemIconTint="@color/itemnavi"
+        style="@style/ScreenBackground.2">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -237,4 +241,5 @@
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
+
 </androidx.drawerlayout.widget.DrawerLayout>

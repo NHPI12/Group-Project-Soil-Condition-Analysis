@@ -34,9 +34,10 @@ import java.util.Objects;
 public class setting extends AppCompatActivity {
     SwitchCompat lightswitch, tempswitch;
     boolean nightMode, tempMode;
+    String tempValue, temperaTure;
     int lang;
-    SharedPreferences sharedPreferences, sharedPreferences_temp, langspinPreference;
-    SharedPreferences.Editor editor, editor_temp, editlang;
+    SharedPreferences sharedPreferences, sharedPreferences_tempvalue, sharedPreferences_tempmode, langspinPreference;
+    SharedPreferences.Editor editor, editor_tempvalue, editor_mode, editlang;
 
 
     @SuppressLint("SetTextI18n")
@@ -45,6 +46,7 @@ public class setting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
 
         lightswitch = findViewById(R.id.lighswitch);
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
@@ -70,33 +72,50 @@ public class setting extends AppCompatActivity {
             editor.apply();
         });
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+
         //Tempunit
         tempswitch = findViewById(R.id.tempswitch);
-        sharedPreferences_temp = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
-        tempMode = sharedPreferences_temp.getBoolean("tempMode", false);
+        tempValue = getIntent().getStringExtra("message");
+
+        sharedPreferences_tempvalue = getSharedPreferences("MODE_TEMPVALUE", Context.MODE_PRIVATE);
+        temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "tempValue");
+        sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
+        tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
+        Toast.makeText(setting.this, temperaTure, Toast.LENGTH_SHORT).show();
+
 
         if (tempMode) {
             tempswitch.setChecked(true);
         }
 
         tempswitch.setOnClickListener(view -> {
+            float tempunit = Float.parseFloat(temperaTure);
             if (tempMode) {
+                tempunit = (float) (tempunit*1.8 + 32);
 
-                editor_temp = sharedPreferences_temp.edit();
-                editor_temp.putBoolean("tempMode", false);
-                tempMode = false;
-                Toast.makeText(setting.this, "Ahihi " + "1", Toast.LENGTH_SHORT).show();
+                editor_mode = sharedPreferences_tempmode.edit();
+                editor_mode.putBoolean("tempMode", false);
+
+                editor_tempvalue = sharedPreferences_tempvalue.edit();
+                editor_tempvalue.putString("temperaTure", String.valueOf(tempunit));
+
             } else {
+                tempunit = (float) ((tempunit-32)/1.8);
 
-                editor_temp = sharedPreferences_temp.edit();
-                editor_temp.putBoolean("tempMode", true);
-                tempMode = true;
-                Toast.makeText(setting.this, "Ahihi " + "2", Toast.LENGTH_SHORT).show();
+                editor_mode = sharedPreferences_tempmode.edit();
+                editor_mode.putBoolean("tempMode", true);
+
+                editor_tempvalue = sharedPreferences_tempvalue.edit();
+                editor_tempvalue.putString("temperaTure", String.valueOf(tempunit));
             }
-            editor_temp.apply();
+
+            editor_mode.apply();
+            editor_tempvalue.apply();
         });
 
 
+        /////lang
         Spinner spinner = findViewById(R.id.spinner);
         String[] lanGuage = {"ENG", "FRA", "VIE"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(setting.this, android.R.layout.simple_list_item_activated_1, lanGuage);
@@ -131,7 +150,6 @@ public class setting extends AppCompatActivity {
 
 
     }
-
 
 
     @Override

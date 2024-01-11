@@ -265,7 +265,7 @@
                                             android:layout_marginStart="10dp"
                                             android:layout_marginTop="10dp"
                                             android:text="@string/humidity"
-                                            android:textColor="@color/titleabc"
+                                            android:textColor="@color/itemnavi"
                                             android:textSize="17sp"
                                             android:textStyle="bold"
                                             tools:ignore="TextSizeCheck,TextContrastCheck" />
@@ -297,8 +297,7 @@
                     style="@style/ScreenBackground.2">
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
+                        android:layout_height="wrap_content">
                         <TextView
                             android:id="@+id/descriptionDetails"
                             android:layout_width="match_parent"
@@ -320,8 +319,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
-                    android:textColor="@color/itemnavi"
-                    android:textStyle="bold"
-                    style="Button.White" />
+                    android:textColor="@color/lilwhite"
+                    android:textStyle="bold" />
             </LinearLayout>
 </FrameLayout>

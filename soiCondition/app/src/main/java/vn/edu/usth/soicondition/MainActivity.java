@@ -34,6 +34,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.LimitLine;
@@ -95,12 +97,10 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     private ImageView arrowImageView;
 
 
-
-
-    SwitchCompat lightswitch, tempswitch;
     boolean nightMode, tempMode;
-    SharedPreferences sharedPreferences, sharedPreferences_temp;
-    SharedPreferences.Editor editor, editor_temp;
+    String temperaTure;
+    SharedPreferences sharedPreferences, sharedPreferences_tempvalue, sharedPreferences_tempmode;
+    SharedPreferences.Editor editor, editor_tempvalue, editor_mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,18 +108,42 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         setContentView(R.layout.activity_main);
 
         ///////////////////////night
+        ImageView arrowmain = findViewById(R.id.ArrowSelectedPlant);
+        Drawable drw;
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightMode = sharedPreferences.getBoolean("nightMode", false);
+
+
+        TextView temp0 = findViewById(R.id.tempData);
+        sharedPreferences_tempvalue = getSharedPreferences("MODE_TEMPVALUE", Context.MODE_PRIVATE);
+        temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "tempValue");
+        sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
+        tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
+
+
+
         if(nightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            editor = sharedPreferences.edit();
+            //editor = sharedPreferences.edit();
+            drw = getResources().getDrawable(R.drawable.lenn, getTheme());
+            arrowmain.setImageDrawable(drw);
+            Toast.makeText(MainActivity.this, temperaTure, Toast.LENGTH_SHORT).show();
         }
         else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            editor = sharedPreferences.edit();
+            //editor = sharedPreferences.edit();
+            drw = getResources().getDrawable(R.drawable.arrow_up, getTheme());
+            arrowmain.setImageDrawable(drw);
+            Toast.makeText(MainActivity.this, temperaTure, Toast.LENGTH_SHORT).show();
         }
-        editor.apply();
+        //editor.apply();
 
+        /////tempunit
+
+        temp0.setText(temperaTure);
+
+
+        /////////////////////////////////////////
 
 
         lineChartTemp = findViewById(R.id.lineChartTemp);
@@ -304,6 +328,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
+
+
     }
 
     @Override
@@ -317,8 +343,12 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
 
     private void openSettings() {
+        TextView textView = (TextView)findViewById(R.id.tempData);
+        String tex = textView.getText().toString();
         Intent intent = new Intent(MainActivity.this, setting.class);
+        intent.putExtra("message", tex);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
         startActivity(intent);
         drawerLayout.closeDrawer(GravityCompat.START);
     }

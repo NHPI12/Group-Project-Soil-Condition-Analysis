@@ -53,9 +53,10 @@
         app:menu="@menu/navigation_menu"
         app:itemIconSize="40dp"
         app:itemVerticalPadding="20dp"
-        app:itemTextColor="@color/itemnavi"
-        style="@style/ScreenBackground.2"
-        tools:ignore="VisualLintBounds">
+        app:itemShapeFillColor="@color/itemnavi"
+        app:itemIconTint="@color/itemnavi"
+        tools:ignore="VisualLintBounds"
+        style="@style/ScreenBackground.2">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

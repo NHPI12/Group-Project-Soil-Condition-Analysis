@@ -18,8 +18,6 @@
     <color name="itemnavi">#76453B</color>
     <color name="titleabc">@color/lilbrown</color>
     <color name="addremove">@color/verybrown</color>
-    <color name="textviewgiday">@color/lilbrown</color>
-    <color name="textdetail">@color/verybrown</color>
     <color name="lightRed">#F24C3D</color>
 
 </resources>

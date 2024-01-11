@@ -14,16 +14,17 @@
         <item name="tabIndicatorColor">@color/white</item>
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/nunito</item>
-        <item name="android:windowBackground">@color/lilwhite</item>
     </style>
 
 
     <style name="ScreenBackground"><item name="android:background">#152A38</item></style>
     <style name="ScreenBackground.2"><item name="android:background">#36597A</item></style>
+    <style name="ScreenBackground.4"><item name="android:background">#152A38</item></style>
     <style name="ScreenBackground.3"><item name="drawerLayoutStyle">@color/lilwhite</item></style>
     <style name="CardBackground"><item name="cardBackgroundColor">#36597A</item></style>
     <style name="CardBackground.2"><item name="cardBackgroundColor">#36597A</item></style>
     <style name="TextColor"><item name="android:textColor">@color/white</item></style>
+    <style name="TextColorData"><item name="android:textColor">@color/graywhite</item></style>
     <style name="ImageChange"><item name="android:src">@color/white</item></style>
     <style name="Switchmode"><item name="android:switchStyle">@color/black</item></style>
 

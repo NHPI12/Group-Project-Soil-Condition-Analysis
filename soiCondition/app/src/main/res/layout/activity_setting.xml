@@ -17,27 +17,22 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_gravity="center"
-
-            style="@style/TextColor"
+            android:textColor="@color/lilwhite"
             android:text="Setting"
             android:textSize="30dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-
-            >
+            android:layout_marginTop="40dp">
 
             <TextView
                 android:id="@+id/lightmode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="210dp"
-
-                style="@style/TextColor"
+                android:textColor="@color/lilwhite"
                 android:text="Light mode"
                 android:textSize="20dp" />
 
@@ -59,8 +54,7 @@
                 android:layout_width="197dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="115dp"
-
-                style="@style/TextColor"
+                android:textColor="@color/lilwhite"
                 android:text="Temperature Unit"
                 android:textSize="20dp" />
 
@@ -79,11 +73,10 @@
 
             <TextView
                 android:id="@+id/lang"
-                style="@style/TextColor"
+                android:textColor="@color/lilwhite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="200dp"
-
                 android:text="Language"
                 android:textSize="20dp" />
 
@@ -95,17 +88,6 @@
 
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/textex"
-            style="@style/TextColor"
-            android:layout_width="381dp"
-            android:layout_height="98dp"
-
-            android:layout_marginEnd="193dp"
-            android:text="Language"
-            android:textSize="20dp" />
-
 
     </LinearLayout>
 

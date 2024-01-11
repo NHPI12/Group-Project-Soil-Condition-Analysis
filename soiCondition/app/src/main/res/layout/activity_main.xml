@@ -86,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
                     android:id="@+id/humidData"
-                    style="@style/TextColor"/>
+                    style="@style/TextColorData"/>
             </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChartHumid"
@@ -131,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
                     android:id="@+id/tempData"
-                    style="@style/TextColor"/>
+                    style="@style/TextColorData"/>
             </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChartTemp"
@@ -175,7 +175,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
                     android:id="@+id/soilData"
-                    style="@style/TextColor"/>
+                    style="@style/TextColorData"/>
                 </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChartSoil"
@@ -198,7 +198,7 @@
         app:itemIconSize="40dp"
         app:itemVerticalPadding="20dp"
         tools:ignore="VisualLintBounds"
-        style="@style/MyActionBarTheme">
+        style="@style/ScreenBackground.2">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -115,9 +115,9 @@ public class PlantDetailsActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         //String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-        String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
-        //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
+        String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
 
         //String apiKey ="sk-MUZ5659b830f829253689"; //Nguyen 3rd
         fetchPlantDetails(ID,apiKey);

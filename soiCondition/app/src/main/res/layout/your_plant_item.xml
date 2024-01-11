@@ -8,19 +8,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="10dp"
     app:cardCornerRadius="10dp"
-    android:id="@+id/your_plant_each_item">
+    android:id="@+id/your_plant_each_item"
+    style="@style/CardBackground">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:background="@color/lilwhite">
+        style="@style/ScreenBackground.2">
         <androidx.cardview.widget.CardView
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_marginStart="10dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="0dp"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            style="@style/CardBackground.2">
+
             <ImageView
                 android:id="@+id/Your_thumbnail"
                 android:layout_width="75dp"
@@ -38,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Title"
-                android:textColor="@color/verybrown"
+                android:textColor="@color/itemnavi"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:id="@+id/common_name"
@@ -75,7 +78,7 @@
                     android:id="@+id/Your_cycle"
                     android:layout_width="85dp"
                     android:layout_height="match_parent"
-                    android:textColor="@color/verybrown"
+                    android:textColor="@color/itemnavi"
                     android:layout_gravity="end"/>
             </LinearLayout>
         </LinearLayout>

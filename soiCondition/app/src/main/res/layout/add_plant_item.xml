@@ -8,19 +8,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="10dp"
     app:cardCornerRadius="10dp"
-    android:id="@+id/adding_plant_each_item">
+    android:id="@+id/adding_plant_each_item"
+    style="@style/CardBackground">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:background="@color/lilwhite">
+        style="@style/ScreenBackground.2">
         <androidx.cardview.widget.CardView
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_margin="5dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="0dp"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            style="@style/CardBackground.2">
 
             <ImageView
                 android:id="@+id/Addthumbnail"
@@ -36,13 +38,14 @@
             android:layout_gravity="center"
             android:layout_marginEnd="5dp"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            style="@style/ScreenBackground.2">
             <TextView
                 android:id="@+id/Addcommon_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Title"
-                android:textColor="@color/verybrown"
+                android:textColor="@color/itemnavi"
                 android:textSize="20sp"
                 android:autoSizeTextType="uniform"
                 android:maxLines="1"
@@ -78,13 +81,14 @@
                     android:layout_width="75dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="end"
-                    android:textColor="@color/lilbrown"/>
+                    android:textColor="@color/itemnavi"/>
             </LinearLayout>
         </LinearLayout>
         <RelativeLayout
             android:layout_width="43dp"
             android:layout_height="match_parent"
-            android:layout_gravity="end">
+            android:layout_gravity="end"
+            style="@style/ScreenBackground.2">
 
             <CheckBox
                 android:id="@+id/checkbox_plant"

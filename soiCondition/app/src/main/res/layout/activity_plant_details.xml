@@ -5,19 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/lilwhite">
+    style="@style/ScreenBackground">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                style="@style/ScreenBackground">
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    style="@style/CardBackground.2">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:background="@color/lilwhite">
+                        style="@style/ScreenBackground.2">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -27,7 +30,8 @@
                                 android:layout_width="228dp"
                                 android:layout_height="match_parent"
                                 android:orientation="vertical"
-                                android:paddingTop="20dp">
+                                android:paddingTop="20dp"
+                                style="@style/ScreenBackground.2">
 
                                 <TextView
                                     android:id="@+id/Scientific_details_name"
@@ -37,7 +41,7 @@
                                     android:autoSizeTextType="uniform"
                                     android:maxLines="2"
                                     android:text="Scientific name"
-                                    android:textColor="@color/lilbrown"
+                                    android:textColor="@color/itemnavi"
                                     android:textSize="20sp"
                                     app:autoSizeMaxTextSize="20sp"
                                     app:autoSizeMinTextSize="10sp"
@@ -50,7 +54,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="Common Name"
                                     android:id="@+id/Common_details_name"
-                                    android:textColor="@color/verybrown"
+                                    android:textColor="@color/itemnavi"
                                     android:textStyle="bold"
                                     android:autoSizeTextType="uniform"
                                     android:maxLines="2"
@@ -112,7 +116,7 @@
                                             android:layout_marginStart="10dp"
                                             android:layout_marginTop="10dp"
                                             android:text="@string/season"
-                                            android:textColor="@color/lilbrown"
+                                            android:textColor="@color/titleabc"
                                             android:textSize="17sp"
                                             android:textStyle="bold"
                                             tools:ignore="TextContrastCheck,TextSizeCheck,TooDeepLayout" />
@@ -124,7 +128,7 @@
                                             android:layout_marginTop="2dp"
                                             android:id="@+id/SeasonsDetails"
                                             android:text="Spring"
-                                            android:textColor="@color/verybrown"
+                                            android:textColor="@color/itemnavi"
                                             android:textStyle="bold"
                                             android:autoSizeTextType="uniform"
                                             android:maxLines="1"
@@ -161,7 +165,7 @@
                                             android:layout_marginStart="10dp"
                                             android:layout_marginTop="10dp"
                                             android:text="@string/cycle"
-                                            android:textColor="@color/lilbrown"
+                                            android:textColor="@color/titleabc"
                                             android:textSize="17sp"
                                             android:textStyle="bold"
                                             tools:ignore="TextSizeCheck,TextContrastCheck" />
@@ -172,7 +176,7 @@
                                             android:layout_marginStart="10dp"
                                             android:text="Perennial"
                                             android:id="@+id/cycle_details"
-                                            android:textColor="@color/verybrown"
+                                            android:textColor="@color/itemnavi"
                                             android:textStyle="bold"
                                             android:autoSizeTextType="uniform"
                                             android:maxLines="1"
@@ -214,7 +218,7 @@
                                             android:layout_marginStart="10dp"
                                             android:layout_marginTop="10dp"
                                             android:text="@string/temperature"
-                                            android:textColor="@color/lilbrown"
+                                            android:textColor="@color/titleabc"
                                             android:textSize="17sp"
                                             android:textStyle="bold"
                                             tools:ignore="TextSizeCheck,TextContrastCheck" />
@@ -226,7 +230,7 @@
                                             android:layout_marginStart="10dp"
                                             android:id="@+id/temperatureDetails"
                                             android:text="44°F - 64°F"
-                                            android:textColor="@color/verybrown"
+                                            android:textColor="@color/itemnavi"
                                             android:textStyle="bold"
                                             android:autoSizeTextType="uniform"
                                             android:maxLines="1"
@@ -262,7 +266,7 @@
                                             android:layout_marginStart="10dp"
                                             android:layout_marginTop="10dp"
                                             android:text="@string/humidity"
-                                            android:textColor="@color/lilbrown"
+                                            android:textColor="@color/titleabc"
                                             android:textSize="17sp"
                                             android:textStyle="bold"
                                             tools:ignore="TextSizeCheck,TextContrastCheck" />
@@ -273,7 +277,7 @@
                                             android:layout_marginStart="10dp"
                                             android:text="High"
                                             android:id="@+id/humidity_details"
-                                            android:textColor="@color/verybrown"
+                                            android:textColor="@color/itemnavi"
                                             android:textStyle="bold"
                                             android:autoSizeTextType="uniform"
                                             android:maxLines="1"
@@ -290,20 +294,22 @@
                 </androidx.cardview.widget.CardView>
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="245dp">
+
+                    android:layout_height="245dp"
+                    style="@style/ScreenBackground.2">
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content">                     
                         <TextView
                             android:id="@+id/descriptionDetails"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@color/lilwhite"
+                            style="@style/ScreenBackground.2"
                             android:maxLines="100"
                             android:paddingStart="7dp"
                             android:paddingTop="5dp"
                             android:scrollbars="vertical"
-                            android:textColor="@color/verybrown"
+                            android:textColor="@color/itemnavi"
                             android:textSize="17sp"
                             tools:ignore="RtlSymmetry"/>
                     </androidx.cardview.widget.CardView>
@@ -312,10 +318,12 @@
                     android:id="@+id/details_button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/leaf"
+                    android:layout_gravity="center"
                     android:layout_margin="10dp"
+                    android:textColor="@color/itemnavi"
                     android:textStyle="bold"
-                    android:textColor="@color/lilwhite"
-                    android:layout_gravity="center"/>
+                    style="Button.White"/>
+                 
+               
             </LinearLayout>
 </FrameLayout>

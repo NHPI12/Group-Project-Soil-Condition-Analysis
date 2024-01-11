@@ -7,13 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".plantListActivity"
     android:id="@+id/plant_list_nav_layout"
-    android:background="@color/leaf">
+    style="@style/ScreenBackground">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/plant_list_recycle_View"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp" />
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -23,7 +23,8 @@
         app:menu="@menu/navigation_menu"
         app:itemIconSize="40dp"
         app:itemVerticalPadding="20dp"
-        android:background="@color/lilwhite"
+        app:itemTextColor="@color/itemnavi"
+        style="@style/ScreenBackground.2"
         tools:ignore="VisualLintBounds">
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,7 +32,8 @@
             android:orientation="vertical"
             android:layout_gravity="bottom"
             android:padding="15dp"
-            android:layout_marginBottom="0dp">
+            android:layout_marginBottom="0dp"
+            style="@style/ScreenBackground.2">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,11 +48,11 @@
                     android:text="Add"
                     android:id="@+id/add_text"
                     android:textStyle="bold"
-                    android:textColor="@color/lilbrown"/>
+                    android:textColor="@color/itemnavi"/>
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/lilbrown" />
+                    android:background="@color/itemnavi" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -59,7 +61,7 @@
                     android:id="@+id/remove_text"
                     android:textStyle="bold"
                     android:paddingStart="40dp"
-                    android:textColor="@color/lilbrown"
+                    android:textColor="@color/itemnavi"
                     tools:ignore="RtlSymmetry" />
             </LinearLayout>
         </LinearLayout>

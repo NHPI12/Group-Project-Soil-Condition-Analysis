@@ -47,6 +47,8 @@ public class setting extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+        TextView tt = findViewById(R.id.textex);
+        tt.setText("aaaaaaaa");
 
         lightswitch = findViewById(R.id.lighswitch);
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
@@ -82,37 +84,30 @@ public class setting extends AppCompatActivity {
         temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "tempValue");
         sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
         tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
-        Toast.makeText(setting.this, temperaTure, Toast.LENGTH_SHORT).show();
-
 
         if (tempMode) {
             tempswitch.setChecked(true);
         }
 
         tempswitch.setOnClickListener(view -> {
-            float tempunit = Float.parseFloat(temperaTure);
-            if (tempMode) {
+            float tempunit = Float.parseFloat(tempValue);
+            if (tempMode == false) {
                 tempunit = (float) (tempunit*1.8 + 32);
-
-                editor_mode = sharedPreferences_tempmode.edit();
-                editor_mode.putBoolean("tempMode", false);
-
-                editor_tempvalue = sharedPreferences_tempvalue.edit();
-                editor_tempvalue.putString("temperaTure", String.valueOf(tempunit));
-
-            } else {
-                tempunit = (float) ((tempunit-32)/1.8);
-
                 editor_mode = sharedPreferences_tempmode.edit();
                 editor_mode.putBoolean("tempMode", true);
-
-                editor_tempvalue = sharedPreferences_tempvalue.edit();
-                editor_tempvalue.putString("temperaTure", String.valueOf(tempunit));
+            } else {
+                tempunit = (float) ((tempunit-32)/1.8);
+                editor_mode = sharedPreferences_tempmode.edit();
+                editor_mode.putBoolean("tempMode", false);
             }
+            tempunit = (float) Math.floor(tempunit * 10) / 10;
 
-            editor_mode.apply();
+            editor_tempvalue = sharedPreferences_tempvalue.edit();
+            editor_tempvalue.putString("temperaTure", String.valueOf(tempunit));
             editor_tempvalue.apply();
+            editor_mode.apply();
         });
+        Toast.makeText(setting.this, temperaTure + " " + tempMode, Toast.LENGTH_SHORT).show();
 
 
         /////lang

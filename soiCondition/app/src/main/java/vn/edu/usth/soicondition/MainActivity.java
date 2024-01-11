@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     boolean nightMode, tempMode;
     String temperaTure;
     SharedPreferences sharedPreferences, sharedPreferences_tempvalue, sharedPreferences_tempmode;
-    SharedPreferences.Editor editor, editor_tempvalue, editor_mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,39 +112,22 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightMode = sharedPreferences.getBoolean("nightMode", false);
 
-
-        TextView temp0 = findViewById(R.id.tempData);
-        sharedPreferences_tempvalue = getSharedPreferences("MODE_TEMPVALUE", Context.MODE_PRIVATE);
-        temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "tempValue");
-        sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
-        tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
-
-
-
         if(nightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            //editor = sharedPreferences.edit();
             drw = getResources().getDrawable(R.drawable.lenn, getTheme());
             arrowmain.setImageDrawable(drw);
-            Toast.makeText(MainActivity.this, temperaTure, Toast.LENGTH_SHORT).show();
+
         }
         else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            //editor = sharedPreferences.edit();
             drw = getResources().getDrawable(R.drawable.arrow_up, getTheme());
             arrowmain.setImageDrawable(drw);
-            Toast.makeText(MainActivity.this, temperaTure, Toast.LENGTH_SHORT).show();
+
         }
-        //editor.apply();
 
-        /////tempunit
-
-        temp0.setText(temperaTure);
 
 
         /////////////////////////////////////////
-
-
         lineChartTemp = findViewById(R.id.lineChartTemp);
         lineChartHumid = findViewById(R.id.lineChartHumid);
         lineChartSoil = findViewById(R.id.lineChartSoil);
@@ -172,6 +154,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         TextView soilData = findViewById(R.id.soilData);
         TextView tempData = findViewById(R.id.tempData);
         TextView humidData = findViewById(R.id.humidData);
+
+
         // Initialize and start a background thread
         handlerThread = new HandlerThread("BackgroundThread");
         handlerThread.start();
@@ -329,9 +313,19 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
         });
 
-
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        sharedPreferences_tempvalue = getSharedPreferences("MODE_TEMPVALUE", Context.MODE_PRIVATE);
+        temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "tempValue");
+        sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
+        tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
+
+        TextView tempData = findViewById(R.id.tempData);
+        tempData.setText(temperaTure);
+    }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
@@ -593,7 +587,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         }
         return sum / entries.size();
     }
-
     private Drawable determineChartBackgroundColor(float overallAverage, int limitValue) {
         float threshold = 15f; // You can adjust this threshold based on your requirements
 
@@ -626,7 +619,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         // Quit the background thread
         handlerThread.quit();
     }
-
 
     private void fetchData() {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();

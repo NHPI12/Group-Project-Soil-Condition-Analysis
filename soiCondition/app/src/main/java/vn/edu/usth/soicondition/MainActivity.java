@@ -478,10 +478,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     int dataIndex = dataSize - index; // Calculate the actual index in the data list
                     if (dataIndex >= 0 && dataIndex < finalTimestamps.size()) {
                         String currentTimestamp = finalTimestamps.get(dataIndex);
-                        SimpleDateFormat timeFormat = null;
-
-                        timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-
+                        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                         // Parse timestamp and format time
                         Date date = dateFormat.parse(currentTimestamp);
                         return timeFormat.format(Objects.requireNonNull(date));

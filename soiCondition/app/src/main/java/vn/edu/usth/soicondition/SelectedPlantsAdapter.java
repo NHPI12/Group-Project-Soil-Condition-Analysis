@@ -84,9 +84,7 @@ public class SelectedPlantsAdapter extends RecyclerView.Adapter<SelectedPlantsAd
                 }
             });
         }
-
     }
-
     @SuppressLint("NotifyDataSetChanged")
     public void toggleRecyclerViewVisibility(ImageView arrowImageView, RecyclerView selectedPlantsRecyclerView) {
         if (selectedPlantsRecyclerView != null) {

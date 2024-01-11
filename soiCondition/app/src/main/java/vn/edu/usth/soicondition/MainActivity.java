@@ -51,6 +51,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -78,6 +79,7 @@ import vn.edu.usth.soicondition.network.model.PlantResponse;
 
 
 public class MainActivity extends AppCompatActivity implements SelectedPlantsAdapter.OnItemClickListener {
+
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private LineChart lineChartTemp, lineChartSoil, lineChartHumid;
@@ -87,14 +89,12 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     private Handler handler;
     private List<PlantData> plantList;
     private List<PlantData> allSelectedPlants;
-    private CardView selectedPlantsCardView;
+    private CardView selectedPlantsCardView ;
     private RecyclerView selectedPlantsRecyclerView;
     private SelectedPlantsAdapter selectedPlantsAdapter;
     private ImageView arrowImageView;
-
-
-
-
+    private LinearLayout PlantDetailsLinearLayout_1, plantdetailslinelayout_2;
+    private TextView textViewWatering, textViewSunlight;
     SwitchCompat lightswitch, tempswitch;
     boolean nightMode, tempMode;
     SharedPreferences sharedPreferences, sharedPreferences_temp;
@@ -111,12 +111,11 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         nightMode = sharedPreferences.getBoolean("nightMode", false);
         if(nightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            editor = sharedPreferences.edit();
         }
         else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            editor = sharedPreferences.edit();
         }
+        editor = sharedPreferences.edit();
         editor.apply();
 
 
@@ -137,7 +136,13 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         selectedPlantsCardView = findViewById(R.id.selectedPlantsCardView);
         selectedPlantsRecyclerView = findViewById(R.id.selectedPlantsRecyclerView);
         arrowImageView = findViewById(R.id.ArrowSelectedPlant);
-
+        PlantDetailsLinearLayout_1 = findViewById(R.id.PlantDetailsCardView1);
+        plantdetailslinelayout_2= findViewById(R.id.PlantDetailsCardView2);
+        //textView water and sunlight
+        textViewWatering = findViewById(R.id.watering_value_main_activity);
+        textViewSunlight = findViewById(R.id.sunlight_textView);
+        PlantDetailsLinearLayout_1.setVisibility(View.GONE);
+        plantdetailslinelayout_2.setVisibility(View.GONE);
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://smart-pot-1d7b5-default-rtdb.firebaseio.com/");
         DatabaseReference databaseReference1 = firebaseDatabase.getReference("sensor_data");
         DatabaseReference databaseReferenceSoil = databaseReference1.child("soil_moisture");
@@ -294,6 +299,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
             drawerLayout.closeDrawer(GravityCompat.START);
         });
+
     }
 
     @Override
@@ -353,8 +359,10 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                         PlantData topItem = selectedPlantsAdapter.getTopItem();
                         if (topItem != null) {
                             int wateringValue1 = topItem.convertWateringToValue();
+                            String wateringValueStr = topItem.getWatering();
                             int temperatureValue1 = topItem.convertSunlightToValue();
                             int soilValue1 = topItem.convertWateringToSoilMoisture();
+                            updateCardViewDetails(wateringValueStr,String.valueOf(temperatureValue1));
                             // Now you can use these values in your updateUI method
                             updateUI(wateringValue1, temperatureValue1, soilValue1);
                         }
@@ -369,6 +377,11 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         } else {
             updateUI(wateringValue, temperatureValue, soilValue);
         }
+    }
+
+    private void updateCardViewDetails(String wateringValueStr, String sunlightValue) {
+        textViewWatering.setText(wateringValueStr);
+        textViewSunlight.setText(sunlightValue);
     }
 
     private void updateUI(int wateringValue, int temperatureValue, int soilValue) {
@@ -597,8 +610,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
-        //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
-        String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
+        String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
+        //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
         boolean isDataFetched = false;
         if (!isDataFetched) {
                 // Fetch data only if it hasn't been fetched yet
@@ -649,9 +662,10 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 allSelectedPlants = getAllSelectedPlants(sharedPreferences);
                 selectedPlantsAdapter = new SelectedPlantsAdapter(allSelectedPlants, this);
                 selectedPlantsCardView.setVisibility(View.VISIBLE);
+                PlantDetailsLinearLayout_1.setVisibility(View.VISIBLE);
+                plantdetailslinelayout_2.setVisibility(View.VISIBLE);
                 selectedPlantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
                 selectedPlantsRecyclerView.setAdapter(selectedPlantsAdapter);
-
                 arrowImageView.setOnClickListener(v -> selectedPlantsAdapter.toggleRecyclerViewVisibility(arrowImageView, selectedPlantsRecyclerView));
                 startFetchingDataFromPlant(lastSelectedPlant);
                 }
@@ -660,6 +674,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             startFetchingDataWithDefaults();
             // If no plants are selected, hide the CardView
             selectedPlantsCardView.setVisibility(View.GONE);
+
         }
     }
 
@@ -673,6 +688,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             Log.d("Selected Plant Details", "Sunlight Before Clicked: " + sunlightValue);
             Log.d("Selected Plant Details", "SoilMoisture Before Clicked: " + soilMoistureValue);
             startFetchingData(wateringValue, sunlightValue, soilMoistureValue);
+
         }
     }
 
@@ -701,6 +717,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         Log.e("Selected Plant Details", "Plant with ID " + plantId + " not found");
         return null;
     }
+
     private int getLastSelectedPlantId(Set<Integer> selectedPlantIds) {
         return selectedPlantIds.isEmpty() ? -1 : Collections.max(selectedPlantIds);
     }

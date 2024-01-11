@@ -310,14 +310,16 @@
                             tools:ignore="RtlSymmetry"/>
                     </androidx.cardview.widget.CardView>
                 </androidx.core.widget.NestedScrollView>
+
                 <Button
                     android:id="@+id/details_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    style="Button.White"
+                    android:layout_width="230dp"
+                    android:layout_height="65dp"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
                     android:textColor="@color/itemnavi"
                     android:textStyle="bold"
-                    style="Button.White"/>
+                    tools:ignore="SpeakableTextPresentCheck" />
             </LinearLayout>
 </FrameLayout>

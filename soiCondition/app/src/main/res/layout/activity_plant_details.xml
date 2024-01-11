@@ -15,6 +15,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/CardBackground.2">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -293,12 +294,12 @@
                 </androidx.cardview.widget.CardView>
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
+
                     android:layout_height="245dp"
                     style="@style/ScreenBackground.2">
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
+                        android:layout_height="wrap_content">                     
                         <TextView
                             android:id="@+id/descriptionDetails"
                             android:layout_width="match_parent"
@@ -313,7 +314,6 @@
                             tools:ignore="RtlSymmetry"/>
                     </androidx.cardview.widget.CardView>
                 </androidx.core.widget.NestedScrollView>
-
                 <Button
                     android:id="@+id/details_button"
                     android:layout_width="match_parent"
@@ -322,6 +322,8 @@
                     android:layout_margin="10dp"
                     android:textColor="@color/itemnavi"
                     android:textStyle="bold"
-                    style="Button.White" />
+                    style="Button.White"/>
+                 
+               
             </LinearLayout>
 </FrameLayout>

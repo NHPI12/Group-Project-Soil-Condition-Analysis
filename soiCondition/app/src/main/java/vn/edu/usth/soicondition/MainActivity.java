@@ -86,9 +86,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     private boolean exitConfirmationShown = false;
     private Handler handler;
     private List<PlantData> plantList;
-    private Plant_List_Recycle_Adapter plantListRecycleAdapter;
     private List<PlantData> allSelectedPlants;
-    private boolean isDataFetched = false;
     private CardView selectedPlantsCardView;
     private RecyclerView selectedPlantsRecyclerView;
     private SelectedPlantsAdapter selectedPlantsAdapter;
@@ -104,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -256,53 +255,44 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        plantListRecycleAdapter = new Plant_List_Recycle_Adapter(MainActivity.this, plantList);
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                if (id == R.id.list_plants) {
-                    Intent intent = new Intent(MainActivity.this, plantListActivity.class);
-                    intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                } else if (id == R.id.item_5) {
-                    openSettings();
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    return true;
-                }else if (id == R.id.item_2){
-                    Intent intent = new Intent(MainActivity.this,Your_Plant_Activity.class);
-                    intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                }
-                return false;
-            }
-        });
-        TextView addTextView = findViewById(R.id.add_text);
-        TextView removeTextView = findViewById(R.id.remove_text);
-        addTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddPlantsActivity.class);
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.list_plants) {
+                Intent intent = new Intent(MainActivity.this, plantListActivity.class);
                 intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
                 startActivity(intent);
                 overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
                 drawerLayout.closeDrawer(GravityCompat.START);
-            }
-        });
-        removeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RemovePlantsActivity.class);
+            } else if (id == R.id.item_5) {
+                openSettings();
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }else if (id == R.id.item_2){
+                Intent intent = new Intent(MainActivity.this,Your_Plant_Activity.class);
                 intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
                 startActivity(intent);
-                overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
+                overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
                 drawerLayout.closeDrawer(GravityCompat.START);
             }
+            return false;
+        });
+        TextView addTextView = findViewById(R.id.add_text);
+        TextView removeTextView = findViewById(R.id.remove_text);
+        addTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddPlantsActivity.class);
+            intent.putParcelableArrayListExtra("plantList", new ArrayList<>(plantList));
+            startActivity(intent);
+            overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+            drawerLayout.closeDrawer(GravityCompat.START);
+        });
+        removeTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, RemovePlantsActivity.class);
+            intent.putParcelableArrayListExtra("plantList",new ArrayList<>(plantList));
+            startActivity(intent);
+            overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
+            drawerLayout.closeDrawer(GravityCompat.START);
         });
     }
 
@@ -359,17 +349,14 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 @Override
                 public void run() {
                     List<Measurements> newData = fetchDataFromLocalDatabase();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            PlantData topItem = selectedPlantsAdapter.getTopItem();
-                            if (topItem != null) {
-                                int wateringValue = topItem.convertWateringToValue();
-                                int temperatureValue = topItem.convertSunlightToValue();
-                                int soilValue = topItem.convertWateringToSoilMoisture();
-                                // Now you can use these values in your updateUI method
-                                updateUI(wateringValue, temperatureValue, soilValue);
-                            }
+                    runOnUiThread(() -> {
+                        PlantData topItem = selectedPlantsAdapter.getTopItem();
+                        if (topItem != null) {
+                            int wateringValue1 = topItem.convertWateringToValue();
+                            int temperatureValue1 = topItem.convertSunlightToValue();
+                            int soilValue1 = topItem.convertWateringToSoilMoisture();
+                            // Now you can use these values in your updateUI method
+                            updateUI(wateringValue1, temperatureValue1, soilValue1);
                         }
                     });
 
@@ -393,12 +380,12 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
         call.enqueue(new Callback<List<Measurements>>() {
             @Override
-            public void onResponse(Call<List<Measurements>> call, Response<List<Measurements>> response) {
+            public void onResponse(@NonNull Call<List<Measurements>> call, @NonNull Response<List<Measurements>> response) {
                 // Log the end of the API call
                 Log.d("MainActivityDatabase", "API call completed");
 
                 if (response.isSuccessful()) {
-                    PlantData topItem = selectedPlantsAdapter.getTopItem();
+
 
                     List<Measurements> data = response.body();
                     List<String> timestamps = new ArrayList<>();
@@ -609,8 +596,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
 
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
-        String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+        String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
         //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
@@ -667,12 +654,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 selectedPlantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
                 selectedPlantsRecyclerView.setAdapter(selectedPlantsAdapter);
 
-                arrowImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selectedPlantsAdapter.toggleRecyclerViewVisibility(arrowImageView, selectedPlantsRecyclerView);
-                    }
-                });
+                arrowImageView.setOnClickListener(v -> selectedPlantsAdapter.toggleRecyclerViewVisibility(arrowImageView, selectedPlantsRecyclerView));
                 startFetchingDataFromPlant(lastSelectedPlant);
                 }
             }else

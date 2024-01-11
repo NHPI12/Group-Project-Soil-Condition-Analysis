@@ -23,6 +23,7 @@
             app:cardElevation="0dp"
             android:layout_gravity="center"
             style="@style/CardBackground.2">
+
             <ImageView
                 android:id="@+id/Your_thumbnail"
                 android:layout_width="75dp"

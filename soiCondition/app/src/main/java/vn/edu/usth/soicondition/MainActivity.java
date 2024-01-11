@@ -360,7 +360,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
                 if (response.isSuccessful()) {
 
-
                     List<Measurements> data = response.body();
                     List<String> timestamps = new ArrayList<>();
                     List<Float> humidityValues = new ArrayList<>();
@@ -431,6 +430,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         });
         return null;
     }
+
     private void updateLineChart(LineChart lineChart, List<Entry> entries, String label, List<String> timestamps, int Value, int minValue, int maxValue) {
         int maxDataPoints = 100;
         int dataSize = entries.size();
@@ -452,11 +452,12 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     int dataIndex = dataSize - index; // Calculate the actual index in the data list
                     if (dataIndex >= 0 && dataIndex < finalTimestamps.size()) {
                         String currentTimestamp = finalTimestamps.get(dataIndex);
+                        SimpleDateFormat timeFormat = null;
+
+                        timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
                         // Parse timestamp and format time
                         Date date = dateFormat.parse(currentTimestamp);
-                        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-
                         return timeFormat.format(Objects.requireNonNull(date));
                     } else {
                         Log.e("MainActivityGraph", "Index out of bounds: " + dataIndex);

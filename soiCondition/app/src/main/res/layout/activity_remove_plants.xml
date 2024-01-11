@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RemovePlantsActivity"
-    android:background="@color/leaf"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    style="@style/ScreenBackground">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
             android:textAlignment="center"
             android:layout_marginTop="100dp"
             android:textSize="35sp"
-            android:textColor="@color/lilwhite"
+            android:textColor="@color/itemnavi"
             android:visibility="visible"
             android:layout_centerHorizontal="true"/>
         <TextView
@@ -39,7 +39,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="150dp"
             android:layout_below="@id/no_plants_text"
-            android:textColor="@color/lilwhite"
+            android:textColor="@color/itemnavi"
             android:textSize="20sp"
             android:textStyle="bold"
             android:visibility="visible" />

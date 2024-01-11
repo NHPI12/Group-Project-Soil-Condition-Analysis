@@ -10,7 +10,8 @@
     android:background="@color/leaf">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        style="@style/ScreenBackground">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,9 +24,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             app:cardCornerRadius="20dp"
-            app:cardBackgroundColor="@color/lilwhite"
             app:cardElevation="10dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            style="@style/CardBackground">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -56,10 +57,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            app:cardBackgroundColor="@color/lilwhite"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
-            app:contentPadding="20dp">
+            app:contentPadding="20dp"
+            style="@style/CardBackground">
             <LinearLayout
                 android:id="@+id/layout_humid"
                 android:layout_width="match_parent"
@@ -78,14 +79,14 @@
                     android:textSize="32sp"
                     android:textStyle="bold"
                     android:text="@string/humid"
-                    android:textColor="@color/verybrown">
+                    style="@style/TextColor">
                 </TextView>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
                     android:id="@+id/humidData"
-                    android:textColor="@color/lilbrown"/>
+                    style="@style/TextColor"/>
             </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChartHumid"
@@ -98,18 +99,19 @@
         <androidx.cardview.widget.CardView
             android:onClick="expandTemp"
             android:layout_width="match_parent"
-            app:cardBackgroundColor="@color/lilwhite"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
-            app:contentPadding="20dp">
+            app:contentPadding="20dp"
+            style="@style/CardBackground">
             <LinearLayout
                 android:id="@+id/layout_temperature"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:animateLayoutChanges="true">
+                android:animateLayoutChanges="true"
+                style="@style/ScreenBackground.2">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -122,14 +124,14 @@
                     android:textSize="32sp"
                     android:textStyle="bold"
                     android:text="@string/temperature"
-                    android:textColor="@color/verybrown">
+                    style="@style/TextColor">
                 </TextView>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
                     android:id="@+id/tempData"
-                    android:textColor="@color/lilbrown"/>
+                    style="@style/TextColor"/>
             </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChartTemp"
@@ -144,11 +146,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            app:cardBackgroundColor="@color/lilwhite"
-
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
-            app:contentPadding="20dp">
+            app:contentPadding="20dp"
+            style="@style/CardBackground">
             <LinearLayout
                 android:id="@+id/layout_soilMoisture"
                 android:layout_width="match_parent"
@@ -163,18 +164,18 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:id="@+id/Soiltitle"
+                    android:id="@+id/soiltitle"
                     android:textSize="32sp"
                     android:textStyle="bold"
                     android:text="@string/soil_moisture"
-                    android:textColor="@color/verybrown">
+                    style="@style/TextColor">
                 </TextView>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
                     android:id="@+id/soilData"
-                    android:textColor="@color/lilbrown"/>
+                    style="@style/TextColor"/>
                 </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChartSoil"
@@ -193,11 +194,11 @@
         android:id="@+id/nav_view"
         app:itemTextAppearance="@style/NavigationViewItemStyle"
         app:menu="@menu/navigation_menu"
-        android:background="@color/lilwhite"
-        app:itemTextColor="@color/verybrown"
+        app:itemTextColor="@color/itemnavi"
         app:itemIconSize="40dp"
         app:itemVerticalPadding="20dp"
-        tools:ignore="VisualLintBounds">
+        tools:ignore="VisualLintBounds"
+        style="@style/MyActionBarTheme">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -218,11 +219,11 @@
                     android:text="Add"
                     android:textStyle="bold"
                     android:id="@+id/add_text"
-                    android:textColor="@color/lilbrown"/>
+                    style="@style/TextColor"/>
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/lilbrown" />
+                    style="@style/ScreenBackground.2" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -231,8 +232,8 @@
                     android:id="@+id/remove_text"
                     android:textStyle="bold"
                     android:paddingLeft="40dp"
-                    android:textColor="@color/lilbrown"
-                    tools:ignore="RtlSymmetry" />
+                    style="@style/TextColor"
+                    tools:ignore="RtlSymmetry"/>
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>

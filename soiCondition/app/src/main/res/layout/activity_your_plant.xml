@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".Your_Plant_Activity"
     android:id="@+id/your_plant_nav_layout"
-    android:background="@color/leaf">
+    style="@style/ScreenBackground">
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        style="@style/ScreenBackground.2"/>
         <TextView
             android:id="@+id/no_plants_text"
             android:layout_width="wrap_content"
@@ -26,7 +27,7 @@
             android:textAlignment="center"
             android:layout_marginTop="-100dp"
             android:textSize="35sp"
-            android:textColor="@color/lilwhite"
+            android:textColor="@color/itemnavi"
             android:visibility="visible"
             android:layout_centerHorizontal="true"/>
 
@@ -38,10 +39,10 @@
             android:clickable="true"
             android:text="ADD PLANTS NOW"
             android:textAlignment="center"
-            android:textColor="@color/lilwhite"
+            android:textColor="@color/itemnavi"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:visibility="visible" />
+            android:visibility="visible"/>
     </RelativeLayout>
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
@@ -52,7 +53,8 @@
         app:menu="@menu/navigation_menu"
         app:itemIconSize="40dp"
         app:itemVerticalPadding="20dp"
-        android:background="@color/lilwhite"
+        app:itemTextColor="@color/itemnavi"
+        style="@style/ScreenBackground.2"
         tools:ignore="VisualLintBounds">
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,11 +77,11 @@
                     android:text="Add"
                     android:id="@+id/add_text"
                     android:textStyle="bold"
-                    android:textColor="@color/lilbrown"/>
+                    android:textColor="@color/itemnavi"/>
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/lilbrown" />
+                    style="@style/CardBackground.2"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -88,7 +90,7 @@
                     android:id="@+id/remove_text"
                     android:textStyle="bold"
                     android:paddingStart="40dp"
-                    android:textColor="@color/lilbrown"
+                    android:textColor="@color/itemnavi"
                     tools:ignore="RtlSymmetry" />
             </LinearLayout>
         </LinearLayout>

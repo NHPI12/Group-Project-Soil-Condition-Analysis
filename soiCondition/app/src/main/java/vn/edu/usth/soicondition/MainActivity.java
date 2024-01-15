@@ -77,6 +77,11 @@ import vn.edu.usth.soicondition.network.JSONPlaceHolder;
 import vn.edu.usth.soicondition.network.TimeAxisValueFormatter;
 import vn.edu.usth.soicondition.network.model.PlantData;
 import vn.edu.usth.soicondition.network.model.PlantResponse;
+import com.google.mlkit.nl.translate.Translation;
+import com.google.mlkit.nl.translate.Translator;
+import com.google.mlkit.nl.translate.TranslatorOptions;
+
+
 
 
 public class MainActivity extends AppCompatActivity implements SelectedPlantsAdapter.OnItemClickListener {
@@ -96,11 +101,11 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     private SelectedPlantsAdapter selectedPlantsAdapter;
     private ImageView arrowImageView;
 
-
     boolean nightMode, tempMode;
     String temperaTure;
     SharedPreferences sharedPreferences, sharedPreferences_tempvalue, sharedPreferences_tempmode;
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,16 +121,25 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             drw = getResources().getDrawable(R.drawable.lenn, getTheme());
             arrowmain.setImageDrawable(drw);
-
         }
         else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             drw = getResources().getDrawable(R.drawable.arrow_up, getTheme());
             arrowmain.setImageDrawable(drw);
-
         }
 
+        sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
+        tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
+        sharedPreferences_tempvalue = getSharedPreferences("MODE_VALUE", Context.MODE_PRIVATE);
+        temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "a");
 
+        TextView tempUnit = findViewById(R.id.tempUnit);
+        if(tempMode){
+            tempUnit.setText("°F");
+        }
+        else {
+            tempUnit.setText("°C");
+        }
 
         /////////////////////////////////////////
         lineChartTemp = findViewById(R.id.lineChartTemp);
@@ -204,7 +218,12 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     try {
                         Double tempValue = dataSnapshot.getValue(Double.class);
                         if (tempValue != null) {
-                            tempData.setText(String.valueOf(tempValue));
+                            if(Objects.equals(temperaTure, "a")){
+                                tempData.setText(String.valueOf(tempValue));
+                            }
+                            else {
+                                tempData.setText(temperaTure);
+                            }
                         } else {
                             // Handle the case where data is null
                             tempData.setText("No data available");
@@ -325,6 +344,12 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
         TextView tempData = findViewById(R.id.tempData);
         tempData.setText(temperaTure);
+        TextView tempUnit = findViewById(R.id.tempUnit);
+        if(tempMode){
+            tempUnit.setText("°F");
+        }else {
+            tempUnit.setText("°C");
+        }
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

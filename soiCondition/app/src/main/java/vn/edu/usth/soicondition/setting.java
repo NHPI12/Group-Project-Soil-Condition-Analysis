@@ -36,8 +36,8 @@ public class setting extends AppCompatActivity {
     boolean nightMode, tempMode;
     String tempValue, temperaTure;
     int lang;
-    SharedPreferences sharedPreferences, sharedPreferences_tempvalue, sharedPreferences_tempmode, langspinPreference;
-    SharedPreferences.Editor editor, editor_tempvalue, editor_mode, editlang;
+    SharedPreferences sharedPreferences, sharedPreferences_tempvalue, sharedPreferences_tempmode, langspinPreference, whatlangPreference;
+    SharedPreferences.Editor editor, editor_tempvalue, editor_mode, editlang, edit_whatlang;
 
 
     @SuppressLint("SetTextI18n")
@@ -47,8 +47,6 @@ public class setting extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        TextView tt = findViewById(R.id.textex);
-        tt.setText("aaaaaaaa");
 
         lightswitch = findViewById(R.id.lighswitch);
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
@@ -118,6 +116,9 @@ public class setting extends AppCompatActivity {
 
         langspinPreference = getSharedPreferences("Lang", Context.MODE_PRIVATE);
         lang = langspinPreference.getInt("lang", 0);
+        whatlangPreference = getSharedPreferences("whatlang", Context.MODE_PRIVATE);
+
+
         spinner.setSelection(lang);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -128,10 +129,17 @@ public class setting extends AppCompatActivity {
                 editlang.apply();
 
                 if (i == 0) {
-                    setAppLocale(setting.this,"en");
+                    //setAppLocale(setting.this,"en");
+                    edit_whatlang = whatlangPreference.edit();
+                    edit_whatlang.putString("whatlang", "en");
+                    
                 } else if (i == 1) {
-                    setAppLocale(setting.this,"fr");
+                    //setAppLocale(setting.this,"fr");
+                    edit_whatlang = whatlangPreference.edit();
+                    edit_whatlang.putString("whatlang", "fr");
+
                 }
+                edit_whatlang.apply();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {

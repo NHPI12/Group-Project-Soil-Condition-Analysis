@@ -47,12 +47,12 @@
                                     app:autoSizeStepGranularity="1sp"
                                     tools:ignore="TextContrastCheck" />
                                 <TextView
+                                    android:id="@+id/Common_details_name"
                                     android:layout_width="205dp"
                                     android:layout_height="110dp"
                                     android:layout_marginStart="10dp"
                                     android:layout_marginTop="5dp"
                                     android:text="Common Name"
-                                    android:id="@+id/Common_details_name"
                                     android:textColor="@color/itemnavi"
                                     android:textStyle="bold"
                                     android:autoSizeTextType="uniform"
@@ -121,11 +121,11 @@
                                             tools:ignore="TextContrastCheck,TextSizeCheck,TooDeepLayout" />
 
                                         <TextView
+                                            android:id="@+id/SeasonsDetails"
                                             android:layout_width="100dp"
                                             android:layout_height="30dp"
                                             android:layout_marginStart="10dp"
                                             android:layout_marginTop="2dp"
-                                            android:id="@+id/SeasonsDetails"
                                             android:text="Spring"
                                             android:textColor="@color/itemnavi"
                                             android:textStyle="bold"
@@ -320,6 +320,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
                     android:textColor="@color/lilwhite"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:text="ADD/REMOVE"/>
             </LinearLayout>
 </FrameLayout>

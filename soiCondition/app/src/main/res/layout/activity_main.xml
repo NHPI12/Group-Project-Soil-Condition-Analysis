@@ -116,21 +116,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
                     android:id="@+id/temptitle"
-                    android:textSize="32sp"
-                    android:textStyle="bold"
+                    style="@style/TextColor"
+                    android:layout_width="190dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:text="@string/temperature"
-                    style="@style/TextColor">
-                </TextView>
+                    android:textSize="32sp"
+                    android:textStyle="bold"/>
                 <TextView
+                    android:id="@+id/tempData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
-                    android:id="@+id/tempData"
+                    style="@style/TextColor"/>
+                <TextView
+                    android:id="@+id/tempUnit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="°C"
+                    android:textSize="32sp"
                     style="@style/TextColor"/>
             </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
@@ -171,10 +178,10 @@
                     style="@style/TextColor">
                 </TextView>
                 <TextView
+                    android:id="@+id/soilData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
-                    android:id="@+id/soilData"
                     style="@style/TextColor"/>
                 </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart

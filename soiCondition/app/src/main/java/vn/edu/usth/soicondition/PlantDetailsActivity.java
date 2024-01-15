@@ -3,6 +3,7 @@ package vn.edu.usth.soicondition;
 
 import android.annotation.SuppressLint;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,14 +13,17 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
-
 
 
 import java.util.ArrayList;
@@ -38,13 +42,22 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import vn.edu.usth.soicondition.network.JSONPlaceHolder;
-
 import vn.edu.usth.soicondition.network.model.PlantDetailsResponse;
+
+import com.google.mlkit.nl.translate.Translation;
+import com.google.mlkit.nl.translate.Translator;
+import com.google.mlkit.nl.translate.TranslatorOptions;
+
+
 
 public class PlantDetailsActivity extends AppCompatActivity {
 
-    private SharedPreferences sharedPreferences ;
+    private SharedPreferences sharedPreferences;
+    boolean  tempMode;
     private static final String PREF_SELECTED_PLANTS="selected_plants";
+
+    SharedPreferences whatlangPreference, sharedPreferences_tempmode;
+    SharedPreferences.Editor edit_whatlang;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +121,8 @@ public class PlantDetailsActivity extends AppCompatActivity {
 
         if (originalUrl != null && !originalUrl.isEmpty()) {
             Picasso.get().load(originalUrl).into(BigImageDetails);
-        } else {
+        }
+        else {
             Picasso.get().load(R.drawable.ic_thumbnail).into(BigImageDetails);
         }
 
@@ -122,6 +136,39 @@ public class PlantDetailsActivity extends AppCompatActivity {
         //String apiKey ="sk-MUZ5659b830f829253689"; //Nguyen 3rd
         fetchPlantDetails(ID,apiKey);
     }
+
+
+    protected void onRestart() {
+        super.onRestart();
+        TextView descriptionDetails = findViewById(R.id.descriptionDetails);
+        String desDetail = descriptionDetails.getText().toString();
+
+        TextView SeasonsDetails = findViewById(R.id.SeasonsDetails);
+        String strSeasonsDetails = SeasonsDetails.toString();
+
+        TranslatorOptions options = new TranslatorOptions.Builder()
+                .setTargetLanguage("fr")
+                .setSourceLanguage("en")
+                .build();
+        Translator translator = Translation.getClient(options);
+        translator.downloadModelIfNeeded();
+
+        Task<String> results = translator.translate(desDetail).addOnSuccessListener(new OnSuccessListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                Toast.makeText(PlantDetailsActivity.this, "hehe", Toast.LENGTH_SHORT).show();
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(PlantDetailsActivity.this, "haha", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
     //Show confirmation and Remove Plant
     private void showConfirmationDialogRemove(int id) {AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Confirmation");
@@ -326,8 +373,22 @@ public class PlantDetailsActivity extends AppCompatActivity {
         int overallMinTemp = Collections.min(minTemps);
         int overallMaxTemp = Collections.max(maxTemps);
 
+        float overMinTemp = (float)overallMinTemp, overMaxTemp = (float)overallMaxTemp;
+
+
+        sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
+        tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
+
         // Display the customized temperature text
-        String temperatureValue = overallMinTemp + "°C - " + overallMaxTemp + "°C";
+        String temperatureValue = "";
+        if(!tempMode){
+            temperatureValue = overallMinTemp + "°C - " + overallMaxTemp + "°C";
+        }
+        else{
+            overMinTemp = (float) (overallMinTemp*1.8 + 32); overMaxTemp = (float) (overallMaxTemp*1.8 + 32);
+            temperatureValue = overMinTemp + "°F - " + overMaxTemp + "°F";
+        }
         temperatureTextView.setText(temperatureValue);
+
     }
 }

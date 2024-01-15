@@ -1,6 +1,6 @@
 package vn.edu.usth.soicondition;
 
-import static android.os.Build.VERSION.SDK_INT;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -132,7 +132,7 @@ public class setting extends AppCompatActivity {
                     //setAppLocale(setting.this,"en");
                     edit_whatlang = whatlangPreference.edit();
                     edit_whatlang.putString("whatlang", "en");
-                    
+
                 } else if (i == 1) {
                     //setAppLocale(setting.this,"fr");
                     edit_whatlang = whatlangPreference.edit();
@@ -167,7 +167,6 @@ public class setting extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
-
 
 
 

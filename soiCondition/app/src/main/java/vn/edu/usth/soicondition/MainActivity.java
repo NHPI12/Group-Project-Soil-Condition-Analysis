@@ -218,12 +218,15 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     try {
                         Double tempValue = dataSnapshot.getValue(Double.class);
                         if (tempValue != null) {
-                            if(Objects.equals(temperaTure, "a")){
+                            if(!tempMode){
                                 tempData.setText(String.valueOf(tempValue));
                             }
                             else {
-                                tempData.setText(temperaTure);
+                                float temper = tempValue.floatValue();
+                                temper = (float) (temper*1.8 + 32);
+                                tempData.setText(String.valueOf(temper));
                             }
+
                         } else {
                             // Handle the case where data is null
                             tempData.setText("No data available");
@@ -495,7 +498,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 Log.e("MainActivityDatabase", "Data loading failed. Exception: " + t.getMessage());
             }
         });
-        }
+    }
 
     private List<Measurements> fetchDataFromLocalDatabase() {
         ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
@@ -663,9 +666,9 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
         boolean isDataFetched = false;
         if (!isDataFetched) {
-                // Fetch data only if it hasn't been fetched yet
-                fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
-            }
+            // Fetch data only if it hasn't been fetched yet
+            fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
+        }
     }
 
     private void fetchDatafromMultiplePages(JSONPlaceHolder jsonPlaceHolder, String apiKey, int pageNumber) {
@@ -721,8 +724,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     }
                 });
                 startFetchingDataFromPlant(lastSelectedPlant);
-                }
-            }else
+            }
+        }else
         {
             startFetchingDataWithDefaults();
             // If no plants are selected, hide the CardView
@@ -803,14 +806,14 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
     @Override
     public void onBackPressed() {
-            if (exitConfirmationShown) {
-                // If exit confirmation is already shown, perform default behavior
-                super.onBackPressed();
-            } else {
-                // Show exit confirmation
-                showExitConfirmation();
-            }
+        if (exitConfirmationShown) {
+            // If exit confirmation is already shown, perform default behavior
+            super.onBackPressed();
+        } else {
+            // Show exit confirmation
+            showExitConfirmation();
         }
+    }
     private void showExitConfirmation() {
         // Add code to show your exit confirmation dialog
         // Example: You can use an AlertDialog to prompt the user

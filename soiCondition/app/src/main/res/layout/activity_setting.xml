@@ -87,9 +87,11 @@
 
             <Spinner
                 android:id="@+id/spinner"
-                android:layout_width="140dp"
+                android:layout_width="90dp"
                 android:layout_height="40dp"
-                android:spinnerMode="dropdown" />
+
+                android:spinnerMode="dropdown"
+                style="@style/appcin"/>
 
 
         </LinearLayout>

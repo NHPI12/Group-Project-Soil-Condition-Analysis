@@ -554,27 +554,31 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void expandHumid(View view) {
-        expand(lineChartHumid, humidLayout, lineChartTemp, lineChartSoil);
+        expand(lineChartHumid, humidLayout,buttonsHumid,buttonsTemp,buttonsSoil, lineChartTemp, lineChartSoil);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void expandTemp(View view) {
-        expand(lineChartTemp, tempLayout, lineChartHumid, lineChartSoil);
+        expand(lineChartTemp, tempLayout,buttonsTemp,buttonsHumid,buttonsSoil,lineChartHumid, lineChartSoil);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void expandSoil(View view) {
-        expand(lineChartSoil, soilLayout, lineChartHumid, lineChartTemp);
+        expand(lineChartSoil, soilLayout,buttonsSoil,buttonsHumid,buttonsTemp, lineChartHumid, lineChartTemp);
     }
 
-    private void expand(LineChart clickedText, LinearLayout clickedLayout, LineChart... otherTexts) {
+    private void expand(LineChart clickedText, LinearLayout clickedLayout,LinearLayout buttonLayout,LinearLayout otherLinear, LinearLayout otherLinear2, LineChart... otherTexts) {
         if (clickedText.getVisibility() == View.VISIBLE) {
             clickedText.setVisibility(View.GONE);
+            buttonLayout.setVisibility(View.GONE);
         } else {
             clickedText.setVisibility(View.VISIBLE);
+            buttonLayout.setVisibility(View.VISIBLE);
             // Set other details to GONE
             for (LineChart otherText : otherTexts) {
                 otherText.setVisibility(View.GONE);
+                otherLinear.setVisibility(View.GONE);
+                otherLinear2.setVisibility(View.GONE);
             }
         }
         TransitionManager.beginDelayedTransition(clickedLayout, new AutoTransition());
@@ -693,11 +697,11 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
     private void TurnPlantDetailsIntoList(){
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
-        //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+        String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
-        String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
+        //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
         SharedPreferences sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
         Set<String> selectedPlantIdsStringSet = sharedPreferences.getStringSet("selected_plants", new HashSet<>());
         Set<Integer> selectedPlantIds = new HashSet<>();

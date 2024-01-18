@@ -24,5 +24,8 @@
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@color/verybrown</item>
     </style>
-
+    <style name="MyButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/background_button_general</item>
+        <item name="android:textColor">@color/lilwhite</item>
+    </style>
 </resources>

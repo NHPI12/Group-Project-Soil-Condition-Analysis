@@ -63,9 +63,9 @@
 
             <androidx.cardview.widget.CardView
                 style="@style/CardBackground"
-                android:layout_width="160dp"
+                android:layout_width="175dp"
                 android:layout_height="126dp"
-                android:layout_marginEnd="48dp"
+                android:layout_marginEnd="20dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
                 tools:ignore="TextSizeCheck">
@@ -112,7 +112,7 @@
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
-                android:layout_width="160dp"
+                android:layout_width="175dp"
                 android:layout_height="126dp"
                 style="@style/CardBackground"
                 app:cardCornerRadius="20dp"
@@ -168,9 +168,9 @@
 
             <androidx.cardview.widget.CardView
                 style="@style/CardBackground"
-                android:layout_width="160dp"
+                android:layout_width="175dp"
                 android:layout_height="126dp"
-                android:layout_marginEnd="48dp"
+                android:layout_marginEnd="20dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
                 tools:ignore="TextSizeCheck">
@@ -212,22 +212,22 @@
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="30dp"
-                        android:textSize="25sp"
                         android:text="Morning"
+                        android:textSize="25sp"
                         tools:ignore="HardcodedText,TextContrastCheck,TextSizeCheck" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 style="@style/CardBackground"
-                android:layout_width="160dp"
+                android:layout_width="175dp"
                 android:layout_height="126dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
                 tools:ignore="TextSizeCheck">
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="170dp"
                     android:layout_height="match_parent">
 
                     <TextView
@@ -238,10 +238,10 @@
                         android:layout_alignParentBottom="true"
                         android:layout_marginEnd="65dp"
                         android:layout_marginBottom="90dp"
+                        android:gravity="center"
                         android:text="@string/care_level"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:gravity="center"
                         tools:ignore="RelativeOverlap" />
 
                     <ImageView
@@ -321,33 +321,38 @@
                     android:gravity="center_horizontal">
                     <Button
                         android:id="@+id/button_1d_humid"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="1d"/>
+                        style="@style/MyButton"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/_1d"
+                         />
                     <Button
                         android:id="@+id/button_3d_humid"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="3d" />
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:text="@string/_3d"
+                        style="@style/MyButton"
+                        android:layout_marginEnd="10dp"/>
                     <Button
                         android:id="@+id/button_1w_humid"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="1w" />
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="1w"
+                        style="@style/MyButton"/>
                     <Button
                         android:id="@+id/button_1m_humid"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_marginEnd="10dp"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        style="@style/MyButton"
                         android:text="1m" />
                     <Button
                         android:id="@+id/button_alltime_humid"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        style="@style/MyButton"
                         android:text="ALL" />
                 </LinearLayout>
             </LinearLayout>
@@ -388,14 +393,14 @@
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
 
-                    style="@style/TextColor"/>
+                    style="@style/TextColorData"/>
                 <TextView
                     android:id="@+id/tempUnit"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="°C"
                     android:textSize="32sp"
-                    style="@style/TextColor"/>
+                    style="@style/TextColorData"/>
             </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChartTemp"
@@ -414,34 +419,39 @@
                     android:gravity="center_horizontal">
                     <Button
                         android:id="@+id/button_1d_temp"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="1d"/>
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="1d"
+                        style="@style/MyButton"/>
                     <Button
                         android:id="@+id/button_3d_temp"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="3d" />
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="3d"
+                        style="@style/MyButton"/>
                     <Button
                         android:id="@+id/button_1w_temp"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="1w" />
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="1w"
+                        style="@style/MyButton"/>
                     <Button
                         android:id="@+id/button_1m_temp"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="1m" />
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="1m"
+                        style="@style/MyButton"/>
                     <Button
                         android:id="@+id/button_alltime_temp"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="ALL" />
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="ALL"
+                        style="@style/MyButton"/>
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -479,7 +489,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
-                    style="@style/TextColor"/>
+                    style="@style/TextColorData"/>
 
                 </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
@@ -499,34 +509,40 @@
                     android:gravity="center_horizontal">
                     <Button
                         android:id="@+id/button_1d_soil"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="1d"/>
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/_1d"
+                        style="@style/MyButton"
+                        />
                     <Button
                         android:id="@+id/button_3d_soil"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="3d" />
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/_3d"
+                        style="@style/MyButton"/>
                     <Button
                         android:id="@+id/button_1w_soil"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="1w" />
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/_1w"
+                        style="@style/MyButton"/>
                     <Button
                         android:id="@+id/button_1m_soil"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="1m" />
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/_1m"
+                        style="@style/MyButton"/>
                     <Button
                         android:id="@+id/button_alltime_soil"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="ALL" />
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/all"
+                        style="@style/MyButton"/>
                 </LinearLayout>
             </LinearLayout>
 

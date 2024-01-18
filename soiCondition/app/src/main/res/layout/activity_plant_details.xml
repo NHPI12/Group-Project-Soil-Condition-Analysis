@@ -38,7 +38,7 @@
                                     android:layout_marginStart="10dp"
                                     android:autoSizeTextType="uniform"
                                     android:maxLines="2"
-                                    android:text="Scientific name"
+                                    android:text="@string/scientific_name"
                                     android:textColor="@color/itemnavi"
                                     android:textSize="20sp"
                                     app:autoSizeMaxTextSize="20sp"
@@ -51,7 +51,7 @@
                                     android:layout_height="110dp"
                                     android:layout_marginStart="10dp"
                                     android:layout_marginTop="5dp"
-                                    android:text="Common Name"
+                                    android:text="@string/common_name"
                                     android:textColor="@color/itemnavi"
                                     android:textStyle="bold"
                                     android:autoSizeTextType="uniform"
@@ -68,7 +68,8 @@
                                 app:cardCornerRadius="100dp"
                                 app:cardElevation="2dp"
                                 android:layout_marginStart="20dp"
-                                android:layout_marginTop="-20dp">
+                                android:layout_marginTop="-20dp"
+                                tools:ignore="VisualLintBounds">
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
@@ -125,7 +126,7 @@
                                             android:layout_height="30dp"
                                             android:layout_marginStart="10dp"
                                             android:layout_marginTop="2dp"
-                                            android:text="Spring"
+                                            android:text="@string/spring"
                                             android:textColor="@color/itemnavi"
                                             android:textStyle="bold"
                                             android:autoSizeTextType="uniform"
@@ -172,7 +173,7 @@
                                             android:layout_width="112dp"
                                             android:layout_height="32dp"
                                             android:layout_marginStart="10dp"
-                                            android:text="Perennial"
+                                            android:text="@string/perennial"
                                             android:id="@+id/cycle_details"
                                             android:textColor="@color/itemnavi"
                                             android:textStyle="bold"
@@ -190,7 +191,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="100dp"
-                                android:orientation="horizontal">
+                                android:orientation="horizontal"
+                                tools:ignore="VisualLintBounds">
 
                                 <LinearLayout
                                     android:layout_width="213dp"
@@ -227,7 +229,6 @@
                                             android:layout_marginTop="2dp"
                                             android:layout_marginStart="10dp"
                                             android:id="@+id/temperatureDetails"
-                                            android:text="44°F - 64°F"
                                             android:textColor="@color/itemnavi"
                                             android:textStyle="bold"
                                             android:autoSizeTextType="uniform"
@@ -273,7 +274,6 @@
                                             android:layout_width="112dp"
                                             android:layout_height="32dp"
                                             android:layout_marginStart="10dp"
-                                            android:text="High"
                                             android:id="@+id/humidity_details"
                                             android:textColor="@color/itemnavi"
                                             android:textStyle="bold"
@@ -283,7 +283,7 @@
                                             app:autoSizeMinTextSize="5sp"
                                             app:autoSizeMaxTextSize="10sp"
                                             app:autoSizeStepGranularity="1sp"
-                                            tools:ignore="SmallSp" />
+                                            tools:ignore="SmallSp,VisualLintBounds" />
                                     </LinearLayout>
                                 </LinearLayout>
                             </LinearLayout>
@@ -314,13 +314,13 @@
                 <Button
                     android:id="@+id/details_button"
                     style="Button.White"
-                    android:layout_width="230dp"
-                    android:layout_height="65dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
-                    android:textColor="@color/lilwhite"
+                    android:textColor="@color/itemnavi"
                     android:textStyle="bold"
-                    android:text="ADD/REMOVE"/>
+                    tools:ignore="SpeakableTextPresentCheck,VisualLintButtonSize" />
 
             </LinearLayout>
 </FrameLayout>

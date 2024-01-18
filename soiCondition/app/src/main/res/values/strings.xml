@@ -19,4 +19,9 @@
     <string name="temperature_unit">Temperature Unit</string>
     <string name="setting">Setting</string>
     <string name="language">Language</string>
+    <string name="common_name">Common Name</string>
+    <string name="scientific_name">Scientific name</string>
+    <string name="spring">Spring</string>
+    <string name="perennial">Perennial</string>
+    <string name="add_remove">ADD/REMOVE</string>
 </resources>

@@ -319,37 +319,37 @@
                     android:layout_below="@+id/lineChartHumid"
                     android:layout_marginTop="8dp"
                     android:gravity="center_horizontal">
-                <Button
-                    android:id="@+id/button_1d_humid"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="1d"/>
-                <Button
-                    android:id="@+id/button_3d_humid"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="3d" />
-                <Button
-                    android:id="@+id/button_1w_humid"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="1w" />
-                <Button
-                    android:id="@+id/button_1m_humid"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="1m" />
-                <Button
-                    android:id="@+id/button_alltime_humid"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="ALL" />
-            </LinearLayout>
+                    <Button
+                        android:id="@+id/button_1d_humid"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="1d"/>
+                    <Button
+                        android:id="@+id/button_3d_humid"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="3d" />
+                    <Button
+                        android:id="@+id/button_1w_humid"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="1w" />
+                    <Button
+                        android:id="@+id/button_1m_humid"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="1m" />
+                    <Button
+                        android:id="@+id/button_alltime_humid"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="ALL" />
+                </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView

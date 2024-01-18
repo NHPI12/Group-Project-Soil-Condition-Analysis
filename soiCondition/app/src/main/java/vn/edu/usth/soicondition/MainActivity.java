@@ -34,6 +34,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.LimitLine;
@@ -77,7 +79,11 @@ import vn.edu.usth.soicondition.network.TimeAxisValueFormatter;
 import vn.edu.usth.soicondition.network.model.PlantData;
 import vn.edu.usth.soicondition.network.model.PlantDetailsResponse;
 import vn.edu.usth.soicondition.network.model.PlantResponse;
+import com.google.mlkit.nl.translate.Translation;
+import com.google.mlkit.nl.translate.Translator;
+import com.google.mlkit.nl.translate.TranslatorOptions;
 import vn.edu.usth.soicondition.network.model.plantDetailsObject;
+
 
 
 public class MainActivity extends AppCompatActivity implements SelectedPlantsAdapter.OnItemClickListener {
@@ -96,13 +102,15 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     private RecyclerView selectedPlantsRecyclerView;
     private SelectedPlantsAdapter selectedPlantsAdapter;
     private ImageView arrowImageView;
+
     private LinearLayout PlantDetailsLinearLayout_1, plantdetailslinelayout_2;
     private TextView textViewWatering, textViewSunlight, textViewCareLevel,textViewWateringPeriod;
     SwitchCompat lightswitch, tempswitch;
     boolean nightMode, tempMode;
-    SharedPreferences sharedPreferences, sharedPreferences_temp;
-    SharedPreferences.Editor editor, editor_temp;
+    String temperaTure;
+    SharedPreferences sharedPreferences, sharedPreferences_tempvalue, sharedPreferences_tempmode;
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -110,19 +118,37 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         setContentView(R.layout.activity_main);
 
         ///////////////////////night
+        ImageView arrowmain = findViewById(R.id.ArrowSelectedPlant);
+        Drawable drw;
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightMode = sharedPreferences.getBoolean("nightMode", false);
+
         if(nightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            drw = getResources().getDrawable(R.drawable.lenn, getTheme());
+            arrowmain.setImageDrawable(drw);
         }
         else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            drw = getResources().getDrawable(R.drawable.arrow_up, getTheme());
+            arrowmain.setImageDrawable(drw);
         }
-        editor = sharedPreferences.edit();
-        editor.apply();
 
 
+        sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
+        tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
+        sharedPreferences_tempvalue = getSharedPreferences("MODE_VALUE", Context.MODE_PRIVATE);
+        temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "a");
 
+        TextView tempUnit = findViewById(R.id.tempUnit);
+        if(tempMode){
+            tempUnit.setText("°F");
+        }
+        else {
+            tempUnit.setText("°C");
+        }
+
+        /////////////////////////////////////////
         lineChartTemp = findViewById(R.id.lineChartTemp);
         lineChartHumid = findViewById(R.id.lineChartHumid);
         lineChartSoil = findViewById(R.id.lineChartSoil);
@@ -158,6 +184,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         TextView soilData = findViewById(R.id.soilData);
         TextView tempData = findViewById(R.id.tempData);
         TextView humidData = findViewById(R.id.humidData);
+
+
         // Initialize and start a background thread
         handlerThread = new HandlerThread("BackgroundThread");
         handlerThread.start();
@@ -206,7 +234,15 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     try {
                         Double tempValue = dataSnapshot.getValue(Double.class);
                         if (tempValue != null) {
-                            tempData.setText(String.valueOf(tempValue));
+                            if(!tempMode){
+                                tempData.setText(String.valueOf(tempValue));
+                            }
+                            else {
+                                float temper = tempValue.floatValue();
+                                temper = (float) (temper*1.8 + 32);
+                                tempData.setText(String.valueOf(temper));
+                            }
+
                         } else {
                             // Handle the case where data is null
                             tempData.setText("No data available");
@@ -289,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
             return false;
         });
+
         TextView addTextView = findViewById(R.id.add_text);
         TextView removeTextView = findViewById(R.id.remove_text);
         addTextView.setOnClickListener(v -> {
@@ -309,6 +346,23 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        sharedPreferences_tempvalue = getSharedPreferences("MODE_TEMPVALUE", Context.MODE_PRIVATE);
+        temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "tempValue");
+        sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
+        tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
+
+        TextView tempData = findViewById(R.id.tempData);
+        tempData.setText(temperaTure);
+        TextView tempUnit = findViewById(R.id.tempUnit);
+        if(tempMode){
+            tempUnit.setText("°F");
+        }else {
+            tempUnit.setText("°C");
+        }
+    }
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
 
@@ -319,8 +373,12 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
 
     private void openSettings() {
+        TextView textView = (TextView)findViewById(R.id.tempData);
+        String tex = textView.getText().toString();
         Intent intent = new Intent(MainActivity.this, setting.class);
+        intent.putExtra("message", tex);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
         startActivity(intent);
         drawerLayout.closeDrawer(GravityCompat.START);
     }
@@ -528,7 +586,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 Log.e("MainActivityDatabase", "Data loading failed. Exception: " + t.getMessage());
             }
         });
-        }
+    }
 
     private List<Measurements> fetchDataFromLocalDatabase() {
         ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
@@ -644,7 +702,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         }
         return sum / entries.size();
     }
-
     private Drawable determineChartBackgroundColor(float overallAverage, int limitValue) {
         float threshold = 15f; // You can adjust this threshold based on your requirements
 
@@ -678,7 +735,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         handlerThread.quit();
     }
 
-
     private void fetchData() {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
         Retrofit retrofit = new Retrofit.Builder()
@@ -701,6 +757,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
                 TurnPlantDetailsIntoList();
             }
+
     }
 
     private void fetchDatafromMultiplePages(JSONPlaceHolder jsonPlaceHolder, String apiKey, int pageNumber) {
@@ -752,9 +809,9 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 selectedPlantsRecyclerView.setAdapter(selectedPlantsAdapter);
                 arrowImageView.setOnClickListener(v -> selectedPlantsAdapter.toggleRecyclerViewVisibility(arrowImageView, selectedPlantsRecyclerView));
                 startFetchingDataFromPlant(lastSelectedPlant);
-                //TurnPlantDetailsIntoList();
-                }
-            }else
+
+            }
+        }else
         {
             startFetchingDataWithDefaults();
             // If no plants are selected, hide the CardView
@@ -838,14 +895,14 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
     @Override
     public void onBackPressed() {
-            if (exitConfirmationShown) {
-                // If exit confirmation is already shown, perform default behavior
-                super.onBackPressed();
-            } else {
-                // Show exit confirmation
-                showExitConfirmation();
-            }
+        if (exitConfirmationShown) {
+            // If exit confirmation is already shown, perform default behavior
+            super.onBackPressed();
+        } else {
+            // Show exit confirmation
+            showExitConfirmation();
         }
+    }
     private void showExitConfirmation() {
         // Add code to show your exit confirmation dialog
         // Example: You can use an AlertDialog to prompt the user

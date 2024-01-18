@@ -19,8 +19,6 @@
     <color name="graywhite">#9F9F9F</color>
     <color name="titleabc">@color/lilbrown</color>
     <color name="addremove">@color/verybrown</color>
-    <color name="textviewgiday">@color/lilbrown</color>
-    <color name="textdetail">@color/verybrown</color>
     <color name="lightRed">#F24C3D</color>
     <color name="lightgreen">#75AC51</color>
     

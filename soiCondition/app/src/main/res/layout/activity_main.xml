@@ -310,6 +310,46 @@
                     android:layout_height="200dp"
                     android:visibility="gone"
                     android:layout_marginTop="16dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/buttonsHumid"
+                    android:visibility="gone"
+                    android:layout_below="@+id/lineChartHumid"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_horizontal">
+                <Button
+                    android:id="@+id/button_1d_humid"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="1d"/>
+                <Button
+                    android:id="@+id/button_3d_humid"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="3d" />
+                <Button
+                    android:id="@+id/button_1w_humid"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="1w" />
+                <Button
+                    android:id="@+id/button_1m_humid"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="1m" />
+                <Button
+                    android:id="@+id/button_alltime_humid"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="ALL" />
+            </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
@@ -363,6 +403,46 @@
                     android:layout_height="200dp"
                     android:visibility="gone"
                     android:layout_marginTop="16dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/buttonsTemp"
+                    android:visibility="gone"
+                    android:layout_below="@+id/lineChartHumid"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_horizontal">
+                    <Button
+                        android:id="@+id/button_1d_temp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="1d"/>
+                    <Button
+                        android:id="@+id/button_3d_temp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="3d" />
+                    <Button
+                        android:id="@+id/button_1w_temp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="1w" />
+                    <Button
+                        android:id="@+id/button_1m_temp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="1m" />
+                    <Button
+                        android:id="@+id/button_alltime_temp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="ALL" />
+                </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
@@ -408,6 +488,46 @@
                     android:layout_height="200dp"
                     android:layout_marginTop="16dp"
                     android:visibility="gone"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/buttonsSoil"
+                    android:visibility="gone"
+                    android:layout_below="@+id/lineChartHumid"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_horizontal">
+                    <Button
+                        android:id="@+id/button_1d_soil"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="1d"/>
+                    <Button
+                        android:id="@+id/button_3d_soil"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="3d" />
+                    <Button
+                        android:id="@+id/button_1w_soil"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="1w" />
+                    <Button
+                        android:id="@+id/button_1m_soil"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="1m" />
+                    <Button
+                        android:id="@+id/button_alltime_soil"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="ALL" />
+                </LinearLayout>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>

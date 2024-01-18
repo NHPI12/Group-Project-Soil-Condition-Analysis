@@ -21,5 +21,6 @@
     <color name="addremove">@color/verybrown</color>
     <color name="lightRed">#F24C3D</color>
     <color name="lightgreen">#75AC51</color>
-    
+    <color name="neutral">#940B92</color>
+
 </resources>

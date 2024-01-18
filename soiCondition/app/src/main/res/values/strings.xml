@@ -15,4 +15,8 @@
     <string name="sunlight">SunLight</string>
     <string name="watering_period">Watering period</string>
     <string name="care_level">Care level</string>
+    <string name="light_mode">Light mode</string>
+    <string name="temperature_unit">Temperature Unit</string>
+    <string name="setting">Setting</string>
+    <string name="language">Language</string>
 </resources>

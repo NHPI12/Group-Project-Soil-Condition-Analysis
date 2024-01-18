@@ -7,17 +7,23 @@ public class    PlantDetailsResponse {
     private int id;
     @SerializedName("common_name")
     private String commonName;
-    @SerializedName("watering_period")
+    public static final String WATERING_PERIOD = "watering_period";
+    @SerializedName(WATERING_PERIOD)
     private String watering_period;
     @SerializedName("flowering_season")
     private String flowering_season;
     @SerializedName("description")
     private String description;
+    @SerializedName("care_level")
+    private String care_level;
 
     public void setId(int id) {
         this.id = id;
     }
-
+    public void setCare_level(String care_level){ this.care_level = care_level;}
+    public String getCare_level(){
+        return care_level;
+    }
     public int getId() {
         return id;
     }

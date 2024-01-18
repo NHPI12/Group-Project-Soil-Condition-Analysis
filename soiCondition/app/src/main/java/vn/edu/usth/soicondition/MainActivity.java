@@ -75,7 +75,9 @@ import vn.edu.usth.soicondition.network.DatabaseLocal.RetrofitDatabase;
 import vn.edu.usth.soicondition.network.JSONPlaceHolder;
 import vn.edu.usth.soicondition.network.TimeAxisValueFormatter;
 import vn.edu.usth.soicondition.network.model.PlantData;
+import vn.edu.usth.soicondition.network.model.PlantDetailsResponse;
 import vn.edu.usth.soicondition.network.model.PlantResponse;
+import vn.edu.usth.soicondition.network.model.plantDetailsObject;
 
 
 public class MainActivity extends AppCompatActivity implements SelectedPlantsAdapter.OnItemClickListener {
@@ -87,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     private HandlerThread handlerThread;
     private boolean exitConfirmationShown = false;
     private Handler handler;
+    private List<plantDetailsObject> plantDetailsList;
     private List<PlantData> plantList;
     private List<PlantData> allSelectedPlants;
     private CardView selectedPlantsCardView ;
@@ -94,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     private SelectedPlantsAdapter selectedPlantsAdapter;
     private ImageView arrowImageView;
     private LinearLayout PlantDetailsLinearLayout_1, plantdetailslinelayout_2;
-    private TextView textViewWatering, textViewSunlight;
+    private TextView textViewWatering, textViewSunlight, textViewCareLevel,textViewWateringPeriod;
     SwitchCompat lightswitch, tempswitch;
     boolean nightMode, tempMode;
     SharedPreferences sharedPreferences, sharedPreferences_temp;
@@ -132,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         tempLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
         soilLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
         plantList = new ArrayList<>();
+        plantDetailsList = new ArrayList<>();
 
         selectedPlantsCardView = findViewById(R.id.selectedPlantsCardView);
         selectedPlantsRecyclerView = findViewById(R.id.selectedPlantsRecyclerView);
@@ -141,6 +145,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         //textView water and sunlight
         textViewWatering = findViewById(R.id.watering_value_main_activity);
         textViewSunlight = findViewById(R.id.sunlight_textView);
+        textViewCareLevel= findViewById(R.id.care_level_textView);
+        textViewWateringPeriod = findViewById(R.id.Watering_period_textView);
         PlantDetailsLinearLayout_1.setVisibility(View.GONE);
         plantdetailslinelayout_2.setVisibility(View.GONE);
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://smart-pot-1d7b5-default-rtdb.firebaseio.com/");
@@ -362,6 +368,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                             String wateringValueStr = topItem.getWatering();
                             int temperatureValue1 = topItem.convertSunlightToValue();
                             int soilValue1 = topItem.convertWateringToSoilMoisture();
+                            ReturnPlantDetails(topItem.getId());
                             updateCardViewDetails(wateringValueStr,String.valueOf(temperatureValue1));
                             // Now you can use these values in your updateUI method
                             updateUI(wateringValue1, temperatureValue1, soilValue1);
@@ -377,6 +384,82 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         } else {
             updateUI(wateringValue, temperatureValue, soilValue);
         }
+    }
+    private void ReturnPlantDetails(int plantId){
+        for (plantDetailsObject plantItem : plantDetailsList){
+            if (plantItem.getId()== plantId){
+                String care_level = plantItem.getCare_level();
+                String watering_period = plantItem.getWatering_period();
+                textViewCareLevel.setText(care_level);
+                if (watering_period !=null){
+                    textViewWateringPeriod.setText(watering_period);
+                }
+
+            }
+        }
+    }
+    private void TurnPlantDetailsIntoList(){
+        //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
+        //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
+        //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
+        String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
+        SharedPreferences sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
+        Set<String> selectedPlantIdsStringSet = sharedPreferences.getStringSet("selected_plants", new HashSet<>());
+        Set<Integer> selectedPlantIds = new HashSet<>();
+        for (String id : selectedPlantIdsStringSet) {
+            selectedPlantIds.add(Integer.valueOf(id));
+        }
+        if (plantDetailsList.isEmpty()){
+            for (int id : selectedPlantIds){
+                fetchPlantDetails(id,apiKey,plantDetailsList);
+            }
+        }else {
+            for (int id : selectedPlantIds){
+                if (!isContained(plantDetailsList,id)){
+                    fetchPlantDetails(id,apiKey,plantDetailsList);
+                }
+            }
+        }
+    }
+    private boolean isContained(List<plantDetailsObject> plantDetailsList, int id){
+        for (plantDetailsObject plantItems : plantDetailsList){
+            if (plantItems.getId() == id){
+                return true;
+            }
+        }
+        return false;
+    }
+    private void fetchPlantDetails(int plantId, String apiKey, List<plantDetailsObject> objectList){
+        OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://perenual.com/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(builder.build())
+                .build();
+        JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
+        Call<PlantDetailsResponse> call = jsonPlaceHolder.getPlantDetails(plantId, apiKey);
+        call.enqueue(new Callback<PlantDetailsResponse>() {
+            @Override
+            public void onResponse(Call<PlantDetailsResponse> call, Response<PlantDetailsResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    PlantDetailsResponse plantDetailsResponse = response.body();
+                    int plant_id = plantDetailsResponse.getId();
+                    String care_level = plantDetailsResponse.getCare_level();
+                    String watering_period = plantDetailsResponse.getWatering_period();
+                    plantDetailsObject plantDetailsObjectCheck = new plantDetailsObject(plant_id, care_level,watering_period);
+                    objectList.add(plantDetailsObjectCheck);
+                }else{
+                    Log.e("PlantDetails", "Error: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlantDetailsResponse> call, Throwable t) {
+                Log.e("PlantDetails", "Error: " + t.getMessage());
+            }
+        });
     }
 
     private void updateCardViewDetails(String wateringValueStr, String sunlightValue) {
@@ -616,6 +699,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         if (!isDataFetched) {
                 // Fetch data only if it hasn't been fetched yet
                 fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
+                TurnPlantDetailsIntoList();
             }
     }
 
@@ -668,6 +752,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 selectedPlantsRecyclerView.setAdapter(selectedPlantsAdapter);
                 arrowImageView.setOnClickListener(v -> selectedPlantsAdapter.toggleRecyclerViewVisibility(arrowImageView, selectedPlantsRecyclerView));
                 startFetchingDataFromPlant(lastSelectedPlant);
+                //TurnPlantDetailsIntoList();
                 }
             }else
         {

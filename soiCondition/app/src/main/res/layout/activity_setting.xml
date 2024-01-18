@@ -19,8 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="@color/lilwhite"
-            android:text="Setting"
-            android:textSize="30dp" />
+            android:text="@string/setting"
+            android:textSize="50sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,17 +31,18 @@
                 android:id="@+id/lightmode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="210dp"
+                android:layout_marginEnd="170dp"
+                android:text="@string/light_mode"
                 android:textColor="@color/lilwhite"
-                android:text="Light mode"
-                android:textSize="20dp" />
+                android:textSize="25sp"
+                tools:ignore="TextSizeCheck" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/lighswitch"
                 android:layout_width="70dp"
                 android:layout_height="50dp"
-                android:theme="@style/SCBSwitch" />
-
+                android:theme="@style/SCBSwitch"
+                tools:ignore="VisualLintBounds,DuplicateSpeakableTextCheck" />
         </LinearLayout>
 
         <LinearLayout
@@ -51,41 +52,43 @@
 
             <TextView
                 android:id="@+id/tempunit"
-                android:layout_width="197dp"
+                android:layout_width="228dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="115dp"
+                android:layout_marginEnd="70dp"
+                android:text="@string/temperature_unit"
                 android:textColor="@color/lilwhite"
-                android:text="Temperature Unit"
-                android:textSize="20dp" />
+                android:textSize="25sp"
+                tools:ignore="TextSizeCheck" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/tempswitch"
                 android:layout_width="70dp"
                 android:layout_height="50dp"
-                android:theme="@style/SCBSwitch" />
+                android:theme="@style/SCBSwitch"
+                tools:ignore="VisualLintBounds" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="57dp"
             android:layout_marginTop="20dp">
 
             <TextView
                 android:id="@+id/lang"
-                android:textColor="@color/lilwhite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="200dp"
-                android:text="Language"
-                android:textSize="20dp" />
+                android:text="@string/language"
+                android:textColor="@color/lilwhite"
+                android:textSize="25sp" />
 
             <Spinner
                 android:id="@+id/spinner"
                 android:layout_width="140dp"
-                android:layout_height="40dp"
-                android:spinnerMode="dropdown" />
-
+                android:layout_height="57dp"
+                android:spinnerMode="dropdown"
+                tools:ignore="TouchTargetSizeCheck,VisualLintBounds" />
 
         </LinearLayout>
 

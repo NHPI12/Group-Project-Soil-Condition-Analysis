@@ -1,6 +1,6 @@
 package vn.edu.usth.soicondition;
 
-import static android.os.Build.VERSION.SDK_INT;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,34 +9,29 @@ import androidx.appcompat.widget.SwitchCompat;
 
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.Activity;
+
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.content.Intent;
+
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
+
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.util.DisplayMetrics;
+
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Locale;
 import java.util.Objects;
 
 public class setting extends AppCompatActivity {
     SwitchCompat lightswitch, tempswitch;
     boolean nightMode, tempMode;
+    String tempValue, temperaTure;
     int lang;
-    SharedPreferences sharedPreferences, sharedPreferences_temp, langspinPreference;
-    SharedPreferences.Editor editor, editor_temp, editlang;
+    SharedPreferences sharedPreferences, sharedPreferences_tempvalue, sharedPreferences_tempmode, langspinPreference, whatlangPreference;
+    SharedPreferences.Editor editor, editor_tempvalue, editor_mode, editlang, edit_whatlang;
 
 
     @SuppressLint("SetTextI18n")
@@ -45,6 +40,7 @@ public class setting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
 
         lightswitch = findViewById(R.id.lighswitch);
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
@@ -70,40 +66,54 @@ public class setting extends AppCompatActivity {
             editor.apply();
         });
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+
         //Tempunit
         tempswitch = findViewById(R.id.tempswitch);
-        sharedPreferences_temp = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
-        tempMode = sharedPreferences_temp.getBoolean("tempMode", false);
+        tempValue = getIntent().getStringExtra("message");
+
+        sharedPreferences_tempvalue = getSharedPreferences("MODE_TEMPVALUE", Context.MODE_PRIVATE);
+        temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "tempValue");
+        sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
+        tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
 
         if (tempMode) {
             tempswitch.setChecked(true);
         }
 
         tempswitch.setOnClickListener(view -> {
-            if (tempMode) {
-
-                editor_temp = sharedPreferences_temp.edit();
-                editor_temp.putBoolean("tempMode", false);
-                tempMode = false;
-                Toast.makeText(setting.this, "Ahihi " + "1", Toast.LENGTH_SHORT).show();
+            float tempunit = Float.parseFloat(tempValue);
+            if (tempMode == false) {
+                tempunit = (float) (tempunit*1.8 + 32);
+                editor_mode = sharedPreferences_tempmode.edit();
+                editor_mode.putBoolean("tempMode", true);
             } else {
-
-                editor_temp = sharedPreferences_temp.edit();
-                editor_temp.putBoolean("tempMode", true);
-                tempMode = true;
-                Toast.makeText(setting.this, "Ahihi " + "2", Toast.LENGTH_SHORT).show();
+                tempunit = (float) ((tempunit-32)/1.8);
+                editor_mode = sharedPreferences_tempmode.edit();
+                editor_mode.putBoolean("tempMode", false);
             }
-            editor_temp.apply();
+            tempunit = (float) Math.floor(tempunit * 10) / 10;
+
+            editor_tempvalue = sharedPreferences_tempvalue.edit();
+            editor_tempvalue.putString("temperaTure", String.valueOf(tempunit));
+            editor_tempvalue.apply();
+            editor_mode.apply();
         });
+        Toast.makeText(setting.this, temperaTure + " " + tempMode, Toast.LENGTH_SHORT).show();
 
 
+        /////lang
         Spinner spinner = findViewById(R.id.spinner);
         String[] lanGuage = {"ENG", "FRA", "VIE"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(setting.this, android.R.layout.simple_list_item_activated_1, lanGuage);
-        spinner.setAdapter(adapter);
+        CustomArrayAdapter customArrayAdapter = new CustomArrayAdapter(setting.this,R.layout.spinner_list,lanGuage);
+        //ArrayAdapter<String> adapter = new ArrayAdapter<>(setting.this, R.layout.spinner_list, lanGuage);
+        spinner.setAdapter(customArrayAdapter);
 
         langspinPreference = getSharedPreferences("Lang", Context.MODE_PRIVATE);
         lang = langspinPreference.getInt("lang", 0);
+        whatlangPreference = getSharedPreferences("whatlang", Context.MODE_PRIVATE);
+
+
         spinner.setSelection(lang);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -114,15 +124,29 @@ public class setting extends AppCompatActivity {
                 editlang.apply();
 
                 if (i == 0) {
-                    setAppLocale(setting.this,"en");
+                    //setAppLocale(setting.this,"en");
+                    edit_whatlang = whatlangPreference.edit();
+                    edit_whatlang.putString("whatlang", "en");
+
                 } else if (i == 1) {
-                    setAppLocale(setting.this,"fr");
+                    //setAppLocale(setting.this,"fr");
+                    edit_whatlang = whatlangPreference.edit();
+                    edit_whatlang.putString("whatlang", "fr");
+
                 }
+                edit_whatlang.apply();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
+        });
+        spinner.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP){
+                customArrayAdapter.setDropDownShown(true);
+                v.performClick();
+            }
+            return false;
         });
     }
 
@@ -131,7 +155,6 @@ public class setting extends AppCompatActivity {
 
 
     }
-
 
 
     @Override
@@ -146,7 +169,6 @@ public class setting extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
-
 
 
 

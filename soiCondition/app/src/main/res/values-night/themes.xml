@@ -8,9 +8,9 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">@color/lilwhite</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">#556E53</item>
+        <item name="android:statusBarColor">@color/lilwhite</item>
         <item name="tabIndicatorColor">@color/white</item>
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/nunito</item>
@@ -26,12 +26,6 @@
     <style name="TextColor"><item name="android:textColor">@color/white</item></style>
     <style name="TextColorData"><item name="android:textColor">@color/graywhite</item></style>
     <style name="ImageChange"><item name="android:src">@color/white</item></style>
-    <style name="Switchmode"><item name="android:switchStyle">@color/black</item></style>
-
-    <style name="spinnerahihi" parent="Theme.AppCompat.Light">
-        <item name="android:textColor">#F8F8F8</item>
-        <item name="background">@color/black</item>
-    </style>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">#556E53</item>
@@ -46,9 +40,24 @@
         <item name="android:colorForeground">#42221f1f</item>
     </style>
 
-    <style name="MyActionBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:textColorPrimary">@color/lilwhite</item>
+    <style name="appcin" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+        <item name="android:spinnerStyle">@style/spinnerStyle</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item>
         <item name="android:background">@color/leaf</item>
     </style>
+    <style name="spinnerStyle">
+        <item name="android:background">@drawable/lenn</item>
+        <item name="android:clickable">true</item>
+    </style>
+    <style name="SpinnerItem">
+        <item name="android:textColor">@color/lilwhite</item>
+        <item name="android:maxHeight">10dip</item>
+    </style>
+    <style name="SpinnerDropDownItem">
+        <item name="android:textColor">@color/lilwhite</item>
+        <item name="android:background">@color/teal_200</item>
+    </style>
+
 
 </resources>

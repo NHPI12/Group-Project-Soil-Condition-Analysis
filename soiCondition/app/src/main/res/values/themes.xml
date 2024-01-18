@@ -22,18 +22,34 @@
     <style name="TextColor"><item name="android:textColor">@color/verybrown</item></style>
     <style name="TextColorData"><item name="android:textColor">@color/lilbrown</item></style>
     <style name="ImageChange"><item name="android:src">@color/white</item></style>
+
     <style name="Switchmode"><item name="android:switchStyle">@color/white</item></style>
+
     <style name="SCBSwitch" parent="Theme.AppCompat.Light">
         <item name="colorControlActivated">#B89B84</item>
         <item name="colorSwitchThumbNormal">#f1f1f1</item>
         <item name="android:colorForeground">#42221f1f</item>
     </style>
-    <style name="spinnerahihi" parent="Theme.AppCompat.Light">
-        <item name="android:textColor">@color/lilbrown</item>
-        <item name="background">@color/white</item>
+
+
+    <style name="appcin" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+        <item name="android:spinnerStyle">@style/spinnerStyle</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item> -->
+        <item name="android:background">@color/lilwhite</item>
     </style>
-    <style name="MyActionBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:textColorPrimary">@color/black</item>
+    <style name="spinnerStyle">
+        <item name="android:background">@drawable/lenn</item>
+        <item name="android:clickable">true</item>
+    </style>
+    <style name="SpinnerItem">
+
+        <item name="android:textColor">@color/lilbrown</item>
+        <item name="android:maxHeight">10dip</item>
+    </style>
+    <style name="SpinnerDropDownItem">
+        <item name="android:textColor">@color/lilbrown</item>
+
         <item name="android:background">@color/lilwhite</item>
     </style>
 

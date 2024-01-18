@@ -35,6 +35,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.LimitLine;
@@ -51,6 +53,7 @@ import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -77,10 +80,17 @@ import vn.edu.usth.soicondition.network.DatabaseLocal.RetrofitDatabase;
 import vn.edu.usth.soicondition.network.JSONPlaceHolder;
 import vn.edu.usth.soicondition.network.TimeAxisValueFormatter;
 import vn.edu.usth.soicondition.network.model.PlantData;
+import vn.edu.usth.soicondition.network.model.PlantDetailsResponse;
 import vn.edu.usth.soicondition.network.model.PlantResponse;
+import com.google.mlkit.nl.translate.Translation;
+import com.google.mlkit.nl.translate.Translator;
+import com.google.mlkit.nl.translate.TranslatorOptions;
+import vn.edu.usth.soicondition.network.model.plantDetailsObject;
+
 
 
 public class MainActivity extends AppCompatActivity implements SelectedPlantsAdapter.OnItemClickListener {
+
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private String currentPeriod = "all";
@@ -89,19 +99,29 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     private HandlerThread handlerThread;
     private boolean exitConfirmationShown = false;
     private Handler handler;
+
     private Button button1dHumid, button3dHumid, button1wHumid, button1mHumid, buttonAllTimeHumid, button1dtemp, button3dtemp, button1wtemp, button1mtemp, buttonAllTimetemp, button1dsoil, button3dsoil, button1wsoil, button1msoil, buttonAllTimesoil;
     private List<Measurements> allData = new ArrayList<>();
+
+    private List<plantDetailsObject> plantDetailsList;
+
     private List<PlantData> plantList;
     private List<PlantData> allSelectedPlants;
-    private CardView selectedPlantsCardView;
+    private CardView selectedPlantsCardView ;
     private RecyclerView selectedPlantsRecyclerView;
     private SelectedPlantsAdapter selectedPlantsAdapter;
     private ImageView arrowImageView;
+
     private boolean isTimeFrameSelected = false;
     SwitchCompat lightswitch, tempswitch;
     boolean nightMode, tempMode;
-    SharedPreferences sharedPreferences, sharedPreferences_temp;
+   
     SharedPreferences.Editor editor, editor_temp;
+    private LinearLayout PlantDetailsLinearLayout_1, plantdetailslinelayout_2;
+    private TextView textViewWatering, textViewSunlight, textViewCareLevel,textViewWateringPeriod;
+    String temperaTure;
+    SharedPreferences sharedPreferences, sharedPreferences_tempvalue, sharedPreferences_tempmode, sharedPreferences_temp;
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -109,18 +129,31 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         setContentView(R.layout.activity_main);
 
 
+        ///////////////////////night
+        ImageView arrowmain = findViewById(R.id.ArrowSelectedPlant);
+        Drawable drw;
+
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightMode = sharedPreferences.getBoolean("nightMode", false);
+
         if(nightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            drw = getResources().getDrawable(R.drawable.lenn, getTheme());
+            arrowmain.setImageDrawable(drw);
         }
         else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            drw = getResources().getDrawable(R.drawable.arrow_up, getTheme());
+            arrowmain.setImageDrawable(drw);
         }
         editor = sharedPreferences.edit();
         editor.apply();
         allData = new ArrayList<>();
-
+        sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
+        tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
+        sharedPreferences_tempvalue = getSharedPreferences("MODE_VALUE", Context.MODE_PRIVATE);
+        temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "a");
+        
         buttonsHumid = findViewById(R.id.buttonsHumid);
         buttonsTemp = findViewById(R.id.buttonsTemp);
         buttonsSoil = findViewById(R.id.buttonsSoil);
@@ -142,7 +175,15 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         button1wsoil = findViewById(R.id.button_1w_soil);
         button1msoil = findViewById(R.id.button_1m_soil);
         buttonAllTimesoil = findViewById(R.id.button_alltime_soil);
+        TextView tempUnit = findViewById(R.id.tempUnit);
+        if(tempMode){
+            tempUnit.setText("°F");
+        }
+        else {
+            tempUnit.setText("°C");
+        }
 
+        /////////////////////////////////////////
         lineChartTemp = findViewById(R.id.lineChartTemp);
         lineChartHumid = findViewById(R.id.lineChartHumid);
         lineChartSoil = findViewById(R.id.lineChartSoil);
@@ -155,11 +196,20 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         tempLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
         soilLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
         plantList = new ArrayList<>();
+        plantDetailsList = new ArrayList<>();
 
         selectedPlantsCardView = findViewById(R.id.selectedPlantsCardView);
         selectedPlantsRecyclerView = findViewById(R.id.selectedPlantsRecyclerView);
         arrowImageView = findViewById(R.id.ArrowSelectedPlant);
-
+        PlantDetailsLinearLayout_1 = findViewById(R.id.PlantDetailsCardView1);
+        plantdetailslinelayout_2= findViewById(R.id.PlantDetailsCardView2);
+        //textView water and sunlight
+        textViewWatering = findViewById(R.id.watering_value_main_activity);
+        textViewSunlight = findViewById(R.id.sunlight_textView);
+        textViewCareLevel= findViewById(R.id.care_level_textView);
+        textViewWateringPeriod = findViewById(R.id.Watering_period_textView);
+        PlantDetailsLinearLayout_1.setVisibility(View.GONE);
+        plantdetailslinelayout_2.setVisibility(View.GONE);
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://smart-pot-1d7b5-default-rtdb.firebaseio.com/");
         DatabaseReference databaseReference1 = firebaseDatabase.getReference("sensor_data");
         DatabaseReference databaseReferenceSoil = databaseReference1.child("soil_moisture");
@@ -169,6 +219,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         TextView soilData = findViewById(R.id.soilData);
         TextView tempData = findViewById(R.id.tempData);
         TextView humidData = findViewById(R.id.humidData);
+
+
         // Initialize and start a background thread
         handlerThread = new HandlerThread("BackgroundThread");
         handlerThread.start();
@@ -217,7 +269,15 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     try {
                         Double tempValue = dataSnapshot.getValue(Double.class);
                         if (tempValue != null) {
-                            tempData.setText(String.valueOf(tempValue));
+                            if(!tempMode){
+                                tempData.setText(String.valueOf(tempValue));
+                            }
+                            else {
+                                float temper = tempValue.floatValue();
+                                temper = (float) (temper*1.8 + 32);
+                                tempData.setText(String.valueOf(temper));
+                            }
+
                         } else {
                             // Handle the case where data is null
                             tempData.setText("No data available");
@@ -300,6 +360,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
             return false;
         });
+
         TextView addTextView = findViewById(R.id.add_text);
         TextView removeTextView = findViewById(R.id.remove_text);
         addTextView.setOnClickListener(v -> {
@@ -463,8 +524,26 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         Date startDate = calendar.getTime();
         return (dataTimestamp.equals(startDate) || dataTimestamp.after(startDate)) &&
                 (dataTimestamp.equals(latestTimestamp) || dataTimestamp.before(latestTimestamp));
+
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        sharedPreferences_tempvalue = getSharedPreferences("MODE_TEMPVALUE", Context.MODE_PRIVATE);
+        temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "tempValue");
+        sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
+        tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
+
+        TextView tempData = findViewById(R.id.tempData);
+        tempData.setText(temperaTure);
+        TextView tempUnit = findViewById(R.id.tempUnit);
+        if(tempMode){
+            tempUnit.setText("°F");
+        }else {
+            tempUnit.setText("°C");
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
@@ -476,8 +555,12 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
 
     private void openSettings() {
+        TextView textView = (TextView)findViewById(R.id.tempData);
+        String tex = textView.getText().toString();
         Intent intent = new Intent(MainActivity.this, setting.class);
+        intent.putExtra("message", tex);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
         startActivity(intent);
         drawerLayout.closeDrawer(GravityCompat.START);
     }
@@ -510,17 +593,102 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         TransitionManager.beginDelayedTransition(clickedLayout, new AutoTransition());
     }
 
+
     private void startPeriodicDataFetch() {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (!isTimeFrameSelected) {
                     updateUIBasedOnCurrentPeriod();
+                 
                 }
                 handler.postDelayed(this, 2000); // Reschedule after 2 seconds
             }
         }, 0);
     }
+
+    private void ReturnPlantDetails(int plantId){
+        for (plantDetailsObject plantItem : plantDetailsList){
+            if (plantItem.getId()== plantId){
+                String care_level = plantItem.getCare_level();
+                String watering_period = plantItem.getWatering_period();
+                textViewCareLevel.setText(care_level);
+                if (watering_period !=null){
+                    textViewWateringPeriod.setText(watering_period);
+                }
+
+            }
+        }
+    }
+    private void TurnPlantDetailsIntoList(){
+        //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
+        //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
+        //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
+        String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
+        SharedPreferences sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
+        Set<String> selectedPlantIdsStringSet = sharedPreferences.getStringSet("selected_plants", new HashSet<>());
+        Set<Integer> selectedPlantIds = new HashSet<>();
+        for (String id : selectedPlantIdsStringSet) {
+            selectedPlantIds.add(Integer.valueOf(id));
+        }
+        if (plantDetailsList.isEmpty()){
+            for (int id : selectedPlantIds){
+                fetchPlantDetails(id,apiKey,plantDetailsList);
+            }
+        }else {
+            for (int id : selectedPlantIds){
+                if (!isContained(plantDetailsList,id)){
+                    fetchPlantDetails(id,apiKey,plantDetailsList);
+                }
+            }
+        }
+    }
+    private boolean isContained(List<plantDetailsObject> plantDetailsList, int id){
+        for (plantDetailsObject plantItems : plantDetailsList){
+            if (plantItems.getId() == id){
+                return true;
+            }
+        }
+        return false;
+    }
+    private void fetchPlantDetails(int plantId, String apiKey, List<plantDetailsObject> objectList){
+        OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://perenual.com/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(builder.build())
+                .build();
+        JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
+        Call<PlantDetailsResponse> call = jsonPlaceHolder.getPlantDetails(plantId, apiKey);
+        call.enqueue(new Callback<PlantDetailsResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<PlantDetailsResponse> call, @NonNull Response<PlantDetailsResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    PlantDetailsResponse plantDetailsResponse = response.body();
+                    int plant_id = plantDetailsResponse.getId();
+                    String care_level = plantDetailsResponse.getCare_level();
+                    String watering_period = plantDetailsResponse.getWatering_period();
+                    plantDetailsObject plantDetailsObjectCheck = new plantDetailsObject(plant_id, care_level,watering_period);
+                    objectList.add(plantDetailsObjectCheck);
+                }else{
+                    Log.e("PlantDetails", "Error: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<PlantDetailsResponse> call, @NonNull Throwable t) {
+                Log.e("PlantDetails", "Error: " + t.getMessage());
+            }
+        });
+    }
+
+    private void updateCardViewDetails(String wateringValueStr, String sunlightValue) {
+        textViewWatering.setText(wateringValueStr);
+        textViewSunlight.setText(sunlightValue);
+    }
+
     private void updateUIBasedOnCurrentPeriod() {
         ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
         Call<List<Measurements>> call = apiService.fetchData();
@@ -710,7 +878,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         }
         return sum / entries.size();
     }
-
     private Drawable determineChartBackgroundColor(float overallAverage, int limitValue) {
         float threshold = 15f; // You can adjust this threshold based on your requirements
 
@@ -748,7 +915,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         handlerThread.quit();
     }
 
-
     private void fetchData() {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
         Retrofit retrofit = new Retrofit.Builder()
@@ -769,7 +935,9 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         if (!isDataFetched) {
                 // Fetch data only if it hasn't been fetched yet
                 fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
+                TurnPlantDetailsIntoList();
             }
+
     }
 
     private void fetchDatafromMultiplePages(JSONPlaceHolder jsonPlaceHolder, String apiKey, int pageNumber) {
@@ -815,19 +983,22 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 allSelectedPlants = getAllSelectedPlants(sharedPreferences);
                 selectedPlantsAdapter = new SelectedPlantsAdapter(allSelectedPlants, this);
                 selectedPlantsCardView.setVisibility(View.VISIBLE);
+                PlantDetailsLinearLayout_1.setVisibility(View.VISIBLE);
+                plantdetailslinelayout_2.setVisibility(View.VISIBLE);
                 selectedPlantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
                 selectedPlantsRecyclerView.setAdapter(selectedPlantsAdapter);
                 arrowImageView.setOnClickListener(v -> selectedPlantsAdapter.toggleRecyclerViewVisibility(arrowImageView, selectedPlantsRecyclerView));
                 startFetchingDataFromPlant(lastSelectedPlant);
-                }
-            }else
+
+            }
+        }else
         {
             startFetchingDataWithDefaults();
             // If no plants are selected, hide the CardView
             selectedPlantsCardView.setVisibility(View.GONE);
+
         }
     }
-
 
     private PlantData getPlantDataById(int plantId, List<PlantData> plantList) {
         if (plantList == null || plantList.isEmpty()) {
@@ -847,6 +1018,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         Log.e("Selected Plant Details", "Plant with ID " + plantId + " not found");
         return null;
     }
+
     private int getLastSelectedPlantId(Set<Integer> selectedPlantIds) {
         return selectedPlantIds.isEmpty() ? -1 : Collections.max(selectedPlantIds);
     }
@@ -883,14 +1055,14 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
     @Override
     public void onBackPressed() {
-            if (exitConfirmationShown) {
-                // If exit confirmation is already shown, perform default behavior
-                super.onBackPressed();
-            } else {
-                // Show exit confirmation
-                showExitConfirmation();
-            }
+        if (exitConfirmationShown) {
+            // If exit confirmation is already shown, perform default behavior
+            super.onBackPressed();
+        } else {
+            // Show exit confirmation
+            showExitConfirmation();
         }
+    }
     private void showExitConfirmation() {
         // Add code to show your exit confirmation dialog
         // Example: You can use an AlertDialog to prompt the user

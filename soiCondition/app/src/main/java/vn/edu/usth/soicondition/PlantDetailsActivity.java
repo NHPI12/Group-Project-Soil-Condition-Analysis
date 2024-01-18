@@ -3,6 +3,7 @@ package vn.edu.usth.soicondition;
 
 import android.annotation.SuppressLint;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,14 +13,17 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
-
 
 
 import java.util.ArrayList;
@@ -38,13 +42,22 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import vn.edu.usth.soicondition.network.JSONPlaceHolder;
-
 import vn.edu.usth.soicondition.network.model.PlantDetailsResponse;
+
+import com.google.mlkit.nl.translate.Translation;
+import com.google.mlkit.nl.translate.Translator;
+import com.google.mlkit.nl.translate.TranslatorOptions;
+
+
 
 public class PlantDetailsActivity extends AppCompatActivity {
 
-    private SharedPreferences sharedPreferences ;
+    private SharedPreferences sharedPreferences;
+    boolean  tempMode;
     private static final String PREF_SELECTED_PLANTS="selected_plants";
+
+    SharedPreferences whatlangPreference, sharedPreferences_tempmode;
+    SharedPreferences.Editor edit_whatlang;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,20 +121,54 @@ public class PlantDetailsActivity extends AppCompatActivity {
 
         if (originalUrl != null && !originalUrl.isEmpty()) {
             Picasso.get().load(originalUrl).into(BigImageDetails);
-        } else {
+        }
+        else {
             Picasso.get().load(R.drawable.ic_thumbnail).into(BigImageDetails);
         }
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        //String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
+        String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
-        String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
+        //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
 
         //String apiKey ="sk-MUZ5659b830f829253689"; //Nguyen 3rd
         fetchPlantDetails(ID,apiKey);
     }
+
+
+    protected void onRestart() {
+        super.onRestart();
+        TextView descriptionDetails = findViewById(R.id.descriptionDetails);
+        String desDetail = descriptionDetails.getText().toString();
+
+        TextView SeasonsDetails = findViewById(R.id.SeasonsDetails);
+        String strSeasonsDetails = SeasonsDetails.toString();
+
+        TranslatorOptions options = new TranslatorOptions.Builder()
+                .setTargetLanguage("fr")
+                .setSourceLanguage("en")
+                .build();
+        Translator translator = Translation.getClient(options);
+        translator.downloadModelIfNeeded();
+
+        Task<String> results = translator.translate(desDetail).addOnSuccessListener(new OnSuccessListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                Toast.makeText(PlantDetailsActivity.this, "hehe", Toast.LENGTH_SHORT).show();
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(PlantDetailsActivity.this, "haha", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
     //Show confirmation and Remove Plant
     private void showConfirmationDialogRemove(int id) {AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Confirmation");
@@ -225,6 +272,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     PlantDetailsResponse plantDetails = response.body();
                     String description = plantDetails.getDescription();
+                    String watering_period = plantDetails.getWatering_period();
                     TextView flowering_season = findViewById(R.id.SeasonsDetails);
                     TextView description_details = findViewById(R.id.descriptionDetails);
                     ImageView flowering_Image = findViewById(R.id.Flowering_Season_Icon);
@@ -236,6 +284,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
                         flowering_Image.setImageResource(R.drawable.season_cycle_icon);
                     }
                     description_details.setText(description);
+                    Log.e("PlantDetails","Watering Period: "+watering_period);
                 } else {
                     Log.e("PlantDetails", "Error: " + response.code());
                 }
@@ -326,8 +375,22 @@ public class PlantDetailsActivity extends AppCompatActivity {
         int overallMinTemp = Collections.min(minTemps);
         int overallMaxTemp = Collections.max(maxTemps);
 
+        float overMinTemp = (float)overallMinTemp, overMaxTemp = (float)overallMaxTemp;
+
+
+        sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
+        tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
+
         // Display the customized temperature text
-        String temperatureValue = overallMinTemp + "°C - " + overallMaxTemp + "°C";
+        String temperatureValue = "";
+        if(!tempMode){
+            temperatureValue = overallMinTemp + "°C - " + overallMaxTemp + "°C";
+        }
+        else{
+            overMinTemp = (float) (overallMinTemp*1.8 + 32); overMaxTemp = (float) (overallMaxTemp*1.8 + 32);
+            temperatureValue = overMinTemp + "°F - " + overMaxTemp + "°F";
+        }
         temperatureTextView.setText(temperatureValue);
+
     }
 }

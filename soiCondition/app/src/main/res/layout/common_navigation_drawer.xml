@@ -14,6 +14,8 @@
         app:itemIconSize="40dp"
         app:itemVerticalPadding="20dp"
         app:itemTextColor="@color/itemnavi"
+        app:itemShapeFillColor="@color/itemnavi"
+        app:itemIconTint="@color/itemnavi"
         style="@style/ScreenBackground.2">
     </com.google.android.material.navigation.NavigationView>
 </LinearLayout>

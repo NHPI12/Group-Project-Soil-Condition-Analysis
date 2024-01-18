@@ -1,38 +1,36 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!-- Base application theme. -->
+
     <style name="Theme.SoiCondition" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/lilbrown</item>
         <item name="colorSecondaryVariant">@color/lilbrown</item>
         <item name="colorOnSecondary">@color/lilbrown</item>
-        <!-- Status bar color. -->
         <item name="android:statusBarColor" >@color/verybrown</item>
         <item name="tabIndicatorColor">@color/verybrown</item>
-        <!-- Customize your theme here. -->
         <item name="fontFamily">@font/nunito</item>
+        <item name="android:windowBackground">@color/lilwhite</item>
     </style>
-
-
-
-    <style name="ScreenBackground"><item name="android:background">@color/lilwhite</item></style>
+    <style name="ScreenBackground"><item name="android:background">@color/leaf</item></style>
     <style name="ScreenBackground.2"><item name="android:background">@color/lilwhite</item></style>
+    <style name="ScreenBackground.4"><item name="android:background">@color/lilwhite</item></style>
     <style name="ScreenBackground.3"><item name="drawerLayoutStyle">@color/leaf</item></style>
     <style name="CardBackground"><item name="cardBackgroundColor">@color/lilwhite</item></style>
     <style name="CardBackground.2"><item name="cardBackgroundColor">@color/lilwhite</item></style>
-    <style name="TextColor"><item name="android:textColor">@color/lilbrown</item></style>
+    <style name="TextColor"><item name="android:textColor">@color/verybrown</item></style>
+    <style name="TextColorData"><item name="android:textColor">@color/lilbrown</item></style>
     <style name="ImageChange"><item name="android:src">@color/white</item></style>
 
+    <style name="Switchmode"><item name="android:switchStyle">@color/white</item></style>
 
     <style name="SCBSwitch" parent="Theme.AppCompat.Light">
         <item name="colorControlActivated">#B89B84</item>
         <item name="colorSwitchThumbNormal">#f1f1f1</item>
         <item name="android:colorForeground">#42221f1f</item>
     </style>
+
 
     <style name="appcin" parent="@android:style/Theme.NoTitleBar.Fullscreen">
         <item name="android:spinnerStyle">@style/spinnerStyle</item>
@@ -45,11 +43,13 @@
         <item name="android:clickable">true</item>
     </style>
     <style name="SpinnerItem">
+
         <item name="android:textColor">@color/lilbrown</item>
         <item name="android:maxHeight">10dip</item>
     </style>
     <style name="SpinnerDropDownItem">
         <item name="android:textColor">@color/lilbrown</item>
+
         <item name="android:background">@color/lilwhite</item>
     </style>
 

@@ -127,9 +127,9 @@ public class PlantDetailsActivity extends AppCompatActivity {
         }
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        //String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
+        String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-        String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
 
@@ -272,6 +272,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     PlantDetailsResponse plantDetails = response.body();
                     String description = plantDetails.getDescription();
+                    String watering_period = plantDetails.getWatering_period();
                     TextView flowering_season = findViewById(R.id.SeasonsDetails);
                     TextView description_details = findViewById(R.id.descriptionDetails);
                     ImageView flowering_Image = findViewById(R.id.Flowering_Season_Icon);
@@ -283,6 +284,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
                         flowering_Image.setImageResource(R.drawable.season_cycle_icon);
                     }
                     description_details.setText(description);
+                    Log.e("PlantDetails","Watering Period: "+watering_period);
                 } else {
                     Log.e("PlantDetails", "Error: " + response.code());
                 }

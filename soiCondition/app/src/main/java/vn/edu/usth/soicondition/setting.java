@@ -9,26 +9,20 @@ import androidx.appcompat.widget.SwitchCompat;
 
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.Activity;
+
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.content.Intent;
+
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
+
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.util.DisplayMetrics;
+
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Locale;
 import java.util.Objects;
 
 public class setting extends AppCompatActivity {
@@ -111,8 +105,9 @@ public class setting extends AppCompatActivity {
         /////lang
         Spinner spinner = findViewById(R.id.spinner);
         String[] lanGuage = {"ENG", "FRA", "VIE"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(setting.this, android.R.layout.simple_list_item_activated_1, lanGuage);
-        spinner.setAdapter(adapter);
+        CustomArrayAdapter customArrayAdapter = new CustomArrayAdapter(setting.this,R.layout.spinner_list,lanGuage);
+        //ArrayAdapter<String> adapter = new ArrayAdapter<>(setting.this, R.layout.spinner_list, lanGuage);
+        spinner.setAdapter(customArrayAdapter);
 
         langspinPreference = getSharedPreferences("Lang", Context.MODE_PRIVATE);
         lang = langspinPreference.getInt("lang", 0);
@@ -145,6 +140,13 @@ public class setting extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
+        });
+        spinner.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP){
+                customArrayAdapter.setDropDownShown(true);
+                v.performClick();
+            }
+            return false;
         });
     }
 

@@ -31,6 +31,7 @@ import android.util.Log;
 
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -61,6 +63,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -80,46 +83,65 @@ import vn.edu.usth.soicondition.network.model.PlantResponse;
 public class MainActivity extends AppCompatActivity implements SelectedPlantsAdapter.OnItemClickListener {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
+    private String currentPeriod = "all";
     private LineChart lineChartTemp, lineChartSoil, lineChartHumid;
-    LinearLayout humidLayout, tempLayout, soilLayout;
+    LinearLayout humidLayout, tempLayout, soilLayout, buttonsHumid, buttonsTemp, buttonsSoil;
     private HandlerThread handlerThread;
     private boolean exitConfirmationShown = false;
     private Handler handler;
+    private Button button1dHumid, button3dHumid, button1wHumid, button1mHumid, buttonAllTimeHumid, button1dtemp, button3dtemp, button1wtemp, button1mtemp, buttonAllTimetemp, button1dsoil, button3dsoil, button1wsoil, button1msoil, buttonAllTimesoil;
+    private List<Measurements> allData = new ArrayList<>();
     private List<PlantData> plantList;
     private List<PlantData> allSelectedPlants;
     private CardView selectedPlantsCardView;
     private RecyclerView selectedPlantsRecyclerView;
     private SelectedPlantsAdapter selectedPlantsAdapter;
     private ImageView arrowImageView;
-
-
-
-
+    private boolean isTimeFrameSelected = false;
     SwitchCompat lightswitch, tempswitch;
     boolean nightMode, tempMode;
     SharedPreferences sharedPreferences, sharedPreferences_temp;
     SharedPreferences.Editor editor, editor_temp;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ///////////////////////night
+
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightMode = sharedPreferences.getBoolean("nightMode", false);
         if(nightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            editor = sharedPreferences.edit();
         }
         else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            editor = sharedPreferences.edit();
         }
+        editor = sharedPreferences.edit();
         editor.apply();
+        allData = new ArrayList<>();
 
+        buttonsHumid = findViewById(R.id.buttonsHumid);
+        buttonsTemp = findViewById(R.id.buttonsTemp);
+        buttonsSoil = findViewById(R.id.buttonsSoil);
 
+        button1dHumid = findViewById(R.id.button_1d_humid);
+        button3dHumid = findViewById(R.id.button_3d_humid);
+        button1wHumid = findViewById(R.id.button_1w_humid);
+        button1mHumid = findViewById(R.id.button_1m_humid);
+        buttonAllTimeHumid = findViewById(R.id.button_alltime_humid);
+
+        button1dtemp = findViewById(R.id.button_1d_temp);
+        button3dtemp = findViewById(R.id.button_3d_temp);
+        button1wtemp = findViewById(R.id.button_1w_temp);
+        button1mtemp = findViewById(R.id.button_1m_temp);
+        buttonAllTimetemp = findViewById(R.id.button_alltime_temp);
+
+        button1dsoil = findViewById(R.id.button_1d_soil);
+        button3dsoil = findViewById(R.id.button_3d_soil);
+        button1wsoil = findViewById(R.id.button_1w_soil);
+        button1msoil = findViewById(R.id.button_1m_soil);
+        buttonAllTimesoil = findViewById(R.id.button_alltime_soil);
 
         lineChartTemp = findViewById(R.id.lineChartTemp);
         lineChartHumid = findViewById(R.id.lineChartHumid);
@@ -294,6 +316,153 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             overridePendingTransition(R.anim.zoom_in,R.anim.zoom_out);
             drawerLayout.closeDrawer(GravityCompat.START);
         });
+            button1dHumid.setOnClickListener(v -> {
+                isTimeFrameSelected = true;
+                updateHumidityChart("1d", currentWateringValue);
+            });
+            button3dHumid.setOnClickListener(v -> {
+                isTimeFrameSelected = true;
+                updateHumidityChart("3d", currentWateringValue);
+            });
+            button1wHumid.setOnClickListener(v -> {
+                isTimeFrameSelected = true;
+                updateHumidityChart("1w", currentWateringValue);
+            });
+            button1mHumid.setOnClickListener(v -> {
+                isTimeFrameSelected = true;
+                updateHumidityChart("1m", currentWateringValue);
+            });
+            buttonAllTimeHumid.setOnClickListener(v -> {
+                isTimeFrameSelected = false;
+                updateHumidityChart("all", currentWateringValue);
+            });
+            button1dtemp.setOnClickListener(v -> {
+                isTimeFrameSelected = true;
+                updateTemperatureChart("1d", currentSunlightValue);
+            });
+            button3dtemp.setOnClickListener(v -> {
+                isTimeFrameSelected = true;
+                updateTemperatureChart("3d", currentSunlightValue);
+            });
+            button1wtemp.setOnClickListener(v -> {
+                isTimeFrameSelected = true;
+                updateTemperatureChart("1w", currentSunlightValue);
+            });
+            button1mtemp.setOnClickListener(v -> {
+                isTimeFrameSelected = true;
+                updateTemperatureChart("1m", currentSunlightValue);
+            });
+            buttonAllTimetemp.setOnClickListener(v -> {
+                isTimeFrameSelected = false;
+                updateTemperatureChart("all", currentSunlightValue);
+            });
+        button1dsoil.setOnClickListener(v -> {
+            isTimeFrameSelected = true;
+            updateSoilChart("1d", currentSoilMoistureValue);
+        });
+        button3dsoil.setOnClickListener(v -> {
+            isTimeFrameSelected = true;
+            updateSoilChart("3d", currentSoilMoistureValue);
+        });
+        button1wsoil.setOnClickListener(v -> {
+            isTimeFrameSelected = true;
+            updateSoilChart("1w", currentSoilMoistureValue);
+        });
+        button1msoil.setOnClickListener(v -> {
+            isTimeFrameSelected = true;
+            updateSoilChart("1m", currentSoilMoistureValue);
+        });
+        buttonAllTimesoil.setOnClickListener(v -> {
+            isTimeFrameSelected = false;
+            updateSoilChart("all", currentSoilMoistureValue);
+        });
+    }
+    private List<String> extractTimestamps(List<Measurements> filteredData) {
+        List<String> timestamps = new ArrayList<>();
+        for (Measurements measurement : filteredData) {
+            timestamps.add(measurement.getTimestamps());
+        }
+        return timestamps;
+    }
+    private List<Entry> convertToEntriesForHumidity(List<Measurements> filteredData) {
+        List<Entry> entries = new ArrayList<>();
+        for (int i = 0; i < filteredData.size(); i++) {
+            Measurements measurement = filteredData.get(i);
+            entries.add(new Entry(i, measurement.getHumidity())); // Using index as X-value
+        }
+        return entries;
+    }
+    private List<Entry> convertToEntriesForTemperature(List<Measurements> filteredData) {
+        List<Entry> entries = new ArrayList<>();
+        for (int i = 0; i < filteredData.size(); i++) {
+            Measurements measurement = filteredData.get(i);
+            entries.add(new Entry(i, measurement.getTemperature())); // Using index as X-value
+        }
+        return entries;
+    }
+    private List<Entry> convertToEntriesForSoilMoisture(List<Measurements> filteredData) {
+        List<Entry> entries = new ArrayList<>();
+        for (int i = 0; i < filteredData.size(); i++) {
+            Measurements measurement = filteredData.get(i);
+            entries.add(new Entry(i, measurement.getSoil_moisture())); // Using index as X-value
+        }
+        return entries;
+    }
+    private int currentWateringValue = -9999;
+    private int currentSunlightValue = -9999;
+    private int currentSoilMoistureValue = -9999;
+    private void startFetchingDataFromPlant(PlantData plantData) {
+        PlantData topItemPlantData = selectedPlantsAdapter.getTopItem();
+        if (topItemPlantData != null) {
+            currentWateringValue = plantData.convertWateringToValue();
+            currentSunlightValue = plantData.convertSunlightToValue();
+            currentSoilMoistureValue = plantData.convertWateringToSoilMoisture();
+
+            Log.d("Selected Plant Details", "Watering Value: " + currentWateringValue);
+            Log.d("Selected Plant Details", "Sunlight Value: " + currentSunlightValue);
+            Log.d("Selected Plant Details", "Soil Moisture Value: " + currentSoilMoistureValue);
+            startPeriodicDataFetch(); // Start fetching data with updated values
+        }
+    }
+    private void startFetchingDataWithDefaults() {
+        currentWateringValue = -9999;
+        currentSunlightValue = -9999;
+        currentSoilMoistureValue = -9999;
+        startPeriodicDataFetch();
+    }
+    private boolean isWithinPeriod(String dataTimestampString, Date latestTimestamp, String period) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date dataTimestamp;
+        try {
+            dataTimestamp = dateFormat.parse(dataTimestampString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(latestTimestamp);
+        switch (period) {
+            case "1d":
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                break;
+            case "3d":
+                calendar.add(Calendar.DAY_OF_MONTH, -3);
+                break;
+            case "1w":
+                calendar.add(Calendar.WEEK_OF_YEAR, -1);
+                break;
+            case "1m":
+                calendar.add(Calendar.MONTH, -1);
+                break;
+            case "all":
+                return true;
+            default:
+                return false;
+        }
+        Date startDate = calendar.getTime();
+        return (dataTimestamp.equals(startDate) || dataTimestamp.after(startDate)) &&
+                (dataTimestamp.equals(latestTimestamp) || dataTimestamp.before(latestTimestamp));
     }
 
     @Override
@@ -341,99 +510,39 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         TransitionManager.beginDelayedTransition(clickedLayout, new AutoTransition());
     }
 
-    private void startFetchingData(int wateringValue, int temperatureValue, int soilValue) {
-
-        if (wateringValue != -9999 && temperatureValue != -9999 && soilValue != -9999) {
-            // Define a Runnable that fetches data and updates UI
-            Runnable fetchDataRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    List<Measurements> newData = fetchDataFromLocalDatabase();
-                    runOnUiThread(() -> {
-                        PlantData topItem = selectedPlantsAdapter.getTopItem();
-                        if (topItem != null) {
-                            int wateringValue1 = topItem.convertWateringToValue();
-                            int temperatureValue1 = topItem.convertSunlightToValue();
-                            int soilValue1 = topItem.convertWateringToSoilMoisture();
-                            // Now you can use these values in your updateUI method
-                            updateUI(wateringValue1, temperatureValue1, soilValue1);
-                        }
-                    });
-
-                    // Schedule the next data fetch after 2 seconds
-                    handler.postDelayed(this, 2000);
+    private void startPeriodicDataFetch() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!isTimeFrameSelected) {
+                    updateUIBasedOnCurrentPeriod();
                 }
-            };
-            // Schedule the initial data fetch with a delay of 0 seconds
-            handler.postDelayed(fetchDataRunnable, 0);
-        } else {
-            updateUI(wateringValue, temperatureValue, soilValue);
-        }
+                handler.postDelayed(this, 2000); // Reschedule after 2 seconds
+            }
+        }, 0);
     }
-
-    private void updateUI(int wateringValue, int temperatureValue, int soilValue) {
+    private void updateUIBasedOnCurrentPeriod() {
         ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
         Call<List<Measurements>> call = apiService.fetchData();
-
-        // Log the start of the API call
-        Log.d("YourActivity", "API call started");
+        Log.d("MainActivity", "API call started");
 
         call.enqueue(new Callback<List<Measurements>>() {
             @Override
             public void onResponse(@NonNull Call<List<Measurements>> call, @NonNull Response<List<Measurements>> response) {
-                // Log the end of the API call
                 Log.d("MainActivityDatabase", "API call completed");
-
-                if (response.isSuccessful()) {
-
-                    List<Measurements> data = response.body();
-                    List<String> timestamps = new ArrayList<>();
-                    List<Float> humidityValues = new ArrayList<>();
-                    List<Float> temperatureValues = new ArrayList<>();
-                    List<Float> soilMoistureValues = new ArrayList<>();
-                    ArrayList<String> xLabel = new ArrayList<>();
-
-                    for (Measurements item : Objects.requireNonNull(data)) {
-                        timestamps.add(item.getTimestamps());
-                        xLabel.addAll(timestamps);
-                        humidityValues.add(item.getHumidity());
-                        temperatureValues.add(item.getTemperature());
-                        soilMoistureValues.add(item.getSoil_moisture());
-                    }
-
-                    List<Entry> humidityEntries = TimeAxisValueFormatter.createEntryList(timestamps, humidityValues);
-                    List<Entry> temperatureEntries = TimeAxisValueFormatter.createEntryList(timestamps, temperatureValues);
-                    List<Entry> soilMoistureEntries = TimeAxisValueFormatter.createEntryList(timestamps, soilMoistureValues);
-
-
-                    // Update the line charts based on the condition
-                    if (wateringValue != -9999 && temperatureValue != -9999 && soilValue != -9999) {
-                        updateLineChart(lineChartHumid, humidityEntries, "Humidity", timestamps, wateringValue, 0, 130);
-                        updateLineChart(lineChartTemp, temperatureEntries, "Temperature", timestamps, temperatureValue, 0, 40);
-                        updateLineChart(lineChartSoil, soilMoistureEntries, "Soil Moisture", timestamps, soilValue, 400, 1300);
-                    } else {
-                        // Update the line charts with empty data
-                        updateLineChart(lineChartHumid, humidityEntries, "Humidity", timestamps, wateringValue, 0, 130);
-                        updateLineChart(lineChartTemp, temperatureEntries, "Temperature", timestamps, temperatureValue, 0, 40);
-                        updateLineChart(lineChartSoil, soilMoistureEntries, "Soil Moisture", timestamps, soilValue, 400, 1300);
-                    }
-
-                    Log.d("MainActivityDatabase", "Data loaded successfully: " + data.size() + " items");
+                if (response.isSuccessful() && response.body() != null) {
+                    allData = response.body();
+                    updateCharts();
                 } else {
-                    // Handle the case when the response is not successful
                     Log.e("MainActivityDatabase", "Data loading failed. Error code: " + response.code());
-
                 }
-
             }
             @Override
             public void onFailure(@NonNull Call<List<Measurements>> call, @NonNull Throwable t) {
-                // Log the failure of the API call
                 Log.e("MainActivityDatabase", "Data loading failed. Exception: " + t.getMessage());
             }
         });
-        }
-
+    }
     private List<Measurements> fetchDataFromLocalDatabase() {
         ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
         Call<List<Measurements>> call = apiService.fetchData();
@@ -441,7 +550,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             @Override
             public void onResponse(@NonNull Call<List<Measurements>> call, @NonNull Response<List<Measurements>> response) {
                 if (response.isSuccessful()) {
-                    List<Measurements> data = response.body(); // THis variable is not used anywhere. DELETE?
+                    allData = response.body();
+
                     Log.d("SoilActivity", "Data loading successfully");
                 } else {
                     // Handle the case when the response is not successful
@@ -456,14 +566,73 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         });
         return null;
     }
+    private List<Measurements> filterDataByPeriod(String period, Date latestTimestamp) {
+        return allData.stream()
+                .filter(measurement -> isWithinPeriod(measurement.getTimestamps(), latestTimestamp, period))
+                .collect(Collectors.toList());
+    }
+    private void updateCharts() {
+        List<Measurements> dataToShow;
+        Date latestTimestamp = findLatestTimestamp(allData);
 
-    private void updateLineChart(LineChart lineChart, List<Entry> entries, String label, List<String> timestamps, int Value, int minValue, int maxValue) {
-        int maxDataPoints = 100;
-        int dataSize = entries.size();
-        if (dataSize > maxDataPoints) {
-            entries = entries.subList(dataSize - maxDataPoints, dataSize);
-            timestamps = timestamps.subList(dataSize - maxDataPoints, dataSize);
+        if (isTimeFrameSelected) {
+            // If a specific time frame is selected, filter the data accordingly
+            dataToShow = filterDataByPeriod(currentPeriod, latestTimestamp);
+        } else {
+            // If no specific time frame is selected, show all measurements
+            dataToShow = allData;
         }
+
+        // Extract and convert data for each type (humidity, temperature, soil moisture)
+        List<String> timestamps = extractTimestamps(dataToShow);
+        List<Entry> humidityEntries = convertToEntriesForHumidity(dataToShow);
+        List<Entry> temperatureEntries = convertToEntriesForTemperature(dataToShow);
+        List<Entry> soilMoistureEntries = convertToEntriesForSoilMoisture(dataToShow);
+
+        // Update each line chart
+        updateLineChart(lineChartHumid, humidityEntries, "Humidity", timestamps, currentWateringValue, 0, 130);
+        updateLineChart(lineChartTemp, temperatureEntries, "Temperature", timestamps, currentSunlightValue, 0, 40);
+        updateLineChart(lineChartSoil, soilMoistureEntries, "Soil Moisture", timestamps, currentSoilMoistureValue, 400, 1300);
+    }
+    private void updateHumidityChart(String period, int wateringValue) {
+        Date latestTimestamp = findLatestTimestamp(allData); // Find the latest timestamp
+        List<Measurements> filteredData = filterDataByPeriod(period, latestTimestamp);
+        List<Entry> entries = convertToEntriesForHumidity(filteredData);
+        List<String> timestamps = extractTimestamps(filteredData);
+        updateLineChart(lineChartHumid, entries, "Humidity", timestamps, wateringValue, 0, 130);
+    }
+    private void updateTemperatureChart(String period, int temperatureValue) {
+        Date latestTimestamp = findLatestTimestamp(allData); // Find the latest timestamp
+        List<Measurements> filteredData = filterDataByPeriod(period, latestTimestamp);
+        List<Entry> entries = convertToEntriesForTemperature(filteredData);
+        List<String> timestamps = extractTimestamps(filteredData);
+        updateLineChart(lineChartTemp, entries, "Temperature", timestamps, temperatureValue, 0, 40);
+    }
+    private void updateSoilChart(String period, int soilMoistureValue) {
+        Date latestTimestamp = findLatestTimestamp(allData); // Find the latest timestamp
+        List<Measurements> filteredData = filterDataByPeriod(period, latestTimestamp);
+        List<Entry> entries = convertToEntriesForSoilMoisture(filteredData);
+        List<String> timestamps = extractTimestamps(filteredData);
+        updateLineChart(lineChartSoil, entries, "Temperature", timestamps, soilMoistureValue, 400, 1300);
+    }
+    private Date findLatestTimestamp(List<Measurements> allData) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date latestTimestamp = null;
+
+        for (Measurements measurement : allData) {
+            try {
+                Date timestamp = dateFormat.parse(measurement.getTimestamps());
+                if (latestTimestamp == null || (timestamp != null && timestamp.after(latestTimestamp))) {
+                    latestTimestamp = timestamp;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return latestTimestamp;
+    }
+    private void updateLineChart(LineChart lineChart, List<Entry> entries, String label, List<String> timestamps, int Value, int minValue, int maxValue) {
+        int dataSize = entries.size();
         final List<Entry> finalEntries = new ArrayList<>(entries);
         final List<String> finalTimestamps = new ArrayList<>(timestamps);
         LineDataSet dataSet = new LineDataSet(finalEntries, label);
@@ -479,10 +648,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     if (dataIndex >= 0 && dataIndex < finalTimestamps.size()) {
                         String currentTimestamp = finalTimestamps.get(dataIndex);
                         SimpleDateFormat timeFormat = null;
-
                         timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-
-                        // Parse timestamp and format time
                         Date date = dateFormat.parse(currentTimestamp);
                         return timeFormat.format(Objects.requireNonNull(date));
                     } else {
@@ -503,13 +669,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         Drawable chartBackground = determineChartBackgroundColor(overallAverage, Value);
         int graphColor = determineGraphColor(overallAverage, Value);
         YAxis leftAxis = lineChart.getAxisRight();
-        leftAxis.setAxisMinimum(minValue);
-        leftAxis.setAxisMaximum(maxValue);
-        if ((maxValue - minValue) > 500) {
-            leftAxis.setLabelCount((maxValue - minValue) / 100); // Set label count with 100-unit interval
-        } else {
-            leftAxis.setLabelCount((maxValue - minValue) / 10); // Set label count with 10-unit interval
-        }
         leftAxis.removeAllLimitLines();
 
         // Add a LimitLine for the watering value
@@ -559,6 +718,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         if (overallAverage <= limitValue + threshold && overallAverage >= limitValue - threshold) {
             // If overall average is within the threshold, use green gradient
             return ContextCompat.getDrawable(this, R.drawable.gradient_green);
+        } else if (limitValue == -9999) {
+            return ContextCompat.getDrawable(this, R.drawable.gradient_neutral);
         } else {
             // If overall average exceeds the threshold, use red gradient
             return ContextCompat.getDrawable(this, R.drawable.gradient_red);
@@ -571,6 +732,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         if (overallAverage <= limitValue + threshold && overallAverage >= limitValue - threshold) {
             // If overall average is within the threshold, use green color
             return ContextCompat.getColor(this,R.color.leaf);
+        } else if (limitValue == -9999) {
+            return ContextCompat.getColor(this,R.color.neutral);
         } else {
             // If overall average exceeds the threshold, use red color
             return ContextCompat.getColor(this,R.color.lightRed);
@@ -599,9 +762,9 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
-        //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
+        String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
-        String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
+        //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
         boolean isDataFetched = false;
         if (!isDataFetched) {
                 // Fetch data only if it hasn't been fetched yet
@@ -654,7 +817,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 selectedPlantsCardView.setVisibility(View.VISIBLE);
                 selectedPlantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
                 selectedPlantsRecyclerView.setAdapter(selectedPlantsAdapter);
-
                 arrowImageView.setOnClickListener(v -> selectedPlantsAdapter.toggleRecyclerViewVisibility(arrowImageView, selectedPlantsRecyclerView));
                 startFetchingDataFromPlant(lastSelectedPlant);
                 }
@@ -666,26 +828,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         }
     }
 
-    private void startFetchingDataFromPlant(PlantData plantData) {
-        PlantData topItemPlantData = selectedPlantsAdapter.getTopItem();
-        if (topItemPlantData != null) {
-            int wateringValue = plantData.convertWateringToValue();
-            int sunlightValue = plantData.convertSunlightToValue();
-            int soilMoistureValue = plantData.convertWateringToSoilMoisture();
-            Log.d("Selected Plant Details", "Watering Before Clicked: " + wateringValue);
-            Log.d("Selected Plant Details", "Sunlight Before Clicked: " + sunlightValue);
-            Log.d("Selected Plant Details", "SoilMoisture Before Clicked: " + soilMoistureValue);
-            startFetchingData(wateringValue, sunlightValue, soilMoistureValue);
-        }
-    }
 
-    // New method to start fetching data with default values when no plant is selected
-    private void startFetchingDataWithDefaults() {
-        int wateringValueDefault = -9999;
-        int sunlightValueDefault = -9999;
-        int soilMoistureValueDefault = -9999;
-        startFetchingData(wateringValueDefault, sunlightValueDefault, soilMoistureValueDefault);
-    }
     private PlantData getPlantDataById(int plantId, List<PlantData> plantList) {
         if (plantList == null || plantList.isEmpty()) {
             Log.d("Selected Plant Details" ,"Null " + Objects.requireNonNull(plantList).size());
@@ -726,10 +869,11 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             selectedPlantsAdapter.notifyItemMoved(position, 0);
             PlantData topItemPlantData = selectedPlantsAdapter.getPlantDataAtPosition(0);
             if (topItemPlantData != null) {
-                int wateringValue = topItemPlantData.convertWateringToValue();
-                int sunlightValue = topItemPlantData.convertSunlightToValue();
-                Log.d("Selected Plant Details", "Watering: " + wateringValue);
-                Log.d("Selected Plant Details", "Sunlight: " + sunlightValue);
+                currentWateringValue = topItemPlantData.convertWateringToValue();
+                currentSunlightValue = topItemPlantData.convertSunlightToValue();
+                currentSoilMoistureValue = topItemPlantData.convertWateringToSoilMoisture();
+                Log.d("Selected Plant Details", "Watering: " + currentWateringValue);
+                Log.d("Selected Plant Details", "Sunlight: " + currentSunlightValue);
             }
         } else if (allSelectedPlants == null) {
             Log.d("Selected Plant Details", "All selected plant is null");

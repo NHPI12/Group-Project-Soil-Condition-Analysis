@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            style="@style/TextColor"                  
+            android:textColor="@color/lilwhite"
             android:text="@string/setting"
             android:textSize="50sp" />
 
@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="170dp"
-                style="@style/TextColor"                              
+                android:textColor="@color/lilwhite"
                 android:text="@string/light_mode"               
                 android:textSize="25sp"
                 tools:ignore="TextSizeCheck" />
@@ -53,8 +53,7 @@
 
             <TextView
                 android:id="@+id/tempunit"
-
-                style="@style/TextColor"
+                android:textColor="@color/lilwhite"
                 android:layout_width="228dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="70dp"
@@ -90,7 +89,6 @@
                 android:layout_width="140dp"
                 android:layout_height="57dp"
                 android:spinnerMode="dropdown"
-                style="@style/appcin"
                 tools:ignore="TouchTargetSizeCheck,VisualLintBounds" />
 
         </LinearLayout>

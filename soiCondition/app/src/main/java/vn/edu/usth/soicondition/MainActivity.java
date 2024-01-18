@@ -500,7 +500,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         Call<PlantDetailsResponse> call = jsonPlaceHolder.getPlantDetails(plantId, apiKey);
         call.enqueue(new Callback<PlantDetailsResponse>() {
             @Override
-            public void onResponse(Call<PlantDetailsResponse> call, Response<PlantDetailsResponse> response) {
+            public void onResponse(@NonNull Call<PlantDetailsResponse> call, @NonNull Response<PlantDetailsResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     PlantDetailsResponse plantDetailsResponse = response.body();
                     int plant_id = plantDetailsResponse.getId();
@@ -514,7 +514,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
 
             @Override
-            public void onFailure(Call<PlantDetailsResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<PlantDetailsResponse> call, @NonNull Throwable t) {
                 Log.e("PlantDetails", "Error: " + t.getMessage());
             }
         });

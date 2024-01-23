@@ -11,11 +11,11 @@ import vn.edu.usth.soicondition.network.ApiServiceDatabase;
 public class RetrofitDatabase {
     // private static final String BASE_URL = "http://172.31.99.32/codes/fetchdata.php/"; // USTH FLoor 4
     //private static final String BASE_URL = "http://192.168.1.150/codes/fetchdata.php/"; // 40th floor Tan Hoang Minh 4016
-    //private static final String BASE_URL = "http://192.168.1.149/codes/fetchdata.php/"; // 42th floor Tan Hoang Minh 4217
+    private static final String BASE_URL = "http://192.168.1.149/codes/fetchdata.php/"; // 42th floor Tan Hoang Minh 4217
     //private static final String BASE_URL = "http://192.168.50.149/codes/fetchdata.php/"; // Home floor 4
     //private static final String BASE_URL = "http://172.20.10.3/codes/fetchdata.php/"; // Nhat Anh Hotspot
     //private static final String BASE_URL = "http://10.10.15.132/codes/fetchdata.php/"; //USTH Student
-    private static final String BASE_URL = "http://192.168.68.105/codes/fetchdata.php/";
+    //private static final String BASE_URL = "http://192.168.68.105/codes/fetchdata.php/";
     private static Retrofit retrofit;
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {

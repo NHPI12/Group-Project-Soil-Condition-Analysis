@@ -73,7 +73,7 @@ public class setting extends AppCompatActivity {
         tempValue = getIntent().getStringExtra("message");
 
         sharedPreferences_tempvalue = getSharedPreferences("MODE_TEMPVALUE", Context.MODE_PRIVATE);
-        temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "tempValue");
+        temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "");
         sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
         tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
 
@@ -99,14 +99,11 @@ public class setting extends AppCompatActivity {
             editor_tempvalue.apply();
             editor_mode.apply();
         });
-        Toast.makeText(setting.this, temperaTure + " " + tempMode, Toast.LENGTH_SHORT).show();
-
 
         /////lang
         Spinner spinner = findViewById(R.id.spinner);
         String[] lanGuage = {"ENG", "FRA", "VIE"};
         CustomArrayAdapter customArrayAdapter = new CustomArrayAdapter(setting.this,R.layout.spinner_list,lanGuage);
-        //ArrayAdapter<String> adapter = new ArrayAdapter<>(setting.this, R.layout.spinner_list, lanGuage);
         spinner.setAdapter(customArrayAdapter);
 
         langspinPreference = getSharedPreferences("Lang", Context.MODE_PRIVATE);
@@ -133,6 +130,9 @@ public class setting extends AppCompatActivity {
                     edit_whatlang = whatlangPreference.edit();
                     edit_whatlang.putString("whatlang", "fr");
 
+                }else{
+                    edit_whatlang = whatlangPreference.edit();
+                    edit_whatlang.putString("whatland","vn");
                 }
                 edit_whatlang.apply();
             }

@@ -518,7 +518,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     protected void onRestart() {
         super.onRestart();
         sharedPreferences_tempvalue = getSharedPreferences("MODE_TEMPVALUE", Context.MODE_PRIVATE);
-        temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "tempValue");
+        temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "");
         sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
         tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
 
@@ -688,6 +688,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             if (plantItem.getId()== plantId){
                 String care_level = plantItem.getCare_level();
                 String watering_period = plantItem.getWatering_period();
+                Log.d("Watering_period","watering_period:"+watering_period);
                 textViewCareLevel.setText(care_level);
                 if (watering_period !=null){
                     textViewWateringPeriod.setText(watering_period);
@@ -697,8 +698,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
     private void TurnPlantDetailsIntoList(){
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
-        String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+        String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
         //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
@@ -829,11 +830,14 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
         // Add a LimitLine for the watering value
         LimitLine limitLine = new LimitLine(Value, "Average Level");
+        limitLine.setTextColor(getResources().getColor(R.color.itemnavi));
         limitLine.setLineWidth(2f);
         limitLine.setLineColor(Color.RED);
         leftAxis.addLimitLine(limitLine);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setLabelRotationAngle(90f);
+        xAxis.setTextColor(getResources().getColor(R.color.itemnavi));
+        leftAxis.setTextColor(getResources().getColor(R.color.itemnavi));
         YAxis rightAxis = lineChart.getAxisLeft();
         rightAxis.setEnabled(false);
         dataSet.setLineWidth(1f); // Line width
@@ -873,7 +877,11 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         if (overallAverage <= limitValue + threshold && overallAverage >= limitValue - threshold) {
             // If overall average is within the threshold, use green gradient
             return ContextCompat.getDrawable(this, R.drawable.gradient_green);
-        } else {
+
+        }else if (limitValue == -9999){
+            return ContextCompat.getDrawable(this, R.drawable.gradient_neutral);
+        }
+        else {
             // If overall average exceeds the threshold, use red gradient
             return ContextCompat.getDrawable(this, R.drawable.gradient_red);
         }
@@ -885,7 +893,9 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         if (overallAverage <= limitValue + threshold && overallAverage >= limitValue - threshold) {
             // If overall average is within the threshold, use green color
             return ContextCompat.getColor(this,R.color.leaf);
-        } else {
+        } else if (limitValue == -9999){
+            return ContextCompat.getColor(this, R.color.neutral);
+        }else {
             // If overall average exceeds the threshold, use red color
             return ContextCompat.getColor(this,R.color.lightRed);
         }
@@ -911,9 +921,9 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
-        String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
+        //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
         //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
         boolean isDataFetched = false;
         if (!isDataFetched) {

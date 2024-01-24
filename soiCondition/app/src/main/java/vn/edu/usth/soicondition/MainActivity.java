@@ -787,8 +787,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             }
         });
     }
-
     private void updateLineChart(LineChart lineChart, List<Entry> entries, String label, List<String> timestamps, int Value, int minValue, int maxValue) {
+        Collections.reverse(timestamps);
         int dataSize = entries.size();
         final List<Entry> finalEntries = new ArrayList<>(entries);
         final List<String> finalTimestamps = new ArrayList<>(timestamps);
@@ -821,6 +821,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 }
             }
         });
+
         float overallAverage = calculateOverallAverage(finalEntries);
         // Dynamically set the limit line color based on the overall average
         Drawable chartBackground = determineChartBackgroundColor(overallAverage, Value);

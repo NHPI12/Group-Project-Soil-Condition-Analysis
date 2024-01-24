@@ -13,7 +13,6 @@
         style="@style/ScreenBackground"
         tools:layout_editor_absoluteX="-42dp"
         tools:layout_editor_absoluteY="16dp">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,12 +20,10 @@
             android:textColor="@color/lilwhite"
             android:text="@string/setting"
             android:textSize="50sp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp">
-
             <TextView
                 android:id="@+id/lightmode"
                 android:layout_width="wrap_content"
@@ -48,29 +45,6 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:id="@+id/tempunit"
-                android:textColor="@color/lilwhite"
-                android:layout_width="228dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="70dp"
-                android:text="@string/temperature_unit"
-                android:textSize="25sp"/>
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/tempswitch"
-                android:layout_width="70dp"
-                android:layout_height="50dp"
-                android:theme="@style/SCBSwitch"
-                tools:ignore="VisualLintBounds" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
             android:layout_height="57dp"
             android:layout_marginTop="20dp">
 
@@ -78,7 +52,6 @@
                 android:id="@+id/lang"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_marginEnd="200dp"
                 android:text="@string/language"
                 android:textColor="@color/lilwhite"
@@ -90,11 +63,31 @@
                 android:layout_height="57dp"
                 android:spinnerMode="dropdown"
                 tools:ignore="TouchTargetSizeCheck,VisualLintBounds" />
-
         </LinearLayout>
-
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/lilwhite"
+                android:background="@drawable/background_button_general"
+                android:id="@+id/CelciusButton"
+                android:layout_margin="5dp"
+                android:text="Celcius"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:textColor="@color/lilwhite"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_button_general"
+                android:id="@+id/FahrenheitButton"
+                android:text="Fahrenheit"/>
+        </LinearLayout>
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
 

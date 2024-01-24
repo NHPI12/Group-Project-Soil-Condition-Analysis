@@ -4,5 +4,6 @@
     <color name="titleabc">@color/lilwhite</color>
     <color name="neutral">#35E8F8</color>
     <color name="buttonlilbrown">#152A38</color>
-
+    <color name="lightlilbrown">#205273</color>
+    <color name="darklilbrown">#101B22</color>
 </resources>

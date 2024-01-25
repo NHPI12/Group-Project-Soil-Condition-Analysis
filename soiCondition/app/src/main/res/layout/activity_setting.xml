@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,55 +20,24 @@
             android:layout_gravity="center"
             android:textColor="@color/lilwhite"
             android:text="@string/setting"
-            android:textSize="50sp" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp">
-            <TextView
-                android:id="@+id/lightmode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="170dp"
-                android:textColor="@color/lilwhite"
-                android:text="@string/light_mode"               
-                android:textSize="25sp"
-                tools:ignore="TextSizeCheck" />
-
-
+            android:textSize="50sp"/>
             <androidx.appcompat.widget.SwitchCompat
+                android:layout_marginTop="25dp"
                 android:id="@+id/lighswitch"
-                android:layout_width="70dp"
-                android:layout_height="50dp"
-                android:theme="@style/SCBSwitch"
-                tools:ignore="VisualLintBounds,DuplicateSpeakableTextCheck" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:id="@+id/lang"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:scaleX="0.75"
+                android:scaleY="0.8"
+                android:checked="false"
+                android:enabled="true"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="200dp"
-                android:text="@string/language"
-                android:textColor="@color/lilwhite"
-                android:textSize="25sp" />
-
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="140dp"
-                android:layout_height="57dp"
-                android:spinnerMode="dropdown"
-                tools:ignore="TouchTargetSizeCheck,VisualLintBounds" />
-        </LinearLayout>
+                app:switchMinWidth="380dp"
+                android:thumb="@drawable/thumb"
+                app:track="@drawable/bg_track"
+                tools:ignore="VisualLintBounds,DuplicateSpeakableTextCheck" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
             <Button
                 android:layout_width="wrap_content"
@@ -88,6 +58,38 @@
                 android:id="@+id/FahrenheitButton"
                 android:text="Fahrenheit"/>
         </LinearLayout>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp"
+            style="@style/CardBackground">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewLanguages"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/arrowImageView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constrainedHeight="true"
+                    app:layout_constraintHeight_max="250dp" />
+                <ImageView
+                    android:id="@+id/arrowImageView"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/arrow_up"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="10dp"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

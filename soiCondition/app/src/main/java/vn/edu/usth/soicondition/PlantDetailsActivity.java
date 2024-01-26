@@ -153,19 +153,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
         Translator translator = Translation.getClient(options);
         translator.downloadModelIfNeeded();
 
-        Task<String> results = translator.translate(desDetail).addOnSuccessListener(new OnSuccessListener<String>() {
-            @Override
-            public void onSuccess(String s) {
-                Toast.makeText(PlantDetailsActivity.this, "hehe", Toast.LENGTH_SHORT).show();
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(PlantDetailsActivity.this, "haha", Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        Task<String> results = translator.translate(desDetail).addOnSuccessListener(s -> Toast.makeText(PlantDetailsActivity.this, "hehe", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(PlantDetailsActivity.this, "haha", Toast.LENGTH_SHORT).show());
 
     }
 
@@ -375,14 +363,14 @@ public class PlantDetailsActivity extends AppCompatActivity {
         int overallMinTemp = Collections.min(minTemps);
         int overallMaxTemp = Collections.max(maxTemps);
 
-        float overMinTemp = (float)overallMinTemp, overMaxTemp = (float)overallMaxTemp;
+        float overMinTemp, overMaxTemp;
 
 
         sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
         tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
 
         // Display the customized temperature text
-        String temperatureValue = "";
+        String temperatureValue;
         if(!tempMode){
             temperatureValue = overallMinTemp + "°C - " + overallMaxTemp + "°C";
         }

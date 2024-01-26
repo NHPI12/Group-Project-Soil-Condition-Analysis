@@ -17,12 +17,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:text="Dark Mode"
+            android:textSize="25sp"
             android:textColor="@color/lilwhite"
-            android:text="@string/setting"
-            android:textSize="50sp"/>
+            android:layout_gravity="center"
+            android:layout_marginTop="80dp"/>
+        <View
+            android:layout_width="200dp"
+            android:layout_gravity="center"
+            android:layout_height="1dp"
+            android:layout_margin="10dp"
+            android:background="@color/graywhite"/>
             <androidx.appcompat.widget.SwitchCompat
-                android:layout_marginTop="25dp"
                 android:id="@+id/lighswitch"
                 android:layout_width="match_parent"
                 android:scaleX="0.75"
@@ -33,18 +39,38 @@
                 app:switchMinWidth="380dp"
                 android:thumb="@drawable/thumb"
                 app:track="@drawable/bg_track"
-                tools:ignore="VisualLintBounds,DuplicateSpeakableTextCheck" />
+                tools:ignore="VisualLintBounds,DuplicateSpeakableTextCheck"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_height="1dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="35dp"
+            android:background="@color/lilwhite"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Temperature Mode"
+            android:textSize="25sp"
+            android:textColor="@color/lilwhite"
+            android:layout_gravity="center"
+            />
+        <View
+            android:layout_width="200dp"
+            android:layout_gravity="center"
+            android:layout_height="1dp"
+            android:layout_margin="10dp"
+            android:background="@color/graywhite"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:orientation="horizontal">
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/lilwhite"
-                android:background="@drawable/background_button_general"
+                style="@style/ButtonColor"
                 android:id="@+id/CelciusButton"
                 android:layout_margin="5dp"
                 android:text="Celcius"/>
@@ -54,15 +80,34 @@
                 android:layout_margin="5dp"
                 android:textColor="@color/lilwhite"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_button_general"
+                style="@style/ButtonColor"
                 android:id="@+id/FahrenheitButton"
                 android:text="Fahrenheit"/>
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_height="1dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="35dp"
+            android:background="@color/lilwhite"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Languages"
+            android:textSize="25sp"
+            android:textColor="@color/lilwhite"
+            android:layout_gravity="center" />
+        <View
+            android:layout_width="200dp"
+            android:layout_gravity="center"
+            android:layout_height="1dp"
+            android:layout_margin="10dp"
+            android:background="@color/graywhite"/>
         <androidx.cardview.widget.CardView
             android:id="@+id/cardViewLanguage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
             style="@style/CardBackground">

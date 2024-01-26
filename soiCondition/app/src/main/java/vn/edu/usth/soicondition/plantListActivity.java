@@ -2,6 +2,7 @@ package vn.edu.usth.soicondition;
 
 import androidx.annotation.NonNull;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -45,7 +46,10 @@ public class plantListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_list);
-
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("Plant List");
+        }
         // RecycleView
         Intent intent = getIntent();
         if (intent.hasExtra("plantList")) {

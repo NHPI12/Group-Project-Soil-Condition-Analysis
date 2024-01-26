@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -17,13 +19,17 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
 
     private List<String> languages;
     private LayoutInflater inflater;
+    private CardView cardViewLanguage;
     private OnItemClickListener listener;
     private int selectedPosition = 0;
+    private Context context;
 
-    public LanguageAdapter(Context context, String[] languages, OnItemClickListener listener) {
+    public LanguageAdapter(Context context, String[] languages,CardView cardViewLanguage, OnItemClickListener listener) {
         this.inflater = LayoutInflater.from(context);
         this.languages = new ArrayList<>(Arrays.asList(languages)); // Convert array to list for manipulation
         this.listener = listener;
+        this.cardViewLanguage = cardViewLanguage;
+        this.context = context;
     }
 
     @NonNull
@@ -36,6 +42,7 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
     @Override
     public void onBindViewHolder(@NonNull LanguageViewHolder holder, int position) {
         holder.textView.setText(languages.get(position));
+        holder.textView.setTextColor(ContextCompat.getColor(context,R.color.itemnavi));
         holder.itemView.setOnClickListener(v -> {
             // Notify the previous item and the clicked item of the change
             notifyItemChanged(selectedPosition);
@@ -45,7 +52,19 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
             // Call the onItemClick method of the OnItemClickListener
             listener.onItemClick(languages.get(position), position);
         });
-
+        if (position == 0) { // Only for the first item
+            holder.textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Toggle the CardView visibility here
+                    if (cardViewLanguage != null) {
+                        if (context instanceof setting) {
+                            ((setting) context).toggleCardView();
+                        }
+                    }
+                }
+            });
+        }
         // Highlight the selected item in some way
         holder.itemView.setSelected(selectedPosition == position);
     }

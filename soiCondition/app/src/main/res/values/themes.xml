@@ -19,18 +19,15 @@
     <style name="CardBackground"><item name="cardBackgroundColor">@color/lilwhite</item></style>
     <style name="CardBackground.2"><item name="cardBackgroundColor">@color/lilwhite</item></style>
     <style name="TextColor"><item name="android:textColor">@color/verybrown</item></style>
+    <style name="ButtonColor"><item name="android:background">@drawable/background_button_general</item></style>
     <style name="TextColorData"><item name="android:textColor">@color/lilbrown</item></style>
     <style name="ImageChange"><item name="android:src">@color/white</item></style>
-
     <style name="Switchmode"><item name="android:switchStyle">@color/white</item></style>
-
     <style name="SCBSwitch" parent="Theme.AppCompat.Light">
         <item name="colorControlActivated">#B89B84</item>
         <item name="colorSwitchThumbNormal">#f1f1f1</item>
         <item name="android:colorForeground">#42221f1f</item>
     </style>
-
-
     <style name="appcin" parent="@android:style/Theme.NoTitleBar.Fullscreen">
         <item name="android:spinnerStyle">@style/spinnerStyle</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItem</item>

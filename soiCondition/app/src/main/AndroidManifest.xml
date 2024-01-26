@@ -16,19 +16,24 @@
         tools:targetApi="34">
         <activity
             android:name=".Your_Plant_Activity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Your Plants"/>
         <activity
             android:name=".RemovePlantsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Remove Plants"/>
         <activity
             android:name=".AddPlantsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Add Plants"/>
         <activity
             android:name=".PlantDetailsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Plant Details"/>
         <activity
             android:name=".setting"
-            android:exported="false"/>
+            android:exported="false"
+            android:label="Settings"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -39,6 +44,7 @@
         </activity>
         <activity
             android:name=".plantListActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Plant List"/>
     </application>
 </manifest>

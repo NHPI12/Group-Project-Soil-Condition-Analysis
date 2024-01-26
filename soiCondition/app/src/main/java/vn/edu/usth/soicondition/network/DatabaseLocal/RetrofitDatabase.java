@@ -16,6 +16,7 @@ public class RetrofitDatabase {
     //private static final String BASE_URL = "http://172.20.10.3/codes/fetchdata.php/"; // Nhat Anh Hotspot
     private static final String BASE_URL = "http://10.10.13.85/codes/fetchdata.php/"; //USTH Student
     //private static final String BASE_URL = "http://192.168.68.105/codes/fetchdata.php/";
+
     private static Retrofit retrofit;
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {

@@ -19,6 +19,7 @@
     <color name="buttonlilbrown">#B19470</color>
     <color name="verybrown">#76453B</color>
     <color name="itemnavi">#76453B</color>
+    <color name="lilwhitenight">#F8FAE5</color>
     <color name="graywhite">#9F9F9F</color>
     <color name="titleabc">@color/lilbrown</color>
     <color name="addremove">@color/verybrown</color>

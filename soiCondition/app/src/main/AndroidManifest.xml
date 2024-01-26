@@ -1,50 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="34">
         <activity
             android:name=".Your_Plant_Activity"
             android:exported="false"
-            android:label="Your Plants"/>
+            android:label="Your Plants" />
         <activity
             android:name=".RemovePlantsActivity"
             android:exported="false"
-            android:label="Remove Plants"/>
+            android:label="Remove Plants" />
         <activity
             android:name=".AddPlantsActivity"
             android:exported="false"
-            android:label="Add Plants"/>
+            android:label="Add Plants" />
         <activity
             android:name=".PlantDetailsActivity"
             android:exported="false"
-            android:label="Plant Details"/>
+            android:label="Plant Details" />
         <activity
             android:name=".setting"
             android:exported="false"
-            android:label="Settings"/>
+            android:label="Settings" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".plantListActivity"
             android:exported="false"
-            android:label="Plant List"/>
+            android:label="Plant List" />
     </application>
+
 </manifest>

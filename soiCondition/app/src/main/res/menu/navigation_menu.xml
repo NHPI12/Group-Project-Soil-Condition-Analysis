@@ -19,4 +19,5 @@
             android:id="@+id/item_5"
             android:title="Settings"
             android:icon="@drawable/ic_settings_foreground"/>
+
 </menu>

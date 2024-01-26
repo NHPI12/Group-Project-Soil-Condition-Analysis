@@ -392,7 +392,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
-
                     style="@style/TextColorData"/>
                 <TextView
                     android:id="@+id/tempUnit"

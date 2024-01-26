@@ -292,10 +292,11 @@
                 </androidx.cardview.widget.CardView>
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="245dp">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent">
                         <TextView
                             android:id="@+id/descriptionDetails"
                             android:layout_width="match_parent"
@@ -321,6 +322,5 @@
                     android:textColor="@color/itemnavi"
                     android:textStyle="bold"
                     tools:ignore="SpeakableTextPresentCheck,VisualLintButtonSize" />
-
             </LinearLayout>
 </FrameLayout>

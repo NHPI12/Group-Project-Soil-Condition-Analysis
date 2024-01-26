@@ -3,6 +3,7 @@ package vn.edu.usth.soicondition;
 
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
@@ -21,6 +22,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import android.view.MotionEvent;
@@ -63,7 +65,10 @@ public class setting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("Settings");
+        }
         CelButton = findViewById(R.id.CelciusButton);
         FahButton = findViewById(R.id.FahrenheitButton);
         lightswitch = findViewById(R.id.lighswitch);
@@ -80,8 +85,10 @@ public class setting extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    arrowImageView.setColorFilter(ContextCompat.getColor(setting.this, R.color.white));
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    arrowImageView.setColorFilter(ContextCompat.getColor(setting.this, R.color.black));
                 }
                 editor = sharedPreferences.edit();
                 editor.putBoolean("nightMode", isChecked);
@@ -93,20 +100,18 @@ public class setting extends AppCompatActivity {
             lightswitch.setChecked(true);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
-
         lightswitch.setOnClickListener(view -> {
             if (nightMode) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 editor = sharedPreferences.edit();
                 editor.putBoolean("nightMode", false);
-
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 editor = sharedPreferences.edit();
                 editor.putBoolean("nightMode", true);
-
             }
             editor.apply();
+            recreate();
         });
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
@@ -117,32 +122,31 @@ public class setting extends AppCompatActivity {
         temperaTure = sharedPreferences_tempvalue.getString("temperaTure", "");
         sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
         tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
-        if (!tempMode) {
-            // Celsius is the current mode
-            CelButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.background_button_settings));
-            FahButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.background_button_settings_dark));
-        } else {
-            // Fahrenheit is the current mode
-            FahButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.background_button_settings));
-            CelButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.background_button_settings_dark));
-        }
         langspinPreference = getSharedPreferences("Lang", Context.MODE_PRIVATE);
         lang = langspinPreference.getInt("lang", 0);
         whatlangPreference = getSharedPreferences("whatlang", Context.MODE_PRIVATE);
-
+        if (!tempMode) {
+            // Celsius is the current mode
+            CelButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings));
+            FahButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings_dark));
+        } else {
+            // Fahrenheit is the current mode
+            FahButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings));
+            CelButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings_dark));
+        }
         CelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FahButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.background_button_settings_dark));
-                CelButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.background_button_settings));
+                FahButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings_dark));
+                CelButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings));
                 convertTemperatureAndSave(false);
             }
         });
         FahButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CelButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.background_button_settings_dark));
-                FahButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.background_button_settings));
+                CelButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings_dark));
+                FahButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings));
                 convertTemperatureAndSave(true);
             }
         });
@@ -151,10 +155,10 @@ public class setting extends AppCompatActivity {
         recyclerViewLanguages = findViewById(R.id.recyclerViewLanguages);
         recyclerViewLanguages.setLayoutManager(new LinearLayoutManager(this));
         // Initially, only show the selected language (English)
-        languageAdapter = new LanguageAdapter(this, new String[] {"English"}, this::onLanguageSelected);
+        languageAdapter = new LanguageAdapter(this, new String[] {"English"},cardViewLanguage, this::onLanguageSelected);
         recyclerViewLanguages.setAdapter(languageAdapter);
     }
-    private void toggleCardView() {
+    void toggleCardView() {
         if (isCardViewExpanded) {
             collapseLanguageList();
         } else {
@@ -187,17 +191,20 @@ public class setting extends AppCompatActivity {
         if (position != 0) {
             languageList.remove(language);
             languageList.add(0, language);
+            languageAdapter.setLanguages(languageList);
             languageAdapter.notifyItemMoved(position, 0);
         }
 
-        // Update the adapter with only the selected language
-        languageAdapter.setLanguages(Collections.singletonList(currentSelectedLanguage));
-        recyclerViewLanguages.getAdapter().notifyDataSetChanged();
-
-        // Check if the CardView is expanded, and collapse it
+        // Collapse the CardView after the selection is made
         if (isCardViewExpanded) {
             toggleCardView();
         }
+
+        // Notify the adapter that the data has changed
+        recyclerViewLanguages.getAdapter().notifyDataSetChanged();
+
+        // Update the locale here if needed
+        //setAppLocale(language);
     }
     private void setAppLocale(String language) {
         Locale locale = new Locale(language);

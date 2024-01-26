@@ -83,7 +83,9 @@ public class AddPlantsActivity extends AppCompatActivity {
 
             // Set custom ActionBar layout
             ActionBar actionBar = getSupportActionBar();
+
             if (actionBar != null) {
+                actionBar.setTitle("Add Plants");
                 actionBar.setDisplayHomeAsUpEnabled(true);
                 actionBar.setDisplayShowCustomEnabled(true);
                 actionBar.setCustomView(customActionBarView, new ActionBar.LayoutParams(

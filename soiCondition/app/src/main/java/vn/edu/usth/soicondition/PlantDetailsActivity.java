@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -68,6 +69,10 @@ public class PlantDetailsActivity extends AppCompatActivity {
         Set<Integer> existingPlantIds = new HashSet<>();
         for (String id : existingPlantIdsStringSet){
             existingPlantIds.add(Integer.valueOf(id));
+        }
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("Plant Details");
         }
         // Initialize and set up your RecyclerView and Adapter here
         Button DetailsButton = findViewById(R.id.details_button);

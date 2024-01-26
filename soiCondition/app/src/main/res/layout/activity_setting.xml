@@ -21,17 +21,18 @@
             android:textColor="@color/lilwhite"
             android:text="@string/setting"
             android:textSize="50sp"/>
+
         <androidx.appcompat.widget.SwitchCompat
-            android:layout_marginTop="25dp"
             android:id="@+id/lighswitch"
             android:layout_width="match_parent"
-            android:scaleX="0.75"
-            android:scaleY="0.8"
+            android:layout_height="239dp"
+            android:layout_marginTop="25dp"
             android:checked="false"
             android:enabled="true"
-            android:layout_height="wrap_content"
-            app:switchMinWidth="380dp"
+            android:scaleX="0.75"
+            android:scaleY="0.8"
             android:thumb="@drawable/thumb"
+            app:switchMinWidth="380dp"
             app:track="@drawable/bg_track"
             tools:ignore="VisualLintBounds,DuplicateSpeakableTextCheck" />
         <LinearLayout
@@ -92,3 +93,4 @@
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+

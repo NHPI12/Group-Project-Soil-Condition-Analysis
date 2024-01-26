@@ -13,6 +13,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
@@ -84,7 +85,7 @@ import vn.edu.usth.soicondition.network.model.plantDetailsObject;
 
 
 
-public class MainActivity extends AppCompatActivity implements SelectedPlantsAdapter.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements SelectedPlantsAdapter.OnItemClickListener,SwipeRefreshLayout.OnRefreshListener  {
 
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     private TextView textViewWatering, textViewSunlight, textViewCareLevel,textViewWateringPeriod;
     SwitchCompat lightswitch, tempswitch;
     boolean nightMode, tempMode;
+    private SwipeRefreshLayout swipeRefreshLayout;
     String temperaTure;
     SharedPreferences sharedPreferences, sharedPreferences_tempvalue, sharedPreferences_tempmode;
 
@@ -119,21 +121,25 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
         ///////////////////////night
         arrowImageView = findViewById(R.id.ArrowSelectedPlant);
-        Drawable drw;
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightMode = sharedPreferences.getBoolean("nightMode", false);
 
         if(nightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            drw = getResources().getDrawable(R.drawable.lenn, getTheme());
-            arrowImageView.setImageDrawable(drw);
+            arrowImageView.setColorFilter(ContextCompat.getColor(MainActivity.this, R.color.white));
+
         }
         else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            drw = getResources().getDrawable(R.drawable.arrow_up, getTheme());
-            arrowImageView.setImageDrawable(drw);
+            arrowImageView.setColorFilter(ContextCompat.getColor(MainActivity.this, R.color.black));
+
         }
         allData = new ArrayList<>();
+        //Refresh Switch
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.lilwhitenight));
+        swipeRefreshLayout.setColorSchemeResources(R.color.itemnavi);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
         tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
@@ -587,9 +593,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!isTimeFrameSelected) {
-                    updateUIBasedOnCurrentPeriod();
-                }
+                updateUIBasedOnCurrentPeriod();
                 handler.postDelayed(this, 2000); // Reschedule after 2 seconds
             }
         }, 0);
@@ -698,11 +702,11 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
     private void TurnPlantDetailsIntoList(){
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
-        String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+        //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
-        //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
+        String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
         SharedPreferences sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
         Set<String> selectedPlantIdsStringSet = sharedPreferences.getStringSet("selected_plants", new HashSet<>());
         Set<Integer> selectedPlantIds = new HashSet<>();
@@ -921,11 +925,11 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
 
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
-        String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+        //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
-        //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
+        String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
         boolean isDataFetched = false;
         if (!isDataFetched) {
                 // Fetch data only if it hasn't been fetched yet
@@ -1075,5 +1079,12 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     // User clicked "No," do nothing or dismiss the dialog
                 })
                 .show();
+    }
+
+    @Override
+    public void onRefresh() {
+        TurnPlantDetailsIntoList();
+        updateSelectedPlantsCard(plantList); // Refresh the selected plants display
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

@@ -1,7 +1,4 @@
 package vn.edu.usth.soicondition;
-
-
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,8 +8,6 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-
 import android.annotation.SuppressLint;
 
 import android.content.Context;
@@ -24,18 +19,8 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -54,9 +39,8 @@ public class setting extends AppCompatActivity {
     SharedPreferences.Editor editor, editor_tempvalue, editor_mode, editlang, edit_whatlang;
     private Button CelButton, FahButton;
     private LanguageAdapter languageAdapter;
-    private List<String> languageList = new ArrayList<>(Arrays.asList("English", "Vietnamese", "France"));
+    private final List<String> languageList = new ArrayList<>(Arrays.asList("English", "Vietnamese", "France"));
     private boolean isCardViewExpanded = false;
-    private CardView cardViewLanguage;
     private RecyclerView recyclerViewLanguages;
 
     @SuppressLint("SetTextI18n")
@@ -75,10 +59,11 @@ public class setting extends AppCompatActivity {
         arrowImageView = findViewById(R.id.arrowImageView);
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightMode = sharedPreferences.getBoolean("nightMode", false);
-        cardViewLanguage = findViewById(R.id.cardViewLanguage);
+        CardView cardViewLanguage = findViewById(R.id.cardViewLanguage);
         arrowImageView.setOnClickListener(v -> toggleCardView());
 
         setupLanguageRecyclerView();
+
 
         lightswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -93,7 +78,11 @@ public class setting extends AppCompatActivity {
                 editor = sharedPreferences.edit();
                 editor.putBoolean("nightMode", isChecked);
                 editor.apply();
+
             }
+            editor = sharedPreferences.edit();
+            editor.putBoolean("nightMode", isChecked);
+            editor.apply();
         });
 
         if (nightMode) {
@@ -134,6 +123,7 @@ public class setting extends AppCompatActivity {
             FahButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings));
             CelButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings_dark));
         }
+
         CelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,6 +139,7 @@ public class setting extends AppCompatActivity {
                 FahButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings));
                 convertTemperatureAndSave(true);
             }
+
         });
     }
     private void setupLanguageRecyclerView() {
@@ -168,22 +159,25 @@ public class setting extends AppCompatActivity {
         isCardViewExpanded = !isCardViewExpanded;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void collapseLanguageList() {
         languageAdapter.setLanguages(Collections.singletonList(currentSelectedLanguage));
-        recyclerViewLanguages.getAdapter().notifyDataSetChanged();
+        Objects.requireNonNull(recyclerViewLanguages.getAdapter()).notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void expandLanguageList() {
         // Update to show all languages, with the selected language at the top
         List<String> allLanguages = new ArrayList<>(Arrays.asList("English", "Vietnamese", "France"));
         allLanguages.remove(currentSelectedLanguage);
         allLanguages.add(0, currentSelectedLanguage);
         languageAdapter.setLanguages(allLanguages);
-        recyclerViewLanguages.getAdapter().notifyDataSetChanged();
+        Objects.requireNonNull(recyclerViewLanguages.getAdapter()).notifyDataSetChanged();
     }
     private void rotateArrow(float degrees) {
         arrowImageView.animate().rotation(degrees).setDuration(300).start();
     }
+    @SuppressLint("NotifyDataSetChanged")
     private void onLanguageSelected(String language, int position) {
         currentSelectedLanguage = language; // Update the current selected language
 
@@ -196,6 +190,7 @@ public class setting extends AppCompatActivity {
         }
 
         // Collapse the CardView after the selection is made
+
         if (isCardViewExpanded) {
             toggleCardView();
         }

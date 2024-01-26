@@ -542,7 +542,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
 
     private void openSettings() {
-        TextView textView = (TextView)findViewById(R.id.tempData);
+        TextView textView = findViewById(R.id.tempData);
         String tex = textView.getText().toString();
         Intent intent = new Intent(MainActivity.this, setting.class);
         intent.putExtra("message", tex);

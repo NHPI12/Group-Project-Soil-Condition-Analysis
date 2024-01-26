@@ -34,6 +34,8 @@
         <item name="android:colorForeground">#42221f1f</item>
     </style>
 
+
+
     <style name="appcin" parent="@android:style/Theme.NoTitleBar.Fullscreen">
         <item name="android:spinnerStyle">@style/spinnerStyle</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItem</item>

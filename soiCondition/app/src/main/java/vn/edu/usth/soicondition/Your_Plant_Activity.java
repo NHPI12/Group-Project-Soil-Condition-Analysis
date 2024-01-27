@@ -1,6 +1,7 @@
 package vn.edu.usth.soicondition;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -46,6 +47,10 @@ public class Your_Plant_Activity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.your_plant_nav);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("Your Plants");
+        }
         Objects.requireNonNull(getSupportActionBar(),"cannot be null").setDisplayHomeAsUpEnabled(true);
 
         navigationView.setNavigationItemSelectedListener(item -> {

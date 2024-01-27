@@ -2,18 +2,14 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="true"
         android:state_enabled="false"
-        android:drawable="@drawable/bang"/>
-
+        android:drawable="@drawable/dark_button"/>
     <item android:state_checked="false"
         android:state_enabled="false"
-        android:drawable="@drawable/lenn"/>
-
+        android:drawable="@drawable/light_button"/>
     <item android:state_checked="true"
         android:state_enabled="true"
-        android:drawable="@drawable/arrow_up"/>
-
+        android:drawable="@drawable/dark_button"/>
     <item android:state_checked="false"
         android:state_enabled="true"
-        android:drawable="@drawable/tayy"/>
-
+        android:drawable="@drawable/light_button"/>
 </selector>

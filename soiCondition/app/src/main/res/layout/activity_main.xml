@@ -7,7 +7,13 @@
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout"
     tools:context=".MainActivity"
-    android:background="@color/leaf">
+    android:background="@color/leaf"
+    tools:ignore="MissingClass">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="MissingClass">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -49,9 +55,223 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="35dp"
-                    android:layout_marginEnd="10dp" />
+                    android:layout_marginEnd="10dp"
+                    tools:ignore="ContentDescription" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="20dp"
+            android:id="@+id/PlantDetailsCardView1">
+
+            <androidx.cardview.widget.CardView
+                style="@style/CardBackground"
+                android:layout_width="175dp"
+                android:layout_height="126dp"
+                android:layout_marginEnd="20dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10dp"
+                tools:ignore="TextSizeCheck">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        style="@style/TextColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="60dp"
+                        android:layout_marginBottom="90dp"
+                        android:text="@string/watering"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        tools:ignore="RelativeOverlap" />
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:scaleType="centerCrop"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="90dp"
+                        android:layout_marginEnd="15dp"
+                        android:src="@drawable/watering_period"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        style="@style/TextColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="30dp"
+                        android:id="@+id/watering_value_main_activity"
+                        android:textSize="25sp"
+                        tools:ignore="RelativeOverlap,TextContrastCheck,TextSizeCheck" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="175dp"
+                android:layout_height="126dp"
+                style="@style/CardBackground"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/TextColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="65dp"
+                        android:layout_marginBottom="90dp"
+                        android:text="@string/sunlight"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        tools:ignore="RelativeOverlap" />
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:scaleType="centerCrop"
+                        android:layout_height="35dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="85dp"
+                        android:layout_marginEnd="15dp"
+                        android:src="@drawable/ic_sun"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        style="@style/TextColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="30dp"
+                        android:id="@+id/sunlight_textView"
+                        android:textSize="25sp"
+                        tools:ignore="RelativeOverlap,TextContrastCheck,TextSizeCheck" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="20dp"
+            android:id="@+id/PlantDetailsCardView2">
+
+            <androidx.cardview.widget.CardView
+                style="@style/CardBackground"
+                android:layout_width="175dp"
+                android:layout_height="126dp"
+                android:layout_marginEnd="20dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10dp"
+                tools:ignore="TextSizeCheck">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/TextColor"
+                        android:layout_width="90dp"
+                        android:layout_height="59dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="62dp"
+                        android:layout_marginBottom="67dp"
+                        android:gravity="center"
+                        android:text="@string/watering_period"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:ignore="TextSizeCheck" />
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="21dp"
+                        android:layout_marginBottom="85dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_watering"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/Watering_period_textView"
+                        style="@style/TextColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="30dp"
+                        android:text="Hello"
+                        android:textSize="25sp"
+                        tools:ignore="HardcodedText,TextContrastCheck,TextSizeCheck" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                style="@style/CardBackground"
+                android:layout_width="175dp"
+                android:layout_height="126dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10dp"
+                tools:ignore="TextSizeCheck">
+
+                <RelativeLayout
+                    android:layout_width="170dp"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/TextColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="65dp"
+                        android:layout_marginBottom="90dp"
+                        android:gravity="center"
+                        android:text="@string/care_level"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:ignore="RelativeOverlap" />
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="85dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_care_level"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/care_level_textView"
+                        style="@style/TextColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="30dp"
+                        android:textSize="25sp"
+                        tools:ignore="TextContrastCheck,TextSizeCheck" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
         <androidx.cardview.widget.CardView
             android:onClick="expandHumid"
             android:layout_width="match_parent"
@@ -78,7 +298,7 @@
                     android:id="@+id/humidtitle"
                     android:textSize="32sp"
                     android:textStyle="bold"
-                    android:text="@string/humid"
+                    android:text="Humidity"
                     style="@style/TextColor">
                 </TextView>
                 <TextView
@@ -86,7 +306,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
                     android:id="@+id/humidData"
-                    style="@style/TextColor"/>
+                    style="@style/TextColorData"/>
             </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChartHumid"
@@ -94,6 +314,51 @@
                     android:layout_height="200dp"
                     android:visibility="gone"
                     android:layout_marginTop="16dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/buttonsHumid"
+                    android:visibility="gone"
+                    android:layout_below="@+id/lineChartHumid"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_horizontal">
+                    <Button
+                        android:id="@+id/button_1d_humid"
+                        style="@style/MyButton"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/_1d"
+                         />
+                    <Button
+                        android:id="@+id/button_3d_humid"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:text="@string/_3d"
+                        style="@style/MyButton"
+                        android:layout_marginEnd="10dp"/>
+                    <Button
+                        android:id="@+id/button_1w_humid"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="1w"
+                        style="@style/MyButton"/>
+                    <Button
+                        android:id="@+id/button_1m_humid"
+                        android:layout_marginEnd="10dp"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        style="@style/MyButton"
+                        android:text="1m" />
+                    <Button
+                        android:id="@+id/button_alltime_humid"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        style="@style/MyButton"
+                        android:text="ALL" />
+                </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
@@ -131,14 +396,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
-                    style="@style/TextColor"/>
+                    style="@style/TextColorData"/>
                 <TextView
                     android:id="@+id/tempUnit"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="°C"
                     android:textSize="32sp"
-                    style="@style/TextColor"/>
+                    style="@style/TextColorData"/>
             </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChartTemp"
@@ -146,6 +411,51 @@
                     android:layout_height="200dp"
                     android:visibility="gone"
                     android:layout_marginTop="16dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/buttonsTemp"
+                    android:visibility="gone"
+                    android:layout_below="@+id/lineChartHumid"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_horizontal">
+                    <Button
+                        android:id="@+id/button_1d_temp"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="1d"
+                        style="@style/MyButton"/>
+                    <Button
+                        android:id="@+id/button_3d_temp"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="3d"
+                        style="@style/MyButton"/>
+                    <Button
+                        android:id="@+id/button_1w_temp"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="1w"
+                        style="@style/MyButton"/>
+                    <Button
+                        android:id="@+id/button_1m_temp"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="1m"
+                        style="@style/MyButton"/>
+                    <Button
+                        android:id="@+id/button_alltime_temp"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="ALL"
+                        style="@style/MyButton"/>
+                </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
@@ -182,7 +492,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
-                    style="@style/TextColor"/>
+                    style="@style/TextColorData"/>
+
                 </LinearLayout>
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChartSoil"
@@ -190,12 +501,59 @@
                     android:layout_height="200dp"
                     android:layout_marginTop="16dp"
                     android:visibility="gone"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/buttonsSoil"
+                    android:visibility="gone"
+                    android:layout_below="@+id/lineChartHumid"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_horizontal">
+                    <Button
+                        android:id="@+id/button_1d_soil"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/_1d"
+                        style="@style/MyButton"
+                        />
+                    <Button
+                        android:id="@+id/button_3d_soil"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/_3d"
+                        style="@style/MyButton"/>
+                    <Button
+                        android:id="@+id/button_1w_soil"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/_1w"
+                        style="@style/MyButton"/>
+                    <Button
+                        android:id="@+id/button_1m_soil"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/_1m"
+                        style="@style/MyButton"/>
+                    <Button
+                        android:id="@+id/button_alltime_soil"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/all"
+                        style="@style/MyButton"/>
+                </LinearLayout>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
     </LinearLayout>
-
     </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
@@ -209,6 +567,7 @@
         tools:ignore="VisualLintBounds"
         app:itemShapeFillColor="@color/itemnavi"
         app:itemIconTint="@color/itemnavi"
+
         style="@style/ScreenBackground.2">
         <LinearLayout
             android:layout_width="match_parent"
@@ -220,17 +579,19 @@
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                tools:ignore="UselessParent">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingRight="40dp"
-                    android:paddingLeft="35dp"
+                    android:paddingEnd="40dp"
+                    android:paddingStart="35dp"
                     android:textSize="20sp"
                     android:text="Add"
                     android:textStyle="bold"
                     android:id="@+id/add_text"
-                    style="@style/TextColor"/>
+                    style="@style/TextColor"
+                    tools:ignore="HardcodedText" />
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
@@ -242,9 +603,9 @@
                     android:text="Remove"
                     android:id="@+id/remove_text"
                     android:textStyle="bold"
-                    android:paddingLeft="40dp"
+                    android:paddingStart="40dp"
                     style="@style/TextColor"
-                    tools:ignore="RtlSymmetry"/>
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>

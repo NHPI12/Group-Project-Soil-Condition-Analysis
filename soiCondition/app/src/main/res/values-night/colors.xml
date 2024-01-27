@@ -2,5 +2,9 @@
 <resources>
     <color name="itemnavi">@color/lilwhite</color>
     <color name="titleabc">@color/lilwhite</color>
-
+    <color name="neutral">#35E8F8</color>
+    <color name="buttonlilbrown">#152A38</color>
+    <color name="selected">#205273</color>
+    <color name="unselected">#101B22</color>
+    <color name="lilwhitenight">#152A38</color>
 </resources>

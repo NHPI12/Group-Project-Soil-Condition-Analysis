@@ -62,10 +62,8 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         PlantData plantData = PlantData.get(position);
-        if(plantData == null){
-            return;
-        }
-        setSunlightIcons(plantData.getSunlight(), holder.sunlightIconsContainer);
+        List<String> plantSunlight = plantData.getSunlight();
+        setSunlightIcons(plantSunlight, holder.sunlightIconsContainer);
         holder.common_name.setText((plantData.getCommon_name()));
         default_Image defaultImage = plantData.getDefaultImage();
         if (defaultImage != null) {
@@ -165,7 +163,7 @@ public class Plant_List_Recycle_Adapter extends RecyclerView.Adapter<Plant_List_
     }
     private ImageView createSunlightIcon(int iconResourceId) {
         ImageView icon = new ImageView(context);
-        icon.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        icon.setLayoutParams(new ViewGroup.LayoutParams(110, ViewGroup.LayoutParams.WRAP_CONTENT));
         icon.setImageResource(iconResourceId);
         icon.setPadding(0, 0, 16, 0);
         return icon;

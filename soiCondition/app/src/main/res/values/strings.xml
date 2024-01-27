@@ -1,8 +1,7 @@
 <resources>
 
     <string name="app_name">PlantSync</string>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
     <string name="season">Season</string>
@@ -12,6 +11,22 @@
     <string name="temperature">Temperature</string>
     <string name="soil_moisture">Soil Moisture</string>
     <string name="checkAll">Check All</string>
+    <string name="watering">Watering</string>
+    <string name="sunlight">SunLight</string>
+    <string name="watering_period">Watering period</string>
+    <string name="care_level">Care level</string>
+    <string name="light_mode">Light mode</string>
+    <string name="temperature_unit">Temperature Unit</string>
     <string name="setting">Setting</string>
-
+    <string name="language">Language</string>
+    <string name="common_name" translatable="false">Common Name</string>
+    <string name="scientific_name" translatable="false">Scientific name</string>
+    <string name="spring" translatable="false">Spring</string>
+    <string name="perennial" translatable="false">Perennial</string>
+    <string name="add_remove">ADD/REMOVE</string>
+    <string name="_1d" translatable="false">1d</string>
+    <string name="_3d" translatable="false">3d</string>
+    <string name="_1w" translatable="false">1w</string>
+    <string name="_1m" translatable="false">1m</string>
+    <string name="all">ALL</string>
 </resources>

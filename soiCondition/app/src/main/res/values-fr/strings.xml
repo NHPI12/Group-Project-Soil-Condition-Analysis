@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Synchronisation des plantes</string>
+    <string name="nav_open">Ouvrir</string>
+    <string name="nav_close">Fermer</string>
+    <string name="season">Saison</string>
+    <string name="cycle">Faire du vélo</string>
+    <string name="humidity">Humidité</string>
+    <string name="humid">Humidité</string>
+    <string name="temperature">Température</string>
+    <string name="soil_moisture">Humidité du sol</string>
+    <string name="checkAll">Vérifie tout</string>
+    <string name="watering">Arrosage</string>
+    <string name="sunlight">Lumière du soleil</string>
+    <string name="watering_period">Période d\'arrosage</string>
+    <string name="care_level">Niveau de soins</string>
+    <string name="light_mode">Mode lumière</string>
+    <string name="temperature_unit">Unité de température</string>
+    <string name="setting">Paramètre</string>
+    <string name="language">Langue</string>
+    <string name="add_remove">AJOUTER/RETIRER</string>
+    <string name="all">TOUS</string>
+</resources>

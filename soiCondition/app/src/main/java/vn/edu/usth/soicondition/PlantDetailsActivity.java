@@ -3,6 +3,7 @@ package vn.edu.usth.soicondition;
 
 import android.annotation.SuppressLint;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -54,10 +56,10 @@ public class PlantDetailsActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     boolean  tempMode;
+    String whatlang, langnow;
     private static final String PREF_SELECTED_PLANTS="selected_plants";
-
-    SharedPreferences whatlangPreference, sharedPreferences_tempmode;
-    SharedPreferences.Editor edit_whatlang;
+    SharedPreferences whatlangPreference, langnowPreference, sharedPreferences_tempmode;
+    SharedPreferences.Editor edit_langnow;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,10 @@ public class PlantDetailsActivity extends AppCompatActivity {
         Set<Integer> existingPlantIds = new HashSet<>();
         for (String id : existingPlantIdsStringSet){
             existingPlantIds.add(Integer.valueOf(id));
+        }
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("Plant Details");
         }
         // Initialize and set up your RecyclerView and Adapter here
         Button DetailsButton = findViewById(R.id.details_button);
@@ -113,8 +119,8 @@ public class PlantDetailsActivity extends AppCompatActivity {
 
         // Set text in TextView elements
         scientificNameTextView.setText(joinStrings(Objects.requireNonNull(scientificNames)));
-        commonNameTextView.setText(commonName);
-        cycleTextView.setText(cycle);
+        commonNameTextView.setText(commonName); translay(commonNameTextView);
+        cycleTextView.setText(cycle); translay(cycleTextView);
         customizeSunlightText(Objects.requireNonNull(sunlight));
         wateringTextView.setText(watering);
         customizeHumidityText(Objects.requireNonNull(watering));
@@ -127,16 +133,16 @@ public class PlantDetailsActivity extends AppCompatActivity {
         }
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        //String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
+        String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-        String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
-        //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
-
+        // String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
         //String apiKey ="sk-MUZ5659b830f829253689"; //Nguyen 3rd
         fetchPlantDetails(ID,apiKey);
-    }
 
+        TextView SeasonsDetails = findViewById(R.id.SeasonsDetails); translay(SeasonsDetails);
+    }
 
     protected void onRestart() {
         super.onRestart();
@@ -153,20 +159,56 @@ public class PlantDetailsActivity extends AppCompatActivity {
         Translator translator = Translation.getClient(options);
         translator.downloadModelIfNeeded();
 
-        Task<String> results = translator.translate(desDetail).addOnSuccessListener(new OnSuccessListener<String>() {
-            @Override
-            public void onSuccess(String s) {
-                Toast.makeText(PlantDetailsActivity.this, "hehe", Toast.LENGTH_SHORT).show();
+        Task<String> results = translator.translate(desDetail)
+                .addOnSuccessListener(s -> Toast.makeText(PlantDetailsActivity.this, "hehe", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(PlantDetailsActivity.this, "haha", Toast.LENGTH_SHORT).show());
 
+    }
+
+    private void translay(TextView texview) {
+        langnowPreference = getSharedPreferences("MODE_LANGNOW", Context.MODE_PRIVATE);
+        langnow = langnowPreference.getString("langnow", "en");
+        whatlangPreference = getSharedPreferences("MODE_LANG", Context.MODE_PRIVATE);
+        whatlang = whatlangPreference.getString("whatlang", "en");
+
+        TranslatorOptions options = new TranslatorOptions.Builder()
+                .setTargetLanguage(whatlang)
+                .setSourceLanguage(langnow).build();
+        Translator translator = Translation.getClient(options);
+        String sourceText = texview.getText().toString();
+
+        ProgressDialog progressDialog = new ProgressDialog(PlantDetailsActivity.this);
+        progressDialog.setMessage("Downloading the trans model");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        translator.downloadModelIfNeeded().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                progressDialog.dismiss();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(PlantDetailsActivity.this, "haha", Toast.LENGTH_SHORT).show();
-
+                progressDialog.dismiss();
             }
         });
 
+        Task<String> result = translator.translate(sourceText).addOnSuccessListener(new OnSuccessListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                //Toast.makeText(PlantDetailsActivity.this, s, Toast.LENGTH_SHORT).show();
+                texview.setText(s);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(PlantDetailsActivity.this, Objects.requireNonNull(e.getMessage()), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        edit_langnow = langnowPreference.edit();
+        edit_langnow.putString("langnow", whatlang);
+        edit_langnow.apply();
     }
 
     //Show confirmation and Remove Plant
@@ -194,7 +236,9 @@ public class PlantDetailsActivity extends AppCompatActivity {
         editor.putStringSet(PREF_SELECTED_PLANTS,convertSetToStringSet(existingPlantIds));
         editor.apply();
         Log.d("Selected plant IDs", existingPlantIds.toString());
-        recreate();
+        Intent intent = new Intent(PlantDetailsActivity.this, MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
     }
 
     // Show confirmation and Add the plant
@@ -222,7 +266,9 @@ public class PlantDetailsActivity extends AppCompatActivity {
         editor.putStringSet(PREF_SELECTED_PLANTS,convertSetToStringSet(existingPlantIds));
         editor.apply();
         Log.d("Selected plant IDs", existingPlantIds.toString());
-        recreate();
+        Intent intent = new Intent(PlantDetailsActivity.this, MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
     }
 
     private Set<String> convertSetToStringSet(Set<Integer> IntegerSet) {
@@ -272,6 +318,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     PlantDetailsResponse plantDetails = response.body();
                     String description = plantDetails.getDescription();
+                    String watering_period = plantDetails.getWatering_period();
                     TextView flowering_season = findViewById(R.id.SeasonsDetails);
                     TextView description_details = findViewById(R.id.descriptionDetails);
                     ImageView flowering_Image = findViewById(R.id.Flowering_Season_Icon);
@@ -283,6 +330,8 @@ public class PlantDetailsActivity extends AppCompatActivity {
                         flowering_Image.setImageResource(R.drawable.season_cycle_icon);
                     }
                     description_details.setText(description);
+                    translay(description_details); translay(flowering_season);
+                    Log.e("PlantDetails","Watering Period: "+watering_period);
                 } else {
                     Log.e("PlantDetails", "Error: " + response.code());
                 }
@@ -335,7 +384,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
                 humidityText = "Not specified";
                 break;
         }
-        humidityTextView.setText(humidityText);
+        humidityTextView.setText(humidityText); translay(humidityTextView);
     }
     private void customizeSunlightText(List<String> sunlight) {
         TextView temperatureTextView = findViewById(R.id.temperatureDetails);
@@ -373,14 +422,14 @@ public class PlantDetailsActivity extends AppCompatActivity {
         int overallMinTemp = Collections.min(minTemps);
         int overallMaxTemp = Collections.max(maxTemps);
 
-        float overMinTemp = (float)overallMinTemp, overMaxTemp = (float)overallMaxTemp;
+        float overMinTemp, overMaxTemp;
 
 
         sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
         tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
 
         // Display the customized temperature text
-        String temperatureValue = "";
+        String temperatureValue;
         if(!tempMode){
             temperatureValue = overallMinTemp + "°C - " + overallMaxTemp + "°C";
         }

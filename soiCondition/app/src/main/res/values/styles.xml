@@ -14,7 +14,6 @@
     <style name="paddingNavigation">
         <item name="android:layout_marginBottom">20dp</item>
     </style>
-
     <style name="CustomCheckboxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:buttonTint">@color/itemnavi</item>
     </style>
@@ -24,4 +23,18 @@
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@color/verybrown</item>
     </style>
+    <style name="MyButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/background_button_general</item>
+        <item name="android:textColor">@color/lilwhite</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MySpinnerStyle" parent="Widget.AppCompat.Spinner">
+        <item name="android:textColor">#FF0000</item> <!-- Example: Red text color -->
+
+        <!-- Add more custom attributes here -->
+    </style>
+
+
+
 </resources>

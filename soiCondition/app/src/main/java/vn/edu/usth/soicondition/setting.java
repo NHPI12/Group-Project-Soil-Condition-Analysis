@@ -17,9 +17,11 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+
 import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,24 +67,18 @@ public class setting extends AppCompatActivity {
         setupLanguageRecyclerView();
 
 
-        lightswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    arrowImageView.setColorFilter(ContextCompat.getColor(setting.this, R.color.white));
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    arrowImageView.setColorFilter(ContextCompat.getColor(setting.this, R.color.black));
-                }
-                editor = sharedPreferences.edit();
-                editor.putBoolean("nightMode", isChecked);
-                editor.apply();
-
+        lightswitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                arrowImageView.setColorFilter(ContextCompat.getColor(setting.this, R.color.white));
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                arrowImageView.setColorFilter(ContextCompat.getColor(setting.this, R.color.black));
             }
             editor = sharedPreferences.edit();
             editor.putBoolean("nightMode", isChecked);
             editor.apply();
+
         });
 
         if (nightMode) {
@@ -146,6 +142,7 @@ public class setting extends AppCompatActivity {
         recyclerViewLanguages = findViewById(R.id.recyclerViewLanguages);
         recyclerViewLanguages.setLayoutManager(new LinearLayoutManager(this));
         // Initially, only show the selected language (English)
+        CardView cardViewLanguage = findViewById(R.id.cardViewLanguage);
         languageAdapter = new LanguageAdapter(this, new String[] {"English"},cardViewLanguage, this::onLanguageSelected);
         recyclerViewLanguages.setAdapter(languageAdapter);
     }

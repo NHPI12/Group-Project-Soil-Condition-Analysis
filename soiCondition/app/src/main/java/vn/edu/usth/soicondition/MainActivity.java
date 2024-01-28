@@ -637,7 +637,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             // If no specific time frame is selected, show all measurements
             dataToShow = allData;
         }
-
         // Extract and convert data for each type (humidity, temperature, soil moisture)
         List<String> timestamps = extractTimestamps(dataToShow);
         List<Entry> humidityEntries = convertToEntriesForHumidity(dataToShow);
@@ -677,7 +676,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         for (Measurements measurement : allData) {
             try {
                 Date timestamp = dateFormat.parse(measurement.getTimestamps());
-                if (latestTimestamp == null || (timestamp != null && timestamp.after(latestTimestamp))) {
+                   if (latestTimestamp == null || (timestamp != null && timestamp.after(latestTimestamp))) {
                     latestTimestamp = timestamp;
                 }
             } catch (ParseException e) {
@@ -703,10 +702,10 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     private void TurnPlantDetailsIntoList(){
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
-        String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
+        //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
         SharedPreferences sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
         Set<String> selectedPlantIdsStringSet = sharedPreferences.getStringSet("selected_plants", new HashSet<>());
         Set<Integer> selectedPlantIds = new HashSet<>();
@@ -923,20 +922,19 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 .build();
         JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
 
-
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
-        //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+        String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
-        String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
+        //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
         boolean isDataFetched = false;
         if (!isDataFetched) {
                 // Fetch data only if it hasn't been fetched yet
                 fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
                 TurnPlantDetailsIntoList();
+                Log.d("PlantList:","Number of member: "+plantList.size());
             }
-
     }
 
     private void fetchDatafromMultiplePages(JSONPlaceHolder jsonPlaceHolder, String apiKey, int pageNumber) {
@@ -950,8 +948,10 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     // Pass data to Activity
                     if (pageNumber < 2) {
                         fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, pageNumber + 1);
+                        Log.d("CheckPlant","FetchSuccessfully");
                     } else {
                         updateSelectedPlantsCard(plantList);
+
                     }
                 } else {
                     Log.e("PlantList", "Error" + response.code());
@@ -995,7 +995,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             startFetchingDataWithDefaults();
             // If no plants are selected, hide the CardView
             selectedPlantsCardView.setVisibility(View.GONE);
-
         }
     }
 

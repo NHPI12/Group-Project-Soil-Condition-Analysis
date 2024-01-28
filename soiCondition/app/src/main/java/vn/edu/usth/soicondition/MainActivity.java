@@ -17,7 +17,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,7 +38,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -50,9 +48,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -88,10 +83,6 @@ import vn.edu.usth.soicondition.network.model.PlantDetailsResponse;
 import vn.edu.usth.soicondition.network.model.PlantResponse;
 import vn.edu.usth.soicondition.network.model.plantDetailsObject;
 
-import com.google.mlkit.nl.translate.Translation;
-import com.google.mlkit.nl.translate.Translator;
-import com.google.mlkit.nl.translate.TranslatorOptions;
-
 
 
 public class MainActivity extends AppCompatActivity implements SelectedPlantsAdapter.OnItemClickListener,SwipeRefreshLayout.OnRefreshListener  {
@@ -115,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
 
     private LinearLayout PlantDetailsLinearLayout_1, plantdetailslinelayout_2;
     private TextView textViewWatering, textViewSunlight, textViewCareLevel,textViewWateringPeriod;
+    SwitchCompat lightswitch, tempswitch;
     boolean nightMode, tempMode;
     private SwipeRefreshLayout swipeRefreshLayout;
     String temperaTure;
@@ -438,45 +430,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             updateSoilChart("all", currentSoilMoistureValue);
         });
     }
-
-    private void translay(TextView texview) {
-        TranslatorOptions options = new TranslatorOptions.Builder()
-                .setTargetLanguage("fr")
-                .setSourceLanguage("en").build();
-        Translator translator = Translation.getClient(options);
-        String sourceText = texview.getText().toString();
-
-        ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setMessage("Downloading the trans model");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        translator.downloadModelIfNeeded().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                progressDialog.dismiss();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                progressDialog.dismiss();
-            }
-        });
-
-        Task<String> result = translator.translate(sourceText).addOnSuccessListener(new OnSuccessListener<String>() {
-            @Override
-            public void onSuccess(String s) {
-                //Toast.makeText(PlantDetailsActivity.this, s, Toast.LENGTH_SHORT).show();
-                texview.setText(s);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MainActivity.this, Objects.requireNonNull(e.getMessage()), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     private List<String> extractTimestamps(List<Measurements> filteredData) {
         List<String> timestamps = new ArrayList<>();
         for (Measurements measurement : filteredData) {
@@ -580,12 +533,9 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         TextView tempUnit = findViewById(R.id.tempUnit);
         if(tempMode){
             tempUnit.setText("°F");
-        }
-        else {
+        }else {
             tempUnit.setText("°C");
         }
-
-        translay(textViewWateringPeriod);
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -687,7 +637,6 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             // If no specific time frame is selected, show all measurements
             dataToShow = allData;
         }
-
         // Extract and convert data for each type (humidity, temperature, soil moisture)
         List<String> timestamps = extractTimestamps(dataToShow);
         List<Entry> humidityEntries = convertToEntriesForHumidity(dataToShow);
@@ -727,7 +676,7 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         for (Measurements measurement : allData) {
             try {
                 Date timestamp = dateFormat.parse(measurement.getTimestamps());
-                if (latestTimestamp == null || (timestamp != null && timestamp.after(latestTimestamp))) {
+                   if (latestTimestamp == null || (timestamp != null && timestamp.after(latestTimestamp))) {
                     latestTimestamp = timestamp;
                 }
             } catch (ParseException e) {
@@ -744,23 +693,19 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 String watering_period = plantItem.getWatering_period();
                 Log.d("Watering_period","watering_period:"+watering_period);
                 textViewCareLevel.setText(care_level);
-                translay(textViewCareLevel);
                 if (watering_period !=null){
                     textViewWateringPeriod.setText(watering_period);
-                    translay(textViewWateringPeriod);
                 }
             }
         }
     }
     private void TurnPlantDetailsIntoList(){
-        String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
+        //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
-        //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
+        String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
         //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
-
-
         SharedPreferences sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
         Set<String> selectedPlantIdsStringSet = sharedPreferences.getStringSet("selected_plants", new HashSet<>());
         Set<Integer> selectedPlantIds = new HashSet<>();
@@ -819,9 +764,10 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
 
     private void updateCardViewDetails(String wateringValueStr, String sunlightValue) {
-        textViewWatering.setText(wateringValueStr); translay(textViewWatering);
+        textViewWatering.setText(wateringValueStr);
         textViewSunlight.setText(sunlightValue);
     }
+
 
     private void fetchDataFromLocalDatabase() {
         ApiServiceDatabase apiService = RetrofitDatabase.getApiService();
@@ -976,20 +922,19 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 .build();
         JSONPlaceHolder jsonPlaceHolder = retrofit.create(JSONPlaceHolder.class);
 
-
         //String apiKey = "sk-gAIS6560794454fbf2885";   // Quy's API key
-        //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
+        String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
         //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
         //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
-        String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
+        //String apiKey = "sk-yMXy658e9fa1e97613609"; // Quy 4rd
         boolean isDataFetched = false;
         if (!isDataFetched) {
                 // Fetch data only if it hasn't been fetched yet
                 fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, 1);
                 TurnPlantDetailsIntoList();
+                Log.d("PlantList:","Number of member: "+plantList.size());
             }
-
     }
 
     private void fetchDatafromMultiplePages(JSONPlaceHolder jsonPlaceHolder, String apiKey, int pageNumber) {
@@ -1003,8 +948,10 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                     // Pass data to Activity
                     if (pageNumber < 2) {
                         fetchDatafromMultiplePages(jsonPlaceHolder, apiKey, pageNumber + 1);
+                        Log.d("CheckPlant","FetchSuccessfully");
                     } else {
                         updateSelectedPlantsCard(plantList);
+
                     }
                 } else {
                     Log.e("PlantList", "Error" + response.code());
@@ -1048,9 +995,10 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             startFetchingDataWithDefaults();
             // If no plants are selected, hide the CardView
             selectedPlantsCardView.setVisibility(View.GONE);
-
         }
     }
+
+
 
     // New method to start fetching data with default values when no plant is selected
 

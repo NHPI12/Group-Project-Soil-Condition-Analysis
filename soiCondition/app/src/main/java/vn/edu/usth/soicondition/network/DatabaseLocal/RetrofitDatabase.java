@@ -1,8 +1,6 @@
 package vn.edu.usth.soicondition.network.DatabaseLocal;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
+
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -14,8 +12,8 @@ public class RetrofitDatabase {
     //private static final String BASE_URL = "http://192.168.68.113/codes/fetchdata.php/"; // Nha Anh Linh
     //private static final String BASE_URL = "http://192.168.50.149/codes/fetchdata.php/"; // Home floor 4
     //private static final String BASE_URL = "http://172.20.10.3/codes/fetchdata.php/"; // Nhat Anh Hotspot
-    private static final String BASE_URL = "http://10.10.13.85/codes/fetchdata.php/"; //USTH Student
-    //private static final String BASE_URL = "http://192.168.68.105/codes/fetchdata.php/";
+    //private static final String BASE_URL = "http://10.10.13.85/codes/fetchdata.php/"; //USTH Student
+    private static final String BASE_URL = "http://192.168.68.105/codes/fetchdata.php/";
 
     private static Retrofit retrofit;
     public static Retrofit getRetrofitInstance() {

@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -58,29 +57,27 @@ public class PlantDetailsActivity extends AppCompatActivity {
     boolean  tempMode;
     String whatlang, langnow;
     private static final String PREF_SELECTED_PLANTS="selected_plants";
-    SharedPreferences whatlangPreference, langnowPreference, sharedPreferences_tempmode;
+
+    SharedPreferences whatlangPreference, sharedPreferences_tempmode, langnowPreference;
     SharedPreferences.Editor edit_langnow;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_details);
-        sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences",MODE_PRIVATE);
-        Set<String> existingPlantIdsStringSet = sharedPreferences.getStringSet(PREF_SELECTED_PLANTS,new HashSet<>());
+
+        sharedPreferences = getSharedPreferences("ID_Plants_Save_Preferences", MODE_PRIVATE);
+        Set<String> existingPlantIdsStringSet = sharedPreferences.getStringSet(PREF_SELECTED_PLANTS, new HashSet<>());
         Set<Integer> existingPlantIds = new HashSet<>();
-        for (String id : existingPlantIdsStringSet){
+        for (String id : existingPlantIdsStringSet) {
             existingPlantIds.add(Integer.valueOf(id));
-        }
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle("Plant Details");
         }
         // Initialize and set up your RecyclerView and Adapter here
         Button DetailsButton = findViewById(R.id.details_button);
 
         Intent intent = getIntent();
         int ID = intent.getIntExtra("id", 0);
-        if(!existingPlantIds.contains(ID)){
+        if (!existingPlantIds.contains(ID)) {
             DetailsButton.setText("ADD PLANT");
             DetailsButton.setBackgroundResource(R.drawable.background_button_add);
             DetailsButton.setTextColor(getResources().getColor(R.color.lilwhite));
@@ -88,7 +85,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
                 //Add function
                 showConfirmationDialogAdd(ID);
             });
-        }else{
+        } else {
             DetailsButton.setText("Remove Plant");
             DetailsButton.setBackgroundResource(R.drawable.background_button_remove);
             DetailsButton.setTextColor(getResources().getColor(R.color.lilwhite));
@@ -98,17 +95,15 @@ public class PlantDetailsActivity extends AppCompatActivity {
             });
         }
 
-
         ArrayList<String> scientificNames = intent.getStringArrayListExtra("scientific_name");
         String commonName = intent.getStringExtra("common_name");
         String cycle = intent.getStringExtra("cycle");
         String watering = intent.getStringExtra("watering");
         String originalUrl = intent.getStringExtra("original_url");
         ArrayList<String> sunlight = intent.getStringArrayListExtra("sunlight");
-        Log.d("Common",""+ commonName);
-
-        Log.d("Okabcde","Original URL: " + originalUrl);
-        Log.d("Okabcde","Common Name: " + commonName);
+        Log.d("Common", "" + commonName);
+        Log.d("Okabcde", "Original URL: " + originalUrl);
+        Log.d("Okabcde", "Common Name: " + commonName);
 
         // Find TextView elements
         TextView scientificNameTextView = findViewById(R.id.Scientific_details_name);
@@ -120,60 +115,42 @@ public class PlantDetailsActivity extends AppCompatActivity {
         // Set text in TextView elements
         scientificNameTextView.setText(joinStrings(Objects.requireNonNull(scientificNames)));
         commonNameTextView.setText(commonName); translay(commonNameTextView);
-        cycleTextView.setText(cycle); translay(cycleTextView);
+        cycleTextView.setText(cycle);
         customizeSunlightText(Objects.requireNonNull(sunlight));
         wateringTextView.setText(watering);
         customizeHumidityText(Objects.requireNonNull(watering));
 
+        translay(cycleTextView);
+
         if (originalUrl != null && !originalUrl.isEmpty()) {
             Picasso.get().load(originalUrl).into(BigImageDetails);
-        }
-        else {
+        } else {
             Picasso.get().load(R.drawable.ic_thumbnail).into(BigImageDetails);
         }
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
+        //String apiKey     = "sk-gAIS6560794454fbf2885";   // Quy's API key
         //String apiKey     = "sk-O0QK655e2575b0b303082";   // Nguyen Main
         //String apiKey     = "sk-JAdj65704f90038483358";   // Nguyen 2nd
-        //String apiKey     = "sk-PEwA657057073ee313360";   // Quy 2nd
-        // String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
+        //String apiKey = "sk-PEwA657057073ee313360";   // Quy 2nd
+        //String apiKey = "sk-V27h658e9a807e9213607"; // Quy 3rd
         //String apiKey ="sk-MUZ5659b830f829253689"; //Nguyen 3rd
-        fetchPlantDetails(ID,apiKey);
+        //String apiKey = "sk-jdMu65b65b3fe0b603926";
+        String apiKey = "sk-GKSV65b67e83af8c03928";
 
-        TextView SeasonsDetails = findViewById(R.id.SeasonsDetails); translay(SeasonsDetails);
-    }
-
-    protected void onRestart() {
-        super.onRestart();
-        TextView descriptionDetails = findViewById(R.id.descriptionDetails);
-        String desDetail = descriptionDetails.getText().toString();
-
-        TextView SeasonsDetails = findViewById(R.id.SeasonsDetails);
-        String strSeasonsDetails = SeasonsDetails.toString();
-
-        TranslatorOptions options = new TranslatorOptions.Builder()
-                .setTargetLanguage("fr")
-                .setSourceLanguage("en")
-                .build();
-        Translator translator = Translation.getClient(options);
-        translator.downloadModelIfNeeded();
-
-        Task<String> results = translator.translate(desDetail)
-                .addOnSuccessListener(s -> Toast.makeText(PlantDetailsActivity.this, "hehe", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(PlantDetailsActivity.this, "haha", Toast.LENGTH_SHORT).show());
+        fetchPlantDetails(ID, apiKey);
 
     }
 
-    private void translay(TextView texview) {
-        langnowPreference = getSharedPreferences("MODE_LANGNOW", Context.MODE_PRIVATE);
-        langnow = langnowPreference.getString("langnow", "en");
-        whatlangPreference = getSharedPreferences("MODE_LANG", Context.MODE_PRIVATE);
-        whatlang = whatlangPreference.getString("whatlang", "en");
+    private void translay(TextView texview){
+        whatlangPreference = getSharedPreferences("whatlang_MODE", Context.MODE_PRIVATE);
+        whatlang = whatlangPreference.getString("whatlang", "fr");
+
+        //Toast.makeText(PlantDetailsActivity.this, whatlang, Toast.LENGTH_SHORT).show();
 
         TranslatorOptions options = new TranslatorOptions.Builder()
                 .setTargetLanguage(whatlang)
-                .setSourceLanguage(langnow).build();
+                .setSourceLanguage("en").build();
         Translator translator = Translation.getClient(options);
         String sourceText = texview.getText().toString();
 
@@ -181,6 +158,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
         progressDialog.setMessage("Downloading the trans model");
         progressDialog.setCancelable(false);
         progressDialog.show();
+
         translator.downloadModelIfNeeded().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
@@ -206,9 +184,6 @@ public class PlantDetailsActivity extends AppCompatActivity {
             }
         });
 
-        edit_langnow = langnowPreference.edit();
-        edit_langnow.putString("langnow", whatlang);
-        edit_langnow.apply();
     }
 
     //Show confirmation and Remove Plant
@@ -236,9 +211,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
         editor.putStringSet(PREF_SELECTED_PLANTS,convertSetToStringSet(existingPlantIds));
         editor.apply();
         Log.d("Selected plant IDs", existingPlantIds.toString());
-        Intent intent = new Intent(PlantDetailsActivity.this, MainActivity.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+        recreate();
     }
 
     // Show confirmation and Add the plant
@@ -266,9 +239,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
         editor.putStringSet(PREF_SELECTED_PLANTS,convertSetToStringSet(existingPlantIds));
         editor.apply();
         Log.d("Selected plant IDs", existingPlantIds.toString());
-        Intent intent = new Intent(PlantDetailsActivity.this, MainActivity.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+        recreate();
     }
 
     private Set<String> convertSetToStringSet(Set<Integer> IntegerSet) {
@@ -331,6 +302,9 @@ public class PlantDetailsActivity extends AppCompatActivity {
                     }
                     description_details.setText(description);
                     translay(description_details); translay(flowering_season);
+
+                    //////////////////////////////////////////////////////////
+
                     Log.e("PlantDetails","Watering Period: "+watering_period);
                 } else {
                     Log.e("PlantDetails", "Error: " + response.code());
@@ -341,6 +315,8 @@ public class PlantDetailsActivity extends AppCompatActivity {
                 Log.e("PlantDetails", "Error: " + t.getMessage());
             }
         });
+
+
     }
     private void setSeasonIcon(String season, ImageView seasonIconImageView) {
         int iconResource;
@@ -384,7 +360,8 @@ public class PlantDetailsActivity extends AppCompatActivity {
                 humidityText = "Not specified";
                 break;
         }
-        humidityTextView.setText(humidityText); translay(humidityTextView);
+        humidityTextView.setText(humidityText);
+        translay(humidityTextView);
     }
     private void customizeSunlightText(List<String> sunlight) {
         TextView temperatureTextView = findViewById(R.id.temperatureDetails);
@@ -416,20 +393,21 @@ public class PlantDetailsActivity extends AppCompatActivity {
                     // Handle other cases if needed
                     break;
             }
+
         }
 
         // Find the overall minimum and maximum temperatures
         int overallMinTemp = Collections.min(minTemps);
         int overallMaxTemp = Collections.max(maxTemps);
 
-        float overMinTemp, overMaxTemp;
+        float overMinTemp = (float)overallMinTemp, overMaxTemp = (float)overallMaxTemp;
 
 
         sharedPreferences_tempmode = getSharedPreferences("MODE_TEMP", Context.MODE_PRIVATE);
         tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
 
         // Display the customized temperature text
-        String temperatureValue;
+        String temperatureValue = "";
         if(!tempMode){
             temperatureValue = overallMinTemp + "°C - " + overallMaxTemp + "°C";
         }

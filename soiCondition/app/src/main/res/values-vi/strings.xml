@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PlantSync</string>
+    <string name="nav_open">Mở</string>
+    <string name="nav_close">Đóng</string>
+    <string name="season">Mùa</string>
+    <string name="cycle">Chu kỳ</string>
+    <string name="humidity">Độ ẩm</string>
+    <string name="humid">Độ ẩm</string>
+    <string name="temperature">Nhiệt độ</string>
+    <string name="soil_moisture">Độ ẩm đất</string>
+    <string name="checkAll">Kiểm tra tất cả</string>
+    <string name="watering">Tưới nước</string>
+    <string name="sunlight">Ánh nắng mặt trời</string>
+    <string name="watering_period">Thời gian tưới nước</string>
+    <string name="care_level">Mức độ chăm sóc</string>
+    <string name="light_mode">Chế độ sáng</string>
+    <string name="temperature_unit">Đơn vị nhiệt độ</string>
+    <string name="setting">Cài đặt</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="add_remove">THÊM VÀO/XÓA BỎ</string>
+    <string name="all">TẤT CẢ</string>
+    <string name="perennial">Lâu năm</string>
+</resources>

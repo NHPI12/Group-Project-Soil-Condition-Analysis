@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,6 +39,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -48,6 +50,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -83,10 +88,12 @@ import vn.edu.usth.soicondition.network.model.PlantDetailsResponse;
 import vn.edu.usth.soicondition.network.model.PlantResponse;
 import vn.edu.usth.soicondition.network.model.plantDetailsObject;
 
+import com.google.mlkit.nl.translate.Translation;
+import com.google.mlkit.nl.translate.Translator;
+import com.google.mlkit.nl.translate.TranslatorOptions;
 
 
 public class MainActivity extends AppCompatActivity implements SelectedPlantsAdapter.OnItemClickListener,SwipeRefreshLayout.OnRefreshListener  {
-
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private LineChart lineChartTemp, lineChartSoil, lineChartHumid;
@@ -109,8 +116,9 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     SwitchCompat lightswitch, tempswitch;
     boolean nightMode, tempMode;
     private SwipeRefreshLayout swipeRefreshLayout;
-    String temperaTure;
-    SharedPreferences sharedPreferences, sharedPreferences_tempvalue, sharedPreferences_tempmode;
+    String temperaTure, whatlang;
+    SharedPreferences sharedPreferences, sharedPreferences_tempvalue, sharedPreferences_tempmode, whatlangPreference, langnowPreference;
+    SharedPreferences.Editor edit_langnow;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -119,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        TextView humidtitle = findViewById(R.id.humidtitle), temptitle = findViewById(R.id.temptitle), soiltitle = findViewById(R.id.soiltitle);
+        //translay(humidtitle); translay(temptitle); translay(soiltitle);
         ///////////////////////night
         arrowImageView = findViewById(R.id.ArrowSelectedPlant);
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
@@ -430,6 +440,50 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
             updateSoilChart("all", currentSoilMoistureValue);
         });
     }
+
+    private void translay(TextView texview){
+        whatlangPreference = getSharedPreferences("whatlang_MODE", Context.MODE_PRIVATE);
+        whatlang = whatlangPreference.getString("whatlang", "en");
+        Toast.makeText(MainActivity.this, whatlang, Toast.LENGTH_SHORT).show();
+
+        TranslatorOptions options = new TranslatorOptions.Builder()
+                .setTargetLanguage(whatlang)
+                .setSourceLanguage("en").build();
+        Translator translator = Translation.getClient(options);
+        String sourceText = texview.getText().toString();
+
+        ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("Downloading the trans model");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        translator.downloadModelIfNeeded().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                progressDialog.dismiss();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
+            }
+        });
+
+        Task<String> result = translator.translate(sourceText).addOnSuccessListener(new OnSuccessListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                //Toast.makeText(PlantDetailsActivity.this, s, Toast.LENGTH_SHORT).show();
+                texview.setText(s);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this, Objects.requireNonNull(e.getMessage()), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
     private List<String> extractTimestamps(List<Measurements> filteredData) {
         List<String> timestamps = new ArrayList<>();
         for (Measurements measurement : filteredData) {
@@ -692,10 +746,11 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
                 String care_level = plantItem.getCare_level();
                 String watering_period = plantItem.getWatering_period();
                 Log.d("Watering_period","watering_period:"+watering_period);
-                textViewCareLevel.setText(care_level);
+                textViewCareLevel.setText(care_level); translay(textViewCareLevel);
                 if (watering_period !=null){
                     textViewWateringPeriod.setText(watering_period);
                 }
+                translay(textViewWateringPeriod);
             }
         }
     }
@@ -764,8 +819,8 @@ public class MainActivity extends AppCompatActivity implements SelectedPlantsAda
     }
 
     private void updateCardViewDetails(String wateringValueStr, String sunlightValue) {
-        textViewWatering.setText(wateringValueStr);
-        textViewSunlight.setText(sunlightValue);
+        textViewWatering.setText(wateringValueStr); translay(textViewWatering);
+        textViewSunlight.setText(sunlightValue); translay(textViewSunlight);
     }
 
 

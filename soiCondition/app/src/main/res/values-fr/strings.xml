@@ -18,6 +18,7 @@
     <string name="temperature_unit">Unité de température</string>
     <string name="setting">Paramètre</string>
     <string name="language">Langue</string>
+    <string name="perennial">Vivace</string>
     <string name="add_remove">AJOUTER/RETIRER</string>
     <string name="all">TOUS</string>
 </resources>

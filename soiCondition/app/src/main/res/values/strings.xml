@@ -22,7 +22,7 @@
     <string name="common_name" translatable="false">Common Name</string>
     <string name="scientific_name" translatable="false">Scientific name</string>
     <string name="spring" translatable="false">Spring</string>
-    <string name="perennial" translatable="false">Perennial</string>
+    <string name="perennial">Perennial</string>
     <string name="add_remove">ADD/REMOVE</string>
     <string name="_1d" translatable="false">1d</string>
     <string name="_3d" translatable="false">3d</string>

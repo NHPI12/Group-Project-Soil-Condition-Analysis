@@ -16,13 +16,17 @@ import android.content.SharedPreferences;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -109,12 +113,14 @@ public class setting extends AppCompatActivity {
         tempMode = sharedPreferences_tempmode.getBoolean("tempMode", false);
         langspinPreference = getSharedPreferences("Lang", Context.MODE_PRIVATE);
         lang = langspinPreference.getInt("lang", 0);
-        whatlangPreference = getSharedPreferences("whatlang", Context.MODE_PRIVATE);
+        whatlangPreference = getSharedPreferences("whatlang_MODE", Context.MODE_PRIVATE);
+
         if (!tempMode) {
             // Celsius is the current mode
             CelButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings));
             FahButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings_dark));
-        } else {
+        }
+        else {
             // Fahrenheit is the current mode
             FahButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings));
             CelButton.setBackground(ContextCompat.getDrawable(setting.this, R.drawable.background_button_settings_dark));
@@ -186,33 +192,49 @@ public class setting extends AppCompatActivity {
             languageAdapter.notifyItemMoved(position, 0);
         }
 
-        // Collapse the CardView after the selection is made
 
+        // Collapse the CardView after the selection is made
         if (isCardViewExpanded) {
             toggleCardView();
         }
 
         // Notify the adapter that the data has changed
         recyclerViewLanguages.getAdapter().notifyDataSetChanged();
+        SharedPreferences.Editor editor_whatlang = whatlangPreference.edit();
+
+        if(position == 0){
+            language = "en";
+        }
+        else if(position == 1){
+            language = "vi";
+        }
+        else if (position == 2) {
+            language = "fr";
+        }
+
+        Toast.makeText(setting.this, "hihihaha", Toast.LENGTH_SHORT).show();
+
+        editor_whatlang.putString("whatlang", language);
+        editor_whatlang.apply();
 
         // Update the locale here if needed
-        //setAppLocale(language);
+        setAppLocale(language);
     }
     private void setAppLocale(String language) {
         Locale locale = new Locale(language);
         Locale.setDefault(locale);
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
 
         Resources resources = getResources();
         Configuration configuration = resources.getConfiguration();
         configuration.setLocale(locale);
+        resources.updateConfiguration(configuration, metrics);
+        //resources.getConfiguration();
 
-        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+// After this, any resource fetches will be based on the new configuration
 
         // Store the language preferences
         SharedPreferences.Editor editor_lang = langspinPreference.edit();
-        SharedPreferences.Editor editor_whatlang = whatlangPreference.edit();
-
-        editor_whatlang.putString("whatlang", language);
 
         switch (language) {
             case "en":
@@ -227,8 +249,6 @@ public class setting extends AppCompatActivity {
         }
 
         editor_lang.apply();
-        editor_whatlang.apply();
-
         // Notify the system to apply the language change
         recreate();
     }
@@ -273,6 +293,5 @@ public class setting extends AppCompatActivity {
         editor_mode.apply();
     }
 }
-
 
 

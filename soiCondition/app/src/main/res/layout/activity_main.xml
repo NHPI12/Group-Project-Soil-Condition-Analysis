@@ -216,7 +216,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="30dp"
-                        android:text="Hello"
+                        android:text="Morning"
                         android:textSize="25sp"
                         tools:ignore="HardcodedText,TextContrastCheck,TextSizeCheck" />
                 </RelativeLayout>
@@ -298,7 +298,7 @@
                     android:id="@+id/humidtitle"
                     android:textSize="32sp"
                     android:textStyle="bold"
-                    android:text="Humidity"
+                    android:text="@string/humidity"
                     style="@style/TextColor">
                 </TextView>
                 <TextView
